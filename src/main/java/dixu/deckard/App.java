@@ -7,18 +7,19 @@ import dixu.deckard.client.PlayerViewSwing;
 import dixu.deckard.server.Game;
 import dixu.deckard.server.GameController;
 import dixu.deckard.server.Player;
+import dixu.deckard.server.PlayerType;
 
 public class App {
     public static void main(String[] args) {
         Display display = new Display("Deckard Thief");
-        GameViewSwing gameViewSwing = new GameViewSwing();
+        Player computer = new Player(PlayerType.COMPUTER);
+        Player player = new Player(PlayerType.PLAYER);
+        PlayerViewSwing computerView = new PlayerViewSwing(computer.getType());
+        PlayerViewSwing playerView = new PlayerViewSwing(player.getType());
+        GameViewSwing gameViewSwing = new GameViewSwing(computerView,playerView);
         GameEngine engine = new GameEngine(display, gameViewSwing);
         engine.start();
-        Player player = new Player("Player");
-        Player computer = new Player("Computer");
         Game game = new Game(player,computer);
-        PlayerViewSwing playerView = new PlayerViewSwing(player.getName());
-        PlayerViewSwing computerView = new PlayerViewSwing(player.getName());
         playerView.addAll(player.getHand());
         computerView.addAll(computer.getHand());
 

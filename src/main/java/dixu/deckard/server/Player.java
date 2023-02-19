@@ -4,27 +4,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Player {
-    private final String name;
+    private final PlayerType type;
     private final List<Card> hand = new ArrayList<>();
 
-    public Player(String name) {
-        this.name = name;
+    public Player(PlayerType type) {
+        this.type = type;
+        for (int i = 0; i < 5; i++) {
+            hand.add(new Card());
+        }
     }
 
-    public void add(Card card) {
-        hand.add(card);
-    }
-
-    public void addAll(List<Card> cards) {
-        hand.addAll(cards);
-    }
 
     public Card playCard(int index) {
         return hand.remove(index);
     }
 
-    public String getName() {
-        return name;
+    public PlayerType getType() {
+        return type;
     }
 
     public List<Card> getHand() {

@@ -21,7 +21,9 @@ public class Game implements EventHandler{
 
     @Override
     public void handle(Event event) {
-
+        if (event instanceof GameStartedEvent) {
+            System.out.println("Game: started");
+        }
     }
 
     public void onPlayerTurn(Event event){
