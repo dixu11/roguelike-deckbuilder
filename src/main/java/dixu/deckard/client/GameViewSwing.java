@@ -1,8 +1,10 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.GameView;
+
 import java.awt.*;
 
-public class MainView {
+public class GameViewSwing implements GameView {
     public void tick() {
 
     }
