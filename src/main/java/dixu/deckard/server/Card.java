@@ -9,4 +9,8 @@ public class Card {
         name = "Attack "+ nextNr++;
         dmg = 1;
     }
+
+    public String getName() {
+        return name;
+    }
 }

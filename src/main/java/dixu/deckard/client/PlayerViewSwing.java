@@ -38,10 +38,15 @@ public class PlayerViewSwing implements PlayerView {
     }
 
     public void render(Graphics g) {
-        g.setColor(Color.GRAY);
         int yOffset = playerType == PlayerType.COMPUTER ? Y_COMPUTER_OFFSET : Y_PLAYER_OFFSET;
         for (int i = 0; i < hand.size(); i++) {
-            g.fillRect(X_PLAYER_MARGIN + i * CARD_WIDTH + CARD_PADDING*i, yOffset, CARD_WIDTH, CARD_HEIGHT);
+            g.setColor(Color.GRAY);
+            int x = X_PLAYER_MARGIN + i * CARD_WIDTH + CARD_PADDING * i;
+            int y = yOffset;
+            g.fillRect(x, yOffset, CARD_WIDTH, CARD_HEIGHT);
+            Card card = hand.get(i);
+            g.setColor(Color.DARK_GRAY);
+            g.drawString(card.getName(),x+CARD_WIDTH/4,yOffset+CARD_HEIGHT/6);
         }
     }
 
