@@ -8,10 +8,12 @@ public class GameViewSwing implements GameView {
 
     private PlayerViewSwing computer;
     private PlayerViewSwing player;
+    private EndTurnButton button;
 
-    public GameViewSwing(PlayerViewSwing computer, PlayerViewSwing player) {
+    public GameViewSwing(PlayerViewSwing computer, PlayerViewSwing player, EndTurnButton button) {
         this.computer = computer;
         this.player = player;
+        this.button = button;
     }
 
     public void tick() {
@@ -23,5 +25,6 @@ public class GameViewSwing implements GameView {
         g.fillRect(0, 0, Display.getWidth(), Display.getHeight());
         computer.render(g);
         player.render(g);
+        button.render(g);
     }
 }

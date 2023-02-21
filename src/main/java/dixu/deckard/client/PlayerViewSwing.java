@@ -43,10 +43,10 @@ public class PlayerViewSwing implements PlayerView {
             g.setColor(Color.GRAY);
             int x = X_PLAYER_MARGIN + i * CARD_WIDTH + CARD_PADDING * i;
             int y = yOffset;
-            g.fillRect(x, yOffset, CARD_WIDTH, CARD_HEIGHT);
+            g.fillRect(x, y, CARD_WIDTH, CARD_HEIGHT);
             Card card = hand.get(i);
             g.setColor(Color.DARK_GRAY);
-            g.drawString(card.getName(),x+CARD_WIDTH/4,yOffset+CARD_HEIGHT/6);
+            g.drawString(card.getName(),x+CARD_WIDTH/4,y+CARD_HEIGHT/6);
         }
     }
 

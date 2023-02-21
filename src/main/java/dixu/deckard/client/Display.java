@@ -73,4 +73,12 @@ public final class Display {
     public void showGame() {
         frame.setVisible(true);
     }
+
+    public static int getWidth(double percent) {
+        return (int) (getWidth() * percent);
+    }
+
+    public static int getHeight(double percent) {
+        return (int) (getHeight() * percent);
+    }
 }
