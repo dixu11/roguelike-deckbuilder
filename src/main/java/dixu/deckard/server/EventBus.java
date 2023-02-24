@@ -6,6 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 public class EventBus {
+
+    private static final EventBus instance = new EventBus();
+
+    private EventBus() {
+    }
+
+    public static EventBus getInstance() {
+        return instance;
+    }
+
     private final Map<Class<?>, List<EventHandler>> allHandlers = new HashMap<>();
 
     public <T> void register(EventHandler handler, Class<T> eventType) {

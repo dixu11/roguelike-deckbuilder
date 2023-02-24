@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HandView {
-    private static final int CARD_PADDING = 20;
+    public static final int CARD_PADDING = 20;
 
     private List<Card> cards;
     private List<CardView> cardViews;

@@ -1,5 +1,6 @@
 package dixu.deckard.server;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -43,5 +44,14 @@ public class Character {
 
     public List<Card> getPlayed() {
         return played;
+    }
+
+    public void playBlocks(Team team) {
+        for (Card card : new ArrayList<>(hand)) {
+            if (card.getType()== CardType.BLOCK) {
+                EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
+                card.play(team,this);
+            }
+        }
     }
 }

@@ -4,7 +4,7 @@ import java.awt.*;
 
 public class CounterView {
 
-    private static final double MARGIN_PERCENT = 0.05;
+    private static final double MARGIN_PERCENT = 0.2;
    private static final  Color DEFAULT_COLOR = Color.DARK_GRAY;
     private Direction direction1;
     private Direction direction2;
@@ -14,6 +14,7 @@ public class CounterView {
     public CounterView(Direction direction1, Direction direction2, CounterSource source) {
         this(direction1, direction2, source, DEFAULT_COLOR);
     }
+
 
     public CounterView(Direction direction1, Direction direction2, CounterSource source, Color color) {
         this.direction1 = direction1;
@@ -29,14 +30,18 @@ public class CounterView {
         int x = rect.x;
         int y = rect.y;
         switch (direction1) {
-            case TOP -> y += marginY;
-            case BOTTOM -> y += rect.height - marginY*2;
+            case TOP -> y += marginY ;
+            case BOTTOM -> y += rect.height - marginY;
         }
         switch (direction2) {
             case LEFT -> x += marginX;
-            case RIGHT -> x += rect.width - marginX * 3;
+            case RIGHT -> x += rect.width - marginX ;
         }
+//        g.setColor(Color.CYAN);
+//        g.fillRect(rect.x,rect.y,rect.width,rect.height);
         g.setColor(color);
         g.drawString(source.getValue()+"",x,y);
     }
+
+
 }

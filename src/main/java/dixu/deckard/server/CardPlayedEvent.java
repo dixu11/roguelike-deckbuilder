@@ -1,18 +1,22 @@
 package dixu.deckard.server;
 
 public class CardPlayedEvent implements Event {
-    private final Player player;
+    private final Team team;
     private final Card card;
     private final Character target;
 
-    public CardPlayedEvent(Player player, Card card, Character target) {
-        this.player = player;
+    public CardPlayedEvent(Team team, Card card, Character target) {
+        this.team = team;
         this.card = card;
         this.target = target;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Team getTeam() {
+        return team;
+    }
+
+    public Character getTarget() {
+        return target;
     }
 
     public Card getCard() {

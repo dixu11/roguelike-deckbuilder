@@ -1,19 +1,21 @@
 package dixu.deckard.server;
 
-public class Game implements EventHandler{
-    private final EventBus eventBus = new EventBus();
-    private final Player player;
-    private final Computer computer;
+import java.util.List;
+
+public class Game implements EventHandler {
+    private final Team playerTeam;
+    private final Team computerTeam;
 
 
-    public Game(Player player, Computer computer) {
-        this.player = player;
-        this.computer = computer;
+    public Game(Team playerTeam, Team computerTeam) {
+        this.playerTeam = playerTeam;
+        this.computerTeam = computerTeam;
     }
 
     public void start() {
-        eventBus.register(this,GameStartedEvent.class);
-        eventBus.register(this,GameOverEvent.class);
+        EventBus eventBus = EventBus.getInstance();
+        eventBus.register(this, GameStartedEvent.class);
+        eventBus.register(this, GameOverEvent.class);
         eventBus.register(this, NextTurnEvent.class);
         eventBus.post(new GameStartedEvent());
     }
@@ -22,32 +24,17 @@ public class Game implements EventHandler{
     public void handle(Event event) {
         if (event instanceof GameStartedEvent) {
             System.out.println("Game: started");
-        }else if (event instanceof NextTurnEvent){
-            System.out.println("Game: next turn");
+        } else if (event instanceof NextTurnEvent) {
+            playerTeam.playBlocks();
+//            computer.playBlock();
+//            player.playAttack();
+//            computer.playAttack();
         }
 
     }
 
-    public void nextTurn(){
-
-    }
-
-    public void onCardPlayed(Event event) {
-
-    }
-
-    public void onGameOver(Event event) {
-
-    }
-    //metody dla clienta:
-
-    public void playCard(Player player, int index) {
-        Card card = player.playCard(index);
-        eventBus.post(new CardPlayedEvent(player, card,null ));
-    }
-
     public void endTurn() {
-        eventBus.post(new NextTurnEvent());
+        EventBus.getInstance().post(new NextTurnEvent());
     }
 
     //get current player

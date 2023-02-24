@@ -7,17 +7,17 @@ public class TrainerFactory {
 
     private CharacterFactory characterFactory = new CharacterFactory();
 
-    public Player createPlayer() {
+    public Team createPlayer() {
         List<Character> characters = new ArrayList<>();
         characters.add(new Character());
         characters.add(new Character());
-        return new Player(characters);
+        return new Team(characters);
     }
 
-    public Computer createComputer() {
+    public Team createComputer() {
         List<Character> characters = new ArrayList<>();
         characters.add(new Character());
         characters.add(new Character());
-        return new Computer(characters);
+        return new Team(characters);
     }
 }
