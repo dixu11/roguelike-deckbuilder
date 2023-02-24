@@ -5,6 +5,7 @@ import java.awt.*;
 public class CounterView {
 
     private static final double MARGIN_PERCENT = 0.05;
+   private static final  Color DEFAULT_COLOR = Color.DARK_GRAY;
     private Direction direction1;
     private Direction direction2;
     private final CounterSource source;
@@ -28,7 +29,7 @@ public class CounterView {
             case LEFT -> x += marginX;
             case RIGHT -> x += rect.width - marginX * 3;
         }
-        g.setColor(Color.RED);
+        g.setColor(DEFAULT_COLOR);
         g.drawString(source.getValue()+"",x,y);
     }
 }
