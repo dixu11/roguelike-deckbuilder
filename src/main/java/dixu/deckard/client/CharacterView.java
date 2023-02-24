@@ -11,7 +11,8 @@ public class CharacterView {
 
     public CharacterView(Character character) {
         this.character = character;
-        cardView = new CardView();
+        cardView = new CardView(character.getName());
+        cardView.addCounter(new CounterView(Direction.BOTTOM,Direction.RIGHT, character::getHealth));
     }
 
     public void render(Graphics g) {
