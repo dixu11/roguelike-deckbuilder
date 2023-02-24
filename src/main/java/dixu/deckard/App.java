@@ -10,16 +10,14 @@ public class App {
         Display display = new Display("Deckard Thief");
         Player computer = new Player();
         Player player = new Player();
-        PlayerViewSwing playerView = new PlayerViewSwing(player);
-        GameViewSwing gameViewSwing = new GameViewSwing(playerView, new EndTurnButton());
-        GameEngine engine = new GameEngine(display, gameViewSwing);
+        PlayerView playerView = new PlayerView(player);
+        GameViewImpl gameViewImpl = new GameViewImpl(playerView, new EndTurnButtonView());
+        GameEngine engine = new GameEngine(display, gameViewImpl);
         engine.start();
         Game game = new Game(player,computer);
-
-
-
         GameController gameController = new GameController(game, playerView);
+        gameViewImpl.setController(gameController);
+        display.addListener(gameViewImpl);
         gameController.start();
-
     }
 }

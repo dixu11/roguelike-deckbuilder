@@ -14,8 +14,7 @@ public class Game implements EventHandler{
     public void start() {
         eventBus.register(this,GameStartedEvent.class);
         eventBus.register(this,GameOverEvent.class);
-        eventBus.register(this,TurnChangedEvent.class);
-
+        eventBus.register(this, NextTurnEvent.class);
         eventBus.post(new GameStartedEvent());
     }
 
@@ -23,10 +22,13 @@ public class Game implements EventHandler{
     public void handle(Event event) {
         if (event instanceof GameStartedEvent) {
             System.out.println("Game: started");
+        }else if (event instanceof NextTurnEvent){
+            System.out.println("Game: next turn");
         }
+
     }
 
-    public void onPlayerTurn(Event event){
+    public void nextTurn(){
 
     }
 
@@ -42,6 +44,10 @@ public class Game implements EventHandler{
     public void playCard(Player player, int index) {
         Card card = player.playCard(index);
         eventBus.post(new CardPlayedEvent(player, card,null ));
+    }
+
+    public void endTurn() {
+        eventBus.post(new NextTurnEvent());
     }
 
     //get current player

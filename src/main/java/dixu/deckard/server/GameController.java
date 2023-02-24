@@ -18,4 +18,8 @@ public class GameController{
     public void playCard(Player player, int index) {
         game.playCard(player, index);
     }
+
+    public void endTurn() {
+        game.endTurn();
+    }
 }

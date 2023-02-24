@@ -12,13 +12,13 @@ public final class GameEngine implements Runnable {
     private BufferStrategy strategy;
 
     private final Display display;
-    private final GameViewSwing gameViewSwing;
+    private final GameViewImpl gameViewImpl;
 
 
-    public GameEngine(Display display, GameViewSwing gameViewSwing) {
+    public GameEngine(Display display, GameViewImpl gameViewImpl) {
         running = false;
         this.display = display;
-        this.gameViewSwing = gameViewSwing;
+        this.gameViewImpl = gameViewImpl;
     }
 
 
@@ -51,7 +51,7 @@ public final class GameEngine implements Runnable {
     }
 
     private void tick() {
-        gameViewSwing.tick();
+        gameViewImpl.tick();
     }
 
     private void render() {
@@ -73,7 +73,7 @@ public final class GameEngine implements Runnable {
     private void renderFrame() {
         Graphics graphics = strategy.getDrawGraphics();
         graphics.clearRect(0, 0, Display.getWidth(), Display.getHeight());
-        gameViewSwing.render(graphics);
+        gameViewImpl.render(graphics);
         strategy.show();
         graphics.dispose();
     }

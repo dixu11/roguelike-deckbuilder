@@ -3,9 +3,8 @@ package dixu.deckard.client;
 import dixu.deckard.server.*;
 
 import java.awt.*;
-import java.util.List;
 
-public class PlayerViewSwing implements PlayerView {
+public class PlayerView implements dixu.deckard.server.PlayerView {
 
     private static final int Y_PLAYER_OFFSET = 600;
     private static final int X_PLAYER_MARGIN = 800;
@@ -16,7 +15,7 @@ public class PlayerViewSwing implements PlayerView {
    private Player player;
    private GameController gameController;
 
-    public PlayerViewSwing(Player player) {
+    public PlayerView(Player player) {
         this.player = player;
     }
 
