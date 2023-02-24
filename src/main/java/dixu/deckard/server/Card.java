@@ -21,6 +21,11 @@ public class Card {
             team.addBlock(value);
             character.remove(this);
         }
+        if (type == CardType.ATTACK) {
+            //team.addBlock(value);
+            System.out.println("NOT IMPLEMENTED ATTACK EXECUTED");
+            character.remove(this);
+        }
     }
 
     public String getName() {
@@ -29,5 +34,14 @@ public class Card {
 
     public CardType getType() {
         return type;
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "name='" + name + '\'' +
+                ", value=" + value +
+                ", type=" + type +
+                '}';
     }
 }

@@ -1,7 +1,5 @@
 package dixu.deckard.server;
 
-import dixu.deckard.client.CounterSource;
-
 import java.util.List;
 
 public class Team {
@@ -16,9 +14,9 @@ public class Team {
         return characters;
     }
 
-    public void playBlocks() {
+    public void playCards(CardType type) {
         for (Character character : characters) {
-            character.playBlocks(this);
+            character.playCards(this, type);
         }
     }
 

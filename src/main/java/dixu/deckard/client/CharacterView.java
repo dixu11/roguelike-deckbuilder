@@ -1,9 +1,11 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.Card;
 import dixu.deckard.server.Character;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CharacterView {
@@ -16,7 +18,7 @@ public class CharacterView {
     public CharacterView(Character character) {
         this.character = character;
         this.handView = new HandView(character.getHand());
-        cardView = new CardView(character.getName());
+        cardView = new CardView(  0,new ArrayList<>(List.of(character.getCharacterCard())));
         cardView.addCounter(new CounterView(Direction.BOTTOM, Direction.RIGHT, character::getHealth));
         counters.add(new CounterView(Direction.BOTTOM,Direction.LEFT,()->character.getDraw().size(), Color.GRAY));
         counters.add(new CounterView(Direction.BOTTOM,Direction.RIGHT,()->character.getDiscard().size(),Color.GRAY));

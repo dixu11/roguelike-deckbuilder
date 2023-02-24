@@ -1,7 +1,5 @@
 package dixu.deckard.server;
 
-import java.util.List;
-
 public class Game implements EventHandler {
     private final Team playerTeam;
     private final Team computerTeam;
@@ -25,10 +23,10 @@ public class Game implements EventHandler {
         if (event instanceof GameStartedEvent) {
             System.out.println("Game: started");
         } else if (event instanceof NextTurnEvent) {
-            playerTeam.playBlocks();
-            computerTeam.playBlocks();
-//            player.playAttack();
-//            computer.playAttack();
+            playerTeam.playCards(CardType.BLOCK);
+            computerTeam.playCards(CardType.BLOCK);
+            playerTeam.playCards(CardType.ATTACK);
+            computerTeam.playCards(CardType.ATTACK);
         }
     }
 

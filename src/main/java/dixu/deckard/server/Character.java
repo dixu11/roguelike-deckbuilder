@@ -1,23 +1,25 @@
 package dixu.deckard.server;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class Character {
     private String name;
     private int hp = 3;
     private static int nextChar = 1;
-    private Queue<Card> draw = new LinkedList<>();
+    private Card characterCard = new Card(CardType.CHARACTER);
+    private LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand  = new LinkedList<>();
     private List<Card> discard = new LinkedList<>();
 
     public Character() {
         name = "Character " + nextChar++;
-        IntStream.range(0, 4)
-                .forEach(n->draw.add(new Card()));
+        IntStream.range(0, 2)
+                .forEach(n->draw.add(new Card(CardType.BLOCK)));
+        IntStream.range(0, 2)
+                .forEach(n -> draw.add(new Card(CardType.ATTACK)));
+        Collections.shuffle(draw);
+
         drawTwo();
     }
 
@@ -46,9 +48,9 @@ public class Character {
         return discard;
     }
 
-    public void playBlocks(Team team) {
+    public void playCards(Team team,CardType type) {
         for (Card card : new ArrayList<>(hand)) {
-            if (card.getType()== CardType.BLOCK) {
+            if (card.getType()== type) {
                 EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
                 card.play(team,this);
                 Game.animate();
@@ -58,6 +60,11 @@ public class Character {
 
     public void remove(Card card) {
         hand.remove(card);
+        System.out.println(hand);
         discard.add(card);
+    }
+
+    public Card getCharacterCard() {
+        return characterCard;
     }
 }

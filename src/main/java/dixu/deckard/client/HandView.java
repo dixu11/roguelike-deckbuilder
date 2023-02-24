@@ -14,20 +14,19 @@ public class HandView {
 
     public HandView(List<Card> cards) {
         this.cards = cards;
-        reload();
+        load();
     }
 
-    private void reload() {
+    private void load() {
         cardViews = new ArrayList<>();
-        for (Card card : cards) {
-            CardView view = new CardView();
-            view.setCard(card);
+        for (int i = 0; i < cards.size(); i++) {
+            CardView view = new CardView(i, cards);
             cardViews.add(view);
         }
     }
 
     public void render(Graphics g) {
-        int xChange =-CardView.CARD_WIDTH+10; //todo
+        int xChange =-CardView.CARD_WIDTH+10;
         g.translate(xChange,0);
         int space = CardView.CARD_WIDTH + CARD_PADDING;
         for (int i = 0; i < cards.size(); i++) {
