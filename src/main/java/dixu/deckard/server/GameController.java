@@ -3,12 +3,9 @@ package dixu.deckard.server;
 public class GameController{
 
     private final Game game;
-    private final PlayerView player;
 
-    public GameController(Game game, PlayerView player) {
+    public GameController(Game game) {
         this.game = game;
-        this.player = player;
-        player.setController(this);
     }
 
     public void start() {

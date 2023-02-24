@@ -9,7 +9,7 @@ public class TeamView {
     private static final int X_BASE_OFFSET = Display.getWidth(0.2);
     private static final int Y_BASE_OFFSET = Display.getHeight(0.3);
     private static final int X_COMPUTER_OFFSET = Display.getWidth(0.25);
-    private static final int PADDING = Display.getWidth(0.05);
+    private static final int PADDING = Display.getWidth(0.08);
     private List<CharacterView> characters;
     private Direction direction;
 
