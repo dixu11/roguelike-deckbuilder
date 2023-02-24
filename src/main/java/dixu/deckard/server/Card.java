@@ -18,7 +18,8 @@ public class Card {
 
     public void play(Team team, Character character) {
         if (type == CardType.BLOCK) {
-            team.addBlock(value); // as event?
+            team.addBlock(value);
+            character.remove(this);
         }
     }
 

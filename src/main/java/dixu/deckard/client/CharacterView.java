@@ -1,6 +1,5 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Card;
 import dixu.deckard.server.Character;
 
 import java.awt.*;
@@ -20,7 +19,7 @@ public class CharacterView {
         cardView = new CardView(character.getName());
         cardView.addCounter(new CounterView(Direction.BOTTOM, Direction.RIGHT, character::getHealth));
         counters.add(new CounterView(Direction.BOTTOM,Direction.LEFT,()->character.getDraw().size(), Color.GRAY));
-        counters.add(new CounterView(Direction.BOTTOM,Direction.RIGHT,()->character.getPlayed().size(),Color.GRAY));
+        counters.add(new CounterView(Direction.BOTTOM,Direction.RIGHT,()->character.getDiscard().size(),Color.GRAY));
     }
 
     public void render(Graphics g) {

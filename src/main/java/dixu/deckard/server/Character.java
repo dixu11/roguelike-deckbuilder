@@ -12,7 +12,7 @@ public class Character {
     private static int nextChar = 1;
     private Queue<Card> draw = new LinkedList<>();
     private List<Card> hand  = new LinkedList<>();
-    private List<Card> played = new LinkedList<>();
+    private List<Card> discard = new LinkedList<>();
 
     public Character() {
         name = "Character " + nextChar++;
@@ -42,8 +42,8 @@ public class Character {
         return draw;
     }
 
-    public List<Card> getPlayed() {
-        return played;
+    public List<Card> getDiscard() {
+        return discard;
     }
 
     public void playBlocks(Team team) {
@@ -51,7 +51,13 @@ public class Character {
             if (card.getType()== CardType.BLOCK) {
                 EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
                 card.play(team,this);
+                Game.animate();
             }
         }
+    }
+
+    public void remove(Card card) {
+        hand.remove(card);
+        discard.add(card);
     }
 }

@@ -26,11 +26,10 @@ public class Game implements EventHandler {
             System.out.println("Game: started");
         } else if (event instanceof NextTurnEvent) {
             playerTeam.playBlocks();
-//            computer.playBlock();
+            computerTeam.playBlocks();
 //            player.playAttack();
 //            computer.playAttack();
         }
-
     }
 
     public void endTurn() {
@@ -39,5 +38,12 @@ public class Game implements EventHandler {
 
     //get current player
 
+    public static void animate() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
 }
