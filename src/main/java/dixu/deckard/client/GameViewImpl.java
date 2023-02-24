@@ -8,13 +8,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public class GameViewImpl implements GameView, MouseListener {
-    private PlayerView player;
+    private HandViewImpl hand;
+    private TeamView playerTeam;
+    private TeamView enemyTeam;
     private EndTurnButtonView button;
     private GameController controller;
 
 
-    public GameViewImpl(PlayerView player, EndTurnButtonView button) {
-        this.player = player;
+    public GameViewImpl(HandViewImpl hand, EndTurnButtonView button, TeamView playerTeam, TeamView enemyTeam) {
+        this.hand = hand;
+        this.playerTeam = playerTeam;
+        this.enemyTeam = enemyTeam;
         this.button = button;
     }
 
@@ -25,8 +29,10 @@ public class GameViewImpl implements GameView, MouseListener {
     public void render(Graphics g) {
         g.setColor(Color.DARK_GRAY);
         g.fillRect(0, 0, Display.getWidth(), Display.getHeight());
-        player.render(g);
+        hand.render(g);
         button.render(g);
+        playerTeam.render(g);
+        enemyTeam.render(g);
     }
 
     public void setController(GameController controller) {

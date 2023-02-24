@@ -4,7 +4,7 @@ import dixu.deckard.server.*;
 
 import java.awt.*;
 
-public class PlayerView implements dixu.deckard.server.PlayerView {
+public class HandViewImpl implements PlayerView {
 
     private static final int Y_PLAYER_OFFSET = 600;
     private static final int X_PLAYER_MARGIN = 800;
@@ -15,7 +15,7 @@ public class PlayerView implements dixu.deckard.server.PlayerView {
    private Player player;
    private GameController gameController;
 
-    public PlayerView(Player player) {
+    public HandViewImpl(Player player) {
         this.player = player;
     }
 

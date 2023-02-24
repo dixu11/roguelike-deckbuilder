@@ -3,10 +3,10 @@ package dixu.deckard.server;
 public class Game implements EventHandler{
     private final EventBus eventBus = new EventBus();
     private final Player player;
-    private final Player computer;
+    private final Computer computer;
 
 
-    public Game(Player player, Player computer) {
+    public Game(Player player, Computer computer) {
         this.player = player;
         this.computer = computer;
     }
