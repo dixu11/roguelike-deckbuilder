@@ -15,7 +15,7 @@ public class Character {
 
     public Character() {
         name = "Character " + nextChar++;
-        IntStream.range(0, 5)
+        IntStream.range(0, 4)
                 .forEach(n->draw.add(new Card()));
         drawTwo();
     }
@@ -35,5 +35,13 @@ public class Character {
 
     public List<Card> getHand() {
         return hand;
+    }
+
+    public Queue<Card> getDraw() {
+        return draw;
+    }
+
+    public List<Card> getPlayed() {
+        return played;
     }
 }

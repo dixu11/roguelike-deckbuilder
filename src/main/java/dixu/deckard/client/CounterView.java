@@ -9,12 +9,19 @@ public class CounterView {
     private Direction direction1;
     private Direction direction2;
     private final CounterSource source;
+    private Color color;
 
     public CounterView(Direction direction1, Direction direction2, CounterSource source) {
+        this(direction1, direction2, source, DEFAULT_COLOR);
+    }
+
+    public CounterView(Direction direction1, Direction direction2, CounterSource source, Color color) {
         this.direction1 = direction1;
         this.direction2 = direction2;
         this.source = source;
+        this.color = color;
     }
+
 
     public void render(Graphics g,Rectangle rect) {
         int marginX = (int) (rect.width * MARGIN_PERCENT);
@@ -29,7 +36,7 @@ public class CounterView {
             case LEFT -> x += marginX;
             case RIGHT -> x += rect.width - marginX * 3;
         }
-        g.setColor(DEFAULT_COLOR);
+        g.setColor(color);
         g.drawString(source.getValue()+"",x,y);
     }
 }
