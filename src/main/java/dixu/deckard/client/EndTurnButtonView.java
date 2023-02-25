@@ -16,7 +16,7 @@ public class EndTurnButtonView implements Clickable {
         g.setColor(Color.GRAY);
         g.fillRect(rect.x, rect.y , rect.width, rect.height);
         g.setColor(Color.DARK_GRAY);
-        g.drawString("Koniec tury",rect.x+10,rect.y +15);
+        g.drawString("End turn",rect.x+10,rect.y +15);
     }
 
 

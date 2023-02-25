@@ -4,23 +4,23 @@ import java.util.List;
 import java.util.Random;
 
 public class Team {
-    private List<Character> characters;
+    private List<Minion> minions;
     private int block;
     private TeamSide side;
 
-    public Team(List<Character> characters,int block, TeamSide side) {
-        this.characters = characters;
+    public Team(List<Minion> minions, int block, TeamSide side) {
+        this.minions = minions;
         this.block = block;
         this.side = side;
     }
 
-    public List<Character> getCharacters() {
-        return characters;
+    public List<Minion> getCharacters() {
+        return minions;
     }
 
     public void playCards() {
-        for (Character character : characters) {
-            character.playCards(this);
+        for (Minion minion : minions) {
+            minion.playCards(this);
         }
     }
 
@@ -45,12 +45,12 @@ public class Team {
             return;
         }
         Random random = new Random();
-        characters.get(random.nextInt(characters.size())).obtainDamage(this,value);
+        minions.get(random.nextInt(minions.size())).obtainDamage(this,value);
     }
 
     public void drawCards() {
-        for (Character character : characters) {
-            character.drawTwo();
+        for (Minion minion : minions) {
+            minion.drawTwo();
         }
     }
 
@@ -58,9 +58,9 @@ public class Team {
         block = 0;
     }
 
-    public void characterDied(Character character) {
-        characters.remove(character);
-        if (characters.isEmpty()) {
+    public void characterDied(Minion minion) {
+        minions.remove(minion);
+        if (minions.isEmpty()) {
             EventBus.getInstance().post(new GameOverEvent(this));
         }
 

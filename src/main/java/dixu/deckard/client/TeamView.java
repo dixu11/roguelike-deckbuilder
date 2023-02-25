@@ -24,6 +24,7 @@ public class TeamView {
                 .toList();
         characters = new ArrayList<>(this.characters);
         blockCounter = new CounterView(Direction.TOP,Direction.LEFT, team::getBlock,Color.GRAY);
+        blockCounter.setDescription("\uD83D\uDEE1️: ");
     }
 
     public void render(Graphics g) {

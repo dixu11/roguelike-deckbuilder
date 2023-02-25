@@ -8,25 +8,29 @@ public class Card {
 
     public Card(CardType type) {
         this.type = type;
-        name = type.name()+ " "+ nextNr++;
         value = 1;
         if (type == CardType.ATTACK) {
             value = 2;
+        } else if (type == CardType.MINION) {
+            value = nextNr;
         }
+        nextNr++;
+
+        name = type.name()+ " "+ value;
     }
 
     public Card() {
         this(CardType.BLOCK);
     }
 
-    public void play(Team team, Character character) {
+    public void play(Team team, Minion minion) {
         if (type == CardType.BLOCK) {
             team.addBlock(value);
-            character.remove(this);
+            minion.remove(this);
         }
         if (type == CardType.ATTACK) {
             EventBus.getInstance().post(new RandomDmgEvent(team.getSide(),value));
-            character.remove(this);
+            minion.remove(this);
         }
         Game.animate();
     }

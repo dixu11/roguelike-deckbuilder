@@ -3,17 +3,17 @@ package dixu.deckard.server;
 import java.util.*;
 import java.util.stream.IntStream;
 
-public class Character {
+public class Minion {
     private String name;
     private int hp = 3;
     private static int nextChar = 1;
-    private Card characterCard = new Card(CardType.CHARACTER);
+    private Card minionCard = new Card(CardType.MINION);
     private LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
     private List<Card> discard = new LinkedList<>();
 
-    public Character() {
-        name = "Character " + nextChar++;
+    public Minion() {
+        name = "Minion " + nextChar++;
         IntStream.range(0, 2)
                 .forEach(n -> draw.add(new Card(CardType.BLOCK)));
         IntStream.range(0, 2)
@@ -63,14 +63,14 @@ public class Character {
         discard.add(card);
     }
 
-    public Card getCharacterCard() {
-        return characterCard;
+    public Card getMinionCard() {
+        return minionCard;
     }
 
     public void obtainDamage(Team team,int value) {
         hp -= value;
         if (hp <= 0) {
-            EventBus.getInstance().post(new CharacterDiedEvent(team.getSide(),this));
+            EventBus.getInstance().post(new MinionDiedEvent(team.getSide(),this));
         }
     }
 

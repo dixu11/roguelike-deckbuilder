@@ -3,9 +3,9 @@ package dixu.deckard.server;
 public class CardPlayedEvent implements Event {
     private final Team team;
     private final Card card;
-    private final Character target;
+    private final Minion target;
 
-    public CardPlayedEvent(Team team, Card card, Character target) {
+    public CardPlayedEvent(Team team, Card card, Minion target) {
         this.team = team;
         this.card = card;
         this.target = target;
@@ -15,7 +15,7 @@ public class CardPlayedEvent implements Event {
         return team;
     }
 
-    public Character getTarget() {
+    public Minion getTarget() {
         return target;
     }
 

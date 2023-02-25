@@ -30,7 +30,7 @@ public class CardView {
         g.setColor(Color.GRAY);
         g.fillRect(0,0,CARD_WIDTH,CARD_HEIGHT);
         g.setColor(Color.DARK_GRAY);
-        g.drawString(getCard().getName(),CARD_WIDTH/6,CARD_HEIGHT/6);
+        g.drawString(getCard().getName(),CARD_WIDTH/10,CARD_HEIGHT/6);
         for (CounterView counter : counters) {
             counter.render(g,new Rectangle(0,0,CARD_WIDTH,CARD_HEIGHT));
         }

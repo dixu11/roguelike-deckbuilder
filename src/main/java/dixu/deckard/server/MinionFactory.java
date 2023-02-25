@@ -1,4 +1,4 @@
 package dixu.deckard.server;
 
-public class CharacterFactory {
+public class MinionFactory {
 }

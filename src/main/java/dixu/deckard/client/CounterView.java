@@ -8,13 +8,23 @@ public class CounterView {
 
     private static final double MARGIN_PERCENT = 0.2;
    private static final  Color DEFAULT_COLOR = Color.DARK_GRAY;
+    private static final Font FONT = new Font(Font.SERIF, Font.PLAIN,  20);
+
+    //location on rectangle
     private Direction direction1;
     private Direction direction2;
+
+    //value
     private final CounterSource source;
+
+    //looks
     private Color color;
+    private String description = "";
+
+
+    //update animation
     private int lastValue;
     private LocalTime changed = LocalTime.now();
-    private Font font= new Font(Font.SERIF, Font.PLAIN,  20);
     private boolean blinking = true;
 
     public CounterView(Direction direction1, Direction direction2, CounterSource source) {
@@ -47,6 +57,7 @@ public class CounterView {
         switch (direction2) {
             case LEFT -> x += marginX;
             case RIGHT -> x += rect.width - marginX ;
+            case BOTTOM -> x+= marginX*2;
         }
 //        g.setColor(Color.CYAN);
 //        g.fillRect(rect.x,rect.y,rect.width,rect.height);
@@ -56,8 +67,8 @@ public class CounterView {
         }
         g.setColor(color);
         Font standard = g.getFont();
-        g.setFont(font);
-        g.drawString(source.getValue() + "", x, y);
+        g.setFont(FONT);
+        g.drawString(description+ source.getValue(), x, y);
         g.setFont(standard);
     }
 
@@ -65,5 +76,7 @@ public class CounterView {
         this.blinking = blinking;
     }
 
-
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

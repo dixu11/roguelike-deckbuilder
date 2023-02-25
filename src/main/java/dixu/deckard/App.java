@@ -16,14 +16,14 @@ public class App {
         //create views
         TeamView playerTeam = new TeamView(player,Direction.LEFT);
         TeamView enemyTeam = new TeamView(enemy, Direction.RIGHT);
-        GameViewImpl gameViewImpl = new GameViewImpl(new EndTurnButtonView(),playerTeam,enemyTeam);
+        FightViewImpl fightViewImpl = new FightViewImpl(new EndTurnButtonView(),playerTeam,enemyTeam);
 
         //create engine and connections
-        GameEngine engine = new GameEngine(display, gameViewImpl);
+        GameEngine engine = new GameEngine(display, fightViewImpl);
         Game game = new Game(player,enemy);
         GameController gameController = new GameController(game);
-        gameViewImpl.setController(gameController);
-        display.addListener(gameViewImpl);
+        fightViewImpl.setController(gameController);
+        display.addListener(fightViewImpl);
         gameController.start();
         engine.start();
     }

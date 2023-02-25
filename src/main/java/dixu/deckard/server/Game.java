@@ -18,13 +18,16 @@ public class Game implements EventHandler {
         eventBus.register(this, EndTurnEvent.class);
         eventBus.register(this, RandomDmgEvent.class);
         eventBus.register(this, StartTurnEvent.class);
-        eventBus.register(this,CharacterDiedEvent.class);
+        eventBus.register(this, MinionDiedEvent.class);
+        eventBus.post(new GameStartedEvent());
         eventBus.post(new StartTurnEvent());
     }
 
     @Override
     public void handle(Event event) {
-        if (event instanceof EndTurnEvent) {
+        if (event instanceof GameStartedEvent) {
+
+        } else if (event instanceof EndTurnEvent) {
             playerTeam.playCards();
             enemyTeam.clearBlock();
             enemyTeam.playCards();
@@ -40,15 +43,15 @@ public class Game implements EventHandler {
             playerTeam.drawCards();
             enemyTeam.drawCards();
             playerTeam.clearBlock();
-        } else if (event instanceof CharacterDiedEvent) {
+        } else if (event instanceof MinionDiedEvent) {
             Team target = enemyTeam;
-            CharacterDiedEvent characterDied = (CharacterDiedEvent) event;
+            MinionDiedEvent characterDied = (MinionDiedEvent) event;
             if (characterDied.getSide() == TeamSide.LEFT) {
                 target = playerTeam;
             }
             target.characterDied(characterDied.getCharacter());
-            System.out.println(characterDied.getCharacter().getName() + " JUST DIED!");
         } else if (event instanceof GameOverEvent) {
+            //todo update UI
             JOptionPane.showMessageDialog(null,"Koniec gry!");
             System.exit(0);
         }

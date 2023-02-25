@@ -1,27 +1,31 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Character;
+import dixu.deckard.server.Minion;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CharacterView {
 
-    private Character character;
+    private Minion minion;
     private CardView cardView;
     private HandView handView;
     private List<CounterView> counters = new ArrayList<>();
 
-    public CharacterView(Character character) {
-        this.character = character;
-        this.handView = new HandView(character.getHand());
-        cardView = new CardView(  0,new ArrayList<>(List.of(character.getCharacterCard())));
-        cardView.addCounter(new CounterView(Direction.BOTTOM, Direction.RIGHT, character::getHealth));
-        counters.add(new CounterView(Direction.BOTTOM,Direction.LEFT,()->character.getDraw().size(), Color.GRAY));
-        CounterView discardCounter = new CounterView(Direction.BOTTOM, Direction.RIGHT, () -> character.getDiscard().size(), Color.GRAY);
+    public CharacterView(Minion minion) {
+        this.minion = minion;
+        this.handView = new HandView(minion.getHand());
+        cardView = new CardView(  0,new ArrayList<>(List.of(minion.getMinionCard())));
+        CounterView healthCounter = new CounterView(Direction.BOTTOM, Direction.BOTTOM, minion::getHealth);
+        healthCounter.setDescription("♥: ");
+        cardView.addCounter(healthCounter);
+        CounterView drawCounter = new CounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
+        drawCounter.setDescription("\uD83C\uDCA0: ");
+        counters.add(drawCounter);
+        CounterView discardCounter = new CounterView(Direction.BOTTOM, Direction.RIGHT, () -> minion.getDiscard().size(), Color.GRAY);
         discardCounter.setBlinking(false);
+        discardCounter.setDescription("\uD83C\uDCC1: ");
         counters.add(discardCounter);
     }
 
@@ -37,7 +41,7 @@ public class CharacterView {
     }
 
 
-    public Character getCharacter() {
-        return character;
+    public Minion getCharacter() {
+        return minion;
     }
 }

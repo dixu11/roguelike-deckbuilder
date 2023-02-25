@@ -5,19 +5,19 @@ import java.util.List;
 
 public class TeamFactory {
 
-    private CharacterFactory characterFactory = new CharacterFactory();
+    private MinionFactory minionFactory = new MinionFactory();
 
     public Team createPlayer() {
-        List<Character> characters = new ArrayList<>();
-        characters.add(new Character());
-        characters.add(new Character());
-        return new Team(characters,0, TeamSide.LEFT);
+        List<Minion> minions = new ArrayList<>();
+        minions.add(new Minion());
+        minions.add(new Minion());
+        return new Team(minions,0, TeamSide.LEFT);
     }
 
     public Team createEnemy() {
-        List<Character> characters = new ArrayList<>();
-        characters.add(new Character());
-        characters.add(new Character());
-        return new Team(characters,3, TeamSide.RIGHT);
+        List<Minion> minions = new ArrayList<>();
+        minions.add(new Minion());
+        minions.add(new Minion());
+        return new Team(minions,3, TeamSide.RIGHT);
     }
 }
