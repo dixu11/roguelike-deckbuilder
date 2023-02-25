@@ -1,0 +1,33 @@
+[
+  {
+    "name": "Basic attack",
+    "effects": [
+      {
+        "type": "RANDOM_ATTACK",
+        "power": "2"
+      }
+    ]
+  },
+  {
+    "name": "Basic block",
+    "effects": [
+      {
+        "type": "TEAM_BLOCK",
+        "power": "1"
+      }
+    ]
+  },
+  {
+    "name": "Attack + Block",
+    "effects": [
+      {
+        "type": "RANDOM_ATTACK",
+        "power": "1"
+      },
+      {
+        "type": "TEAM_BLOCK",
+        "power": "1"
+      }
+    ]
+  }
+]
