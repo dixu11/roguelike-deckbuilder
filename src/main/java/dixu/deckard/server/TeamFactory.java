@@ -11,13 +11,13 @@ public class TeamFactory {
         List<Minion> minions = new ArrayList<>();
         minions.add(new Minion());
         minions.add(new Minion());
-        return new Team(minions,0, TeamSide.LEFT);
+        return new Team(minions, TeamSide.LEFT);
     }
 
     public Team createEnemy() {
         List<Minion> minions = new ArrayList<>();
         minions.add(new Minion());
         minions.add(new Minion());
-        return new Team(minions,3, TeamSide.RIGHT);
+        return new Team(minions, TeamSide.RIGHT);
     }
 }

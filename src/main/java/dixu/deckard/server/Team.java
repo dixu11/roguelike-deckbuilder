@@ -3,14 +3,13 @@ package dixu.deckard.server;
 import java.util.List;
 import java.util.Random;
 
-public class Team {
+public class Team implements EventHandler{
     private List<Minion> minions;
     private int block;
     private TeamSide side;
 
-    public Team(List<Minion> minions, int block, TeamSide side) {
+    public Team(List<Minion> minions, TeamSide side) {
         this.minions = minions;
-        this.block = block;
         this.side = side;
     }
 
@@ -64,5 +63,15 @@ public class Team {
             EventBus.getInstance().post(new GameOverEvent(this));
         }
 
+    }
+
+    @Override
+    public void handle(Event event) {
+        if (event instanceof TeamBlockEvent) {
+            TeamBlockEvent teamBlockEvent = (TeamBlockEvent) event;
+            if (teamBlockEvent.getTeam() == this) {
+                block += teamBlockEvent.getValueChange();
+            }
+        }
     }
 }

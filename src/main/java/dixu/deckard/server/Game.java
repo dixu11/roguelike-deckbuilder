@@ -3,6 +3,7 @@ package dixu.deckard.server;
 import javax.swing.*;
 
 public class Game implements EventHandler {
+    private static final int ENEMY_TEAM_INITIAL_BLOCK = 3;
     private final Team playerTeam;
     private final Team enemyTeam;
 
@@ -19,8 +20,11 @@ public class Game implements EventHandler {
         eventBus.register(this, RandomDmgEvent.class);
         eventBus.register(this, StartTurnEvent.class);
         eventBus.register(this, MinionDiedEvent.class);
-        eventBus.post(new GameStartedEvent());
+        eventBus.register(playerTeam,TeamBlockEvent.class);
+        eventBus.register(enemyTeam,TeamBlockEvent.class);
+        //eventBus.post(new GameStartedEvent()); // nic nie robi więc zakomentowany
         eventBus.post(new StartTurnEvent());
+        eventBus.post(new TeamBlockEvent(ENEMY_TEAM_INITIAL_BLOCK,enemyTeam));
     }
 
     @Override
