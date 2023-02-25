@@ -1,6 +1,5 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Card;
 import dixu.deckard.server.Character;
 
 import java.awt.*;
@@ -38,5 +37,7 @@ public class CharacterView {
     }
 
 
-
+    public Character getCharacter() {
+        return character;
+    }
 }

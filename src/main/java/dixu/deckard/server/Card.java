@@ -2,7 +2,7 @@ package dixu.deckard.server;
 
 public class Card {
     private final String name;
-    private final int value;
+    private  int value;
     private CardType type;
     private static int nextNr = 1;
 
@@ -10,6 +10,9 @@ public class Card {
         this.type = type;
         name = type.name()+ " "+ nextNr++;
         value = 1;
+        if (type == CardType.ATTACK) {
+            value = 2;
+        }
     }
 
     public Card() {

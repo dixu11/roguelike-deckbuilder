@@ -62,7 +62,6 @@ public class Character {
 
     public void remove(Card card) {
         hand.remove(card);
-        System.out.println(hand);
         discard.add(card);
     }
 
@@ -70,8 +69,14 @@ public class Character {
         return characterCard;
     }
 
-    public void obtainDamage(int value) {
+    public void obtainDamage(Team team,int value) {
         hp -= value;
-        System.out.println(name + " damaged by " + value);
+        if (hp <= 0) {
+            EventBus.getInstance().post(new CharacterDiedEvent(team.getSide(),this));
+        }
+    }
+
+    public boolean isDead() {
+        return hp <= 0;
     }
 }

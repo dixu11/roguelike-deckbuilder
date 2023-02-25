@@ -24,7 +24,6 @@ public class EndTurnButtonView implements Clickable {
     @Override
     public void onClick(GameController controller) {
         controller.endTurn();
-        System.out.println("Click: end turn");
     }
 
     @Override

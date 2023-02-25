@@ -45,7 +45,7 @@ public class Team {
             return;
         }
         Random random = new Random();
-        characters.get(random.nextInt(characters.size())).obtainDamage(value);
+        characters.get(random.nextInt(characters.size())).obtainDamage(this,value);
     }
 
     public void drawCards() {
@@ -56,5 +56,10 @@ public class Team {
 
     public void clearBlock() {
         block = 0;
+    }
+
+    public void characterDied(Character character) {
+        characters.remove(character);
+
     }
 }

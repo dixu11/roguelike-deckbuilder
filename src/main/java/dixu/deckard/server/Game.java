@@ -17,13 +17,14 @@ public class Game implements EventHandler {
         eventBus.register(this, EndTurnEvent.class);
         eventBus.register(this, RandomDmgEvent.class);
         eventBus.register(this, StartTurnEvent.class);
+        eventBus.register(this,CharacterDiedEvent.class);
         eventBus.post(new GameStartedEvent());
     }
 
     @Override
     public void handle(Event event) {
         if (event instanceof GameStartedEvent) {
-            System.out.println("Game: started");
+
         } else if (event instanceof EndTurnEvent) {
             playerTeam.playCards();
             enemyTeam.clearBlock();
@@ -40,6 +41,14 @@ public class Game implements EventHandler {
             playerTeam.drawCards();
             enemyTeam.drawCards();
             playerTeam.clearBlock();
+        } else if (event instanceof CharacterDiedEvent) {
+            Team target = enemyTeam;
+            CharacterDiedEvent characterDied = (CharacterDiedEvent) event;
+            if (characterDied.getSide() == TeamSide.LEFT) {
+                target = playerTeam;
+            }
+            target.characterDied(characterDied.getCharacter());
+            System.out.println(characterDied.getCharacter().getName() + " JUST DIED!");
         }
         Game.animate();
     }
@@ -52,7 +61,7 @@ public class Game implements EventHandler {
 
     public static void animate() {
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

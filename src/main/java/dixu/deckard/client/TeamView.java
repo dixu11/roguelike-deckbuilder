@@ -3,6 +3,7 @@ package dixu.deckard.client;
 import dixu.deckard.server.Team;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class TeamView {
@@ -21,10 +22,12 @@ public class TeamView {
         this.characters = team.getCharacters().stream()
                 .map(CharacterView::new)
                 .toList();
+        characters = new ArrayList<>(this.characters);
         blockCounter = new CounterView(Direction.TOP,Direction.LEFT, team::getBlock,Color.GRAY);
     }
 
     public void render(Graphics g) {
+        characters.removeIf(view -> view.getCharacter().isDead());
         int xChange = 0;
 
         g.translate(getX(),getY());
