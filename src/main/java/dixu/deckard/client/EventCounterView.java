@@ -36,7 +36,7 @@ public class EventCounterView implements CounterView, EventHandler {
     }
 
 
-    public EventCounterView(Direction direction1, Direction direction2,  Color color) {
+    public EventCounterView(Direction direction1, Direction direction2, Color color) {
         this.direction1 = direction1;
         this.direction2 = direction2;
         this.color = color;

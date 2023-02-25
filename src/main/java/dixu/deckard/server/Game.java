@@ -20,11 +20,10 @@ public class Game implements EventHandler {
         eventBus.register(this, RandomDmgEvent.class);
         eventBus.register(this, StartTurnEvent.class);
         eventBus.register(this, MinionDiedEvent.class);
-        eventBus.register(playerTeam,TeamBlockEvent.class);
-        eventBus.register(enemyTeam,TeamBlockEvent.class);
+
         //eventBus.post(new GameStartedEvent()); // nic nie robi więc zakomentowany
         eventBus.post(new StartTurnEvent());
-        eventBus.post(new TeamBlockEvent(ENEMY_TEAM_INITIAL_BLOCK,enemyTeam));
+        enemyTeam.addBlock(3);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class Game implements EventHandler {
 
     public static void animate() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

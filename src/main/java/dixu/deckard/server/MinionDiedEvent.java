@@ -1,6 +1,6 @@
 package dixu.deckard.server;
 
-public class MinionDiedEvent implements Event{
+public class MinionDiedEvent implements Event {
     private TeamSide side;
     private Minion minion;
 

@@ -3,7 +3,7 @@ package dixu.deckard.server;
 import java.util.List;
 import java.util.Random;
 
-public class Team implements EventHandler{
+public class Team {
     private List<Minion> minions;
     private int block;
     private TeamSide side;
@@ -28,6 +28,7 @@ public class Team implements EventHandler{
     }
 
     public void applyRandomDmg(int value) {
+        int oldBlock = block;
         if (block <= value) {
             value -= block;
             block = 0;
@@ -35,6 +36,7 @@ public class Team implements EventHandler{
             block -= value;
             return;
         }
+        EventBus.getInstance().post(new TeamBlockEvent(block, oldBlock, this));
         Random random = new Random();
         minions.get(random.nextInt(minions.size())).obtainDamage(this,value);
     }
@@ -46,7 +48,7 @@ public class Team implements EventHandler{
     }
 
     public void clearBlock() {
-        EventBus.getInstance().post(new TeamBlockEvent(0,this));
+        EventBus.getInstance().post(new TeamBlockEvent(0, block, this));
         block = 0;
     }
 
@@ -57,13 +59,8 @@ public class Team implements EventHandler{
         }
     }
 
-    @Override
-    public void handle(Event event) {
-        if (event instanceof TeamBlockEvent) {
-            TeamBlockEvent teamBlockEvent = (TeamBlockEvent) event;
-            if (teamBlockEvent.getTeam() == this) {
-                block += teamBlockEvent.getNewValue();
-            }
-        }
+    public void addBlock(int value) {
+        EventBus.getInstance().post(new TeamBlockEvent(value+block, block, this));
+        block += value;
     }
 }

@@ -1,4 +1,4 @@
 package dixu.deckard.server;
 
-public class GameStartedEvent implements Event{
+public class GameStartedEvent implements Event {
 }

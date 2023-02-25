@@ -25,8 +25,8 @@ public class Card {
 
     public void play(Team team, Minion minion) {
         if (type == CardType.BLOCK) {
-            EventBus.getInstance().post(new TeamBlockEvent(value,team));
             minion.remove(this);
+            team.addBlock(value);
         }
         if (type == CardType.ATTACK) {
             EventBus.getInstance().post(new RandomDmgEvent(team.getSide(),value));
