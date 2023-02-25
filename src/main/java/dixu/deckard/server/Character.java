@@ -9,13 +9,13 @@ public class Character {
     private static int nextChar = 1;
     private Card characterCard = new Card(CardType.CHARACTER);
     private LinkedList<Card> draw = new LinkedList<>();
-    private List<Card> hand  = new LinkedList<>();
+    private List<Card> hand = new LinkedList<>();
     private List<Card> discard = new LinkedList<>();
 
     public Character() {
         name = "Character " + nextChar++;
         IntStream.range(0, 2)
-                .forEach(n->draw.add(new Card(CardType.BLOCK)));
+                .forEach(n -> draw.add(new Card(CardType.BLOCK)));
         IntStream.range(0, 2)
                 .forEach(n -> draw.add(new Card(CardType.ATTACK)));
         Collections.shuffle(draw);
@@ -48,13 +48,10 @@ public class Character {
         return discard;
     }
 
-    public void playCards(Team team,CardType type) {
+    public void playCards(Team team) {
         for (Card card : new ArrayList<>(hand)) {
-            if (card.getType()== type) {
-                EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
-                card.play(team,this);
-                Game.animate();
-            }
+            EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
+            card.play(team, this);
         }
     }
 
@@ -66,5 +63,10 @@ public class Character {
 
     public Card getCharacterCard() {
         return characterCard;
+    }
+
+    public void obtainDamage(int value) {
+        hp -= value;
+        System.out.println(name + " damaged by " + value);
     }
 }

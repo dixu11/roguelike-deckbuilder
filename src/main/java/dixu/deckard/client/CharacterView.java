@@ -21,7 +21,9 @@ public class CharacterView {
         cardView = new CardView(  0,new ArrayList<>(List.of(character.getCharacterCard())));
         cardView.addCounter(new CounterView(Direction.BOTTOM, Direction.RIGHT, character::getHealth));
         counters.add(new CounterView(Direction.BOTTOM,Direction.LEFT,()->character.getDraw().size(), Color.GRAY));
-        counters.add(new CounterView(Direction.BOTTOM,Direction.RIGHT,()->character.getDiscard().size(),Color.GRAY));
+        CounterView discardCounter = new CounterView(Direction.BOTTOM, Direction.RIGHT, () -> character.getDiscard().size(), Color.GRAY);
+        discardCounter.setBlinking(false);
+        counters.add(discardCounter);
     }
 
     public void render(Graphics g) {

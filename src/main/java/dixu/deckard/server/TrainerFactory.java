@@ -11,13 +11,13 @@ public class TrainerFactory {
         List<Character> characters = new ArrayList<>();
         characters.add(new Character());
         characters.add(new Character());
-        return new Team(characters);
+        return new Team(characters,0, TeamSide.LEFT);
     }
 
     public Team createComputer() {
         List<Character> characters = new ArrayList<>();
         characters.add(new Character());
         characters.add(new Character());
-        return new Team(characters);
+        return new Team(characters,3, TeamSide.RIGHT);
     }
 }

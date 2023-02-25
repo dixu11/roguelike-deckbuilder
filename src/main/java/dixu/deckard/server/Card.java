@@ -22,10 +22,10 @@ public class Card {
             character.remove(this);
         }
         if (type == CardType.ATTACK) {
-            //team.addBlock(value);
-            System.out.println("NOT IMPLEMENTED ATTACK EXECUTED");
+            EventBus.getInstance().post(new RandomDmgEvent(team.getSide(),value));
             character.remove(this);
         }
+        Game.animate();
     }
 
     public String getName() {

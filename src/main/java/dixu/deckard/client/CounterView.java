@@ -1,6 +1,8 @@
 package dixu.deckard.client;
 
 import java.awt.*;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 
 public class CounterView {
 
@@ -10,6 +12,10 @@ public class CounterView {
     private Direction direction2;
     private final CounterSource source;
     private Color color;
+    private int lastValue;
+    private LocalTime changed = LocalTime.now();
+    private Font font= new Font(Font.SERIF, Font.PLAIN,  20);
+    private boolean blinking = true;
 
     public CounterView(Direction direction1, Direction direction2, CounterSource source) {
         this(direction1, direction2, source, DEFAULT_COLOR);
@@ -25,6 +31,11 @@ public class CounterView {
 
 
     public void render(Graphics g,Rectangle rect) {
+        if (lastValue != source.getValue()) {
+            changed = LocalTime.now();
+            lastValue = source.getValue();
+        }
+
         int marginX = (int) (rect.width * MARGIN_PERCENT);
         int marginY = (int) (rect.height * MARGIN_PERCENT);
         int x = rect.x;
@@ -39,8 +50,19 @@ public class CounterView {
         }
 //        g.setColor(Color.CYAN);
 //        g.fillRect(rect.x,rect.y,rect.width,rect.height);
+        Color color = this.color;
+        if (changed.until(LocalTime.now(), ChronoUnit.SECONDS) < 1 && blinking) {
+          color=  Color.YELLOW;
+        }
         g.setColor(color);
-        g.drawString(source.getValue()+"",x,y);
+        Font standard = g.getFont();
+        g.setFont(font);
+        g.drawString(source.getValue() + "", x, y);
+        g.setFont(standard);
+    }
+
+    public void setBlinking(boolean blinking) {
+        this.blinking = blinking;
     }
 
 

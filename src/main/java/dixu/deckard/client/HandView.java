@@ -29,7 +29,7 @@ public class HandView {
         int xChange =-CardView.CARD_WIDTH+10;
         g.translate(xChange,0);
         int space = CardView.CARD_WIDTH + CARD_PADDING;
-        for (int i = 0; i < cards.size(); i++) {
+        for (int i = cards.size()-1; i >=0; i--) {
             g.translate(space, 0);
             cardViews.get(i).render(g);
             xChange += space;
