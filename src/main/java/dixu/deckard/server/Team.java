@@ -27,18 +27,30 @@ public class Team {
         return side;
     }
 
-    public void applyRandomDmg(int value) {
-        int oldBlock = block;
-        if (block <= value) {
-            value -= block;
-            block = 0;
-        } else {
-            block -= value;
+    public void applyRandomDmg(int dmg) {
+        int dmgLeft = trashBlock(dmg);
+        if (dmgLeft <= 0) {
             return;
         }
-        EventBus.getInstance().post(new TeamBlockEvent(block, oldBlock, this));
         Random random = new Random();
-        minions.get(random.nextInt(minions.size())).obtainDamage(this,value);
+        minions.get(random.nextInt(minions.size())).obtainDamage(this,dmgLeft);
+
+    }
+
+    private int trashBlock(int dmg) {
+        if (block == 0) {
+            return dmg;
+        }
+        int oldBlock = block;
+        if (block <= dmg) {
+            dmg -= block;
+            block = 0;
+        } else {
+            block -= dmg;
+            dmg = 0;
+        }
+        EventBus.getInstance().post(new TeamBlockEvent(block, oldBlock, this));
+        return dmg;
     }
 
     public void drawCards() {
