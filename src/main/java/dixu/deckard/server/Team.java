@@ -23,14 +23,6 @@ public class Team implements EventHandler{
         }
     }
 
-    public void addBlock(int value) {
-        block += value;
-    }
-
-    public int getBlock() {
-        return block;
-    }
-
     public TeamSide getSide() {
         return side;
     }
@@ -54,6 +46,7 @@ public class Team implements EventHandler{
     }
 
     public void clearBlock() {
+        EventBus.getInstance().post(new TeamBlockEvent(0,this));
         block = 0;
     }
 
@@ -62,7 +55,6 @@ public class Team implements EventHandler{
         if (minions.isEmpty()) {
             EventBus.getInstance().post(new GameOverEvent(this));
         }
-
     }
 
     @Override
@@ -70,7 +62,7 @@ public class Team implements EventHandler{
         if (event instanceof TeamBlockEvent) {
             TeamBlockEvent teamBlockEvent = (TeamBlockEvent) event;
             if (teamBlockEvent.getTeam() == this) {
-                block += teamBlockEvent.getValueChange();
+                block += teamBlockEvent.getNewValue();
             }
         }
     }

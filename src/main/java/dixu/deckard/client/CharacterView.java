@@ -11,19 +11,19 @@ public class CharacterView {
     private Minion minion;
     private CardView cardView;
     private HandView handView;
-    private List<CounterView> counters = new ArrayList<>();
+    private List<SourceCounterView> counters = new ArrayList<>();
 
     public CharacterView(Minion minion) {
         this.minion = minion;
         this.handView = new HandView(minion.getHand());
         cardView = new CardView(  0,new ArrayList<>(List.of(minion.getMinionCard())));
-        CounterView healthCounter = new CounterView(Direction.BOTTOM, Direction.BOTTOM, minion::getHealth);
+        SourceCounterView healthCounter = new SourceCounterView(Direction.BOTTOM, Direction.BOTTOM, minion::getHealth);
         healthCounter.setDescription("♥: ");
         cardView.addCounter(healthCounter);
-        CounterView drawCounter = new CounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
+        SourceCounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
         drawCounter.setDescription("\uD83C\uDCA0: ");
         counters.add(drawCounter);
-        CounterView discardCounter = new CounterView(Direction.BOTTOM, Direction.RIGHT, () -> minion.getDiscard().size(), Color.GRAY);
+        SourceCounterView discardCounter = new SourceCounterView(Direction.BOTTOM, Direction.RIGHT, () -> minion.getDiscard().size(), Color.GRAY);
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
         counters.add(discardCounter);
@@ -35,7 +35,7 @@ public class CharacterView {
         handView.render(g);
         g.translate(CardView.CARD_WIDTH,CardView.CARD_HEIGHT +20);
         Rectangle r = new Rectangle(0,CardView.CARD_HEIGHT/2,CardView.CARD_WIDTH,CardView.CARD_HEIGHT);
-        for (CounterView counter : counters) {
+        for (SourceCounterView counter : counters) {
             counter.render(g, r);
         }
     }

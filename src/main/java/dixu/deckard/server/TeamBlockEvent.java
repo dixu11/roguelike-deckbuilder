@@ -1,16 +1,16 @@
 package dixu.deckard.server;
 
 public class TeamBlockEvent implements Event {
-    private int valueChange;
+    private int newValue;
     private Team team;
 
     public TeamBlockEvent(int valueChange, Team team) {
-        this.valueChange = valueChange;
+        this.newValue = valueChange;
         this.team = team;
     }
 
-    public int getValueChange() {
-        return valueChange;
+    public int getNewValue() {
+        return newValue;
     }
 
     public Team getTeam() {

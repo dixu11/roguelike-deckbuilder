@@ -1,6 +1,8 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.EventBus;
 import dixu.deckard.server.Team;
+import dixu.deckard.server.TeamBlockEvent;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -17,30 +19,33 @@ public class TeamView {
     private CounterView blockCounter;
 
     public TeamView(Team team, Direction direction) {
-        this.team =team;
+        this.team = team;
         this.direction = direction;
         this.characters = team.getCharacters().stream()
                 .map(CharacterView::new)
                 .toList();
         characters = new ArrayList<>(this.characters);
-        blockCounter = new CounterView(Direction.TOP,Direction.LEFT, team::getBlock,Color.GRAY);
-        blockCounter.setDescription("\uD83D\uDEE1️: ");
+        EventCounterView blockCounterEvent = new EventCounterView(Direction.TOP, Direction.LEFT,  Color.GRAY);
+        blockCounterEvent.setDescription("\uD83D\uDEE1️: ");
+        blockCounterEvent.setParent(team);
+        EventBus.getInstance().register(blockCounterEvent, TeamBlockEvent.class);
+        blockCounter = blockCounterEvent;
     }
 
     public void render(Graphics g) {
         characters.removeIf(view -> view.getCharacter().isDead());
         int xChange = 0;
 
-        g.translate(getX(),getY());
-        blockCounter.render(g,new Rectangle(0,CardView.CARD_HEIGHT*2,100,100));
+        g.translate(getX(), getY());
+        blockCounter.render(g, new Rectangle(0, CardView.CARD_HEIGHT * 2, 100, 100));
         for (int i = 0; i < characters.size(); i++) {
             int xMove = PADDING + CardView.CARD_WIDTH;
             characters.get(i).render(g);
             g.translate(xMove, 0);
-            xChange+=xMove;
+            xChange += xMove;
         }
 
-        g.translate(-getX()- xChange,-getY());
+        g.translate(-getX() - xChange, -getY());
     }
 
     private int getX() {
