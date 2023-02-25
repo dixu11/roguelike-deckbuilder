@@ -24,6 +24,11 @@ public class Character {
     }
 
     public void drawTwo() {
+        if (draw.size() < 2) {
+            Collections.shuffle(discard);
+            draw.addAll(discard);
+            discard.clear();
+        }
         hand.add(draw.remove());
         hand.add(draw.remove());
     }

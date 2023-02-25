@@ -47,4 +47,14 @@ public class Team {
         Random random = new Random();
         characters.get(random.nextInt(characters.size())).obtainDamage(value);
     }
+
+    public void drawCards() {
+        for (Character character : characters) {
+            character.drawTwo();
+        }
+    }
+
+    public void clearBlock() {
+        block = 0;
+    }
 }
