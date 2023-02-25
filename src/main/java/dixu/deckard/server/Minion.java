@@ -21,14 +21,18 @@ public class Minion {
         Collections.shuffle(draw);
     }
 
-    public void drawTwo() {
+    public void drawTwo(Team team) { //refactor to method that draws 1
         if (draw.size() < 2) {
             Collections.shuffle(discard);
             draw.addAll(discard);
             discard.clear();
         }
-        hand.add(draw.remove());
-        hand.add(draw.remove());
+        Card card1 = draw.remove();
+        hand.add(card1);
+        EventBus.getInstance().post(new DrawCardEvent(card1,this,team));
+        Card card2 = draw.remove();
+        hand.add(card2);
+        EventBus.getInstance().post(new DrawCardEvent(card2,this,team));
     }
 
     public String getName() {
@@ -53,8 +57,9 @@ public class Minion {
 
     public void playCards(Team team,Game game) {
         for (Card card : new ArrayList<>(hand)) {
-            card.play(team, this,game);
             EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
+            card.play(team, this,game);
+            Game.animate();
         }
     }
 

@@ -55,7 +55,7 @@ public class Team {
 
     public void drawCards() {
         for (Minion minion : minions) {
-            minion.drawTwo();
+            minion.drawTwo(this);
         }
     }
 

@@ -12,29 +12,29 @@ public class MinionView implements EventHandler {
     private Minion minion;
     private CardView cardView;
     private HandView handView;
-    private List<CounterView> counters = new ArrayList<>();
-   // private CounterView drawCounter;
+    private CounterView drawCounter;
     private CounterView discardCounter;
 
     public MinionView(Minion minion) {
         this.minion = minion;
         this.handView = new HandView(minion.getHand());
-        cardView = new CardView(  0,new ArrayList<>(List.of(minion.getMinionCard())));
+        cardView = new CardView( minion.getMinionCard());
         EventCounterView healthCounter = new EventCounterView(Direction.BOTTOM, Direction.BOTTOM);
         healthCounter.setDescription("♥: ");
         healthCounter.setParent(minion);
         healthCounter.setValue(minion.getHealth());
         EventBus.getInstance().register(healthCounter, MinionDamagedEvent.class);
         cardView.addCounter(healthCounter);
-        SourceCounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
+        CounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
         drawCounter.setDescription("\uD83C\uDCA0: ");
-        counters.add(drawCounter);
+        drawCounter.setValue(minion.getDraw().size());
+        this.drawCounter = drawCounter;
         CounterView discardCounter = new EventCounterView(Direction.BOTTOM, Direction.RIGHT, Color.GRAY);
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
         this.discardCounter = discardCounter;
-        counters.add(discardCounter);
         EventBus.getInstance().register(this,CardPlayedEvent.class);
+        EventBus.getInstance().register(this,DrawCardEvent.class);
     }
 
     public void render(Graphics g) {
@@ -43,9 +43,8 @@ public class MinionView implements EventHandler {
         handView.render(g);
         g.translate(CardView.CARD_WIDTH,CardView.CARD_HEIGHT +20);
         Rectangle r = new Rectangle(0,CardView.CARD_HEIGHT/2,CardView.CARD_WIDTH,CardView.CARD_HEIGHT);
-        for (CounterView counter : counters) {
-            counter.render(g, r);
-        }
+       drawCounter.render(g,r);
+       discardCounter.render(g,r);
     }
 
 
@@ -60,6 +59,13 @@ public class MinionView implements EventHandler {
             if (cardPlayedEvent.getMinion()==minion) {
                 discardCounter.addValue(1);
                 handView.remove(cardPlayedEvent.getCard());
+            }
+        }
+        if (event instanceof DrawCardEvent) {
+            DrawCardEvent drawCardEvent = (DrawCardEvent) event;
+            if (drawCardEvent.getMinion() == minion) {
+                handView.addCard(drawCardEvent.getCard());
+                drawCounter.setValue(minion.getDraw().size());
             }
         }
     }

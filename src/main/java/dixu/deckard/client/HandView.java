@@ -16,22 +16,14 @@ public class HandView {
         this.cards = cards;
     }
 
-    private void load() {
-        cardViews = new ArrayList<>();
-        for (int i = 0; i < cards.size(); i++) {
-            CardView view = new CardView(i, cards);
-            cardViews.add(view);
-        }
-    }
-
     public void render(Graphics g) {
-        if (cardViews.size() != cards.size()) { //todo remove after draw card event handled
-            load();
+        if (cardViews.isEmpty()) {
+            return;
         }
         int xChange =-CardView.CARD_WIDTH+10;
         g.translate(xChange,0);
         int space = CardView.CARD_WIDTH + CARD_PADDING;
-        for (int i = cards.size()-1; i >=0; i--) {
+        for (int i = 0; i <cardViews.size(); i++) {
             g.translate(space, 0);
             cardViews.get(i).render(g);
             xChange += space;
@@ -40,6 +32,11 @@ public class HandView {
     }
 
     public void remove(Card card) {
+        System.out.println("played: " + card.getName());
         cardViews.removeIf(v -> v.getCard() == card);
+    }
+
+    public void addCard(Card card) {
+        cardViews.add(0,new CardView(card));
     }
 }
