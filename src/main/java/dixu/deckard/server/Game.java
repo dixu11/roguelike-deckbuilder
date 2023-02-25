@@ -19,14 +19,12 @@ public class Game implements EventHandler {
         eventBus.register(this, RandomDmgEvent.class);
         eventBus.register(this, StartTurnEvent.class);
         eventBus.register(this,CharacterDiedEvent.class);
-        eventBus.post(new GameStartedEvent());
+        eventBus.post(new StartTurnEvent());
     }
 
     @Override
     public void handle(Event event) {
-        if (event instanceof GameStartedEvent) {
-
-        } else if (event instanceof EndTurnEvent) {
+        if (event instanceof EndTurnEvent) {
             playerTeam.playCards();
             enemyTeam.clearBlock();
             enemyTeam.playCards();

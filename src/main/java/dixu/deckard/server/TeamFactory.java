@@ -14,7 +14,7 @@ public class TeamFactory {
         return new Team(characters,0, TeamSide.LEFT);
     }
 
-    public Team createComputer() {
+    public Team createEnemy() {
         List<Character> characters = new ArrayList<>();
         characters.add(new Character());
         characters.add(new Character());

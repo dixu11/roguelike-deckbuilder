@@ -19,8 +19,6 @@ public class Character {
         IntStream.range(0, 2)
                 .forEach(n -> draw.add(new Card(CardType.ATTACK)));
         Collections.shuffle(draw);
-
-        drawTwo();
     }
 
     public void drawTwo() {

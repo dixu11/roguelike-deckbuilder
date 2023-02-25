@@ -10,11 +10,10 @@ public class HandView {
     public static final int CARD_PADDING = 20;
 
     private List<Card> cards;
-    private List<CardView> cardViews;
+    private List<CardView> cardViews = new ArrayList<>();
 
     public HandView(List<Card> cards) {
         this.cards = cards;
-        load();
     }
 
     private void load() {
@@ -26,6 +25,9 @@ public class HandView {
     }
 
     public void render(Graphics g) {
+        if (cardViews.size() != cards.size()) {
+            load();
+        }
         int xChange =-CardView.CARD_WIDTH+10;
         g.translate(xChange,0);
         int space = CardView.CARD_WIDTH + CARD_PADDING;
