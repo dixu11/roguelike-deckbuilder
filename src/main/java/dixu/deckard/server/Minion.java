@@ -53,8 +53,8 @@ public class Minion {
 
     public void playCards(Team team,Game game) {
         for (Card card : new ArrayList<>(hand)) {
-            EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
             card.play(team, this,game);
+            EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
         }
     }
 

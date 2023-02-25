@@ -1,21 +1,22 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.EventBus;
-import dixu.deckard.server.Minion;
-import dixu.deckard.server.MinionDamagedEvent;
+import dixu.deckard.server.*;
+import dixu.deckard.server.Event;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CharacterView {
+public class MinionView implements EventHandler {
 
     private Minion minion;
     private CardView cardView;
     private HandView handView;
     private List<CounterView> counters = new ArrayList<>();
+   // private CounterView drawCounter;
+    private CounterView discardCounter;
 
-    public CharacterView(Minion minion) {
+    public MinionView(Minion minion) {
         this.minion = minion;
         this.handView = new HandView(minion.getHand());
         cardView = new CardView(  0,new ArrayList<>(List.of(minion.getMinionCard())));
@@ -28,10 +29,12 @@ public class CharacterView {
         SourceCounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
         drawCounter.setDescription("\uD83C\uDCA0: ");
         counters.add(drawCounter);
-        SourceCounterView discardCounter = new SourceCounterView(Direction.BOTTOM, Direction.RIGHT, () -> minion.getDiscard().size(), Color.GRAY);
+        CounterView discardCounter = new EventCounterView(Direction.BOTTOM, Direction.RIGHT, Color.GRAY);
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
+        this.discardCounter = discardCounter;
         counters.add(discardCounter);
+        EventBus.getInstance().register(this,CardPlayedEvent.class);
     }
 
     public void render(Graphics g) {
@@ -48,5 +51,16 @@ public class CharacterView {
 
     public Minion getCharacter() {
         return minion;
+    }
+
+    @Override
+    public void handle(Event event) {
+        if (event instanceof CardPlayedEvent) {
+            CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
+            if (cardPlayedEvent.getMinion()==minion) {
+                discardCounter.addValue(1);
+                handView.remove(cardPlayedEvent.getCard());
+            }
+        }
     }
 }

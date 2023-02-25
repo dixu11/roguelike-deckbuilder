@@ -13,7 +13,7 @@ public class TeamView {
     private static final int Y_BASE_OFFSET = Display.getHeight(0.3);
     private static final int X_COMPUTER_OFFSET = Display.getWidth(0.25);
     private static final int PADDING = Display.getWidth(0.08);
-    private List<CharacterView> characters;
+    private List<MinionView> characters;
     private Team team;
     private Direction direction;
     private CounterView blockCounter;
@@ -22,7 +22,7 @@ public class TeamView {
         this.team = team;
         this.direction = direction;
         this.characters = team.getCharacters().stream()
-                .map(CharacterView::new)
+                .map(MinionView::new)
                 .toList();
         characters = new ArrayList<>(this.characters);
         EventCounterView blockCounterEvent = new EventCounterView(Direction.TOP, Direction.LEFT,  Color.GRAY);

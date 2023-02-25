@@ -25,7 +25,7 @@ public class HandView {
     }
 
     public void render(Graphics g) {
-        if (cardViews.size() != cards.size()) {
+        if (cardViews.size() != cards.size()) { //todo remove after draw card event handled
             load();
         }
         int xChange =-CardView.CARD_WIDTH+10;
@@ -39,4 +39,7 @@ public class HandView {
         g.translate(-xChange, 0);
     }
 
+    public void remove(Card card) {
+        cardViews.removeIf(v -> v.getCard() == card);
+    }
 }

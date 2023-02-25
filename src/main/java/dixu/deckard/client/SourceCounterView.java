@@ -76,6 +76,11 @@ public class SourceCounterView implements CounterView{
         this.blinking = blinking;
     }
 
+    @Override
+    public void addValue(int value) {
+        //had to implement - to remove
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }

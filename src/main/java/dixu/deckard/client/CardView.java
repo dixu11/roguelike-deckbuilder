@@ -36,7 +36,7 @@ public class CardView {
         }
     }
 
-    private Card getCard() {
+    Card getCard() {
         if (index >= cards.size()) {
             return null;
         }

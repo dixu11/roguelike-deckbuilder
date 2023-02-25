@@ -75,6 +75,11 @@ public class EventCounterView implements CounterView, EventHandler {
         this.blinking = blinking;
     }
 
+    @Override
+    public void addValue(int value) {
+        this.value += value;
+    }
+
     public void setDescription(String description) {
         this.description = description;
     }

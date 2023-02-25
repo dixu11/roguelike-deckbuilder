@@ -8,4 +8,8 @@ public interface CounterView {
     void setDescription(String description);
 
     void setValue(int health);
+
+    void setBlinking(boolean blinking);
+
+    void addValue(int value);
 }
