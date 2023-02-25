@@ -79,4 +79,9 @@ public class SourceCounterView implements CounterView{
     public void setDescription(String description) {
         this.description = description;
     }
+
+    @Override
+    public void setValue(int newValue) {
+        //had to implement - to remove
+    }
 }

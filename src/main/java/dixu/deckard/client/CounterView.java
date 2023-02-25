@@ -6,4 +6,6 @@ public interface CounterView {
     void render(Graphics g, Rectangle rectangle);
 
     void setDescription(String description);
+
+    void setValue(int health);
 }

@@ -2,6 +2,7 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.Event;
 import dixu.deckard.server.EventHandler;
+import dixu.deckard.server.MinionDamagedEvent;
 import dixu.deckard.server.TeamBlockEvent;
 
 import java.awt.*;
@@ -79,11 +80,23 @@ public class EventCounterView implements CounterView, EventHandler {
     }
 
     @Override
+    public void setValue(int value) {
+        this.value = value;
+    }
+
+    @Override
     public void handle(Event event) { //todo try to generify
         if (event instanceof TeamBlockEvent) {
             TeamBlockEvent teamBlockEvent = (TeamBlockEvent) event;
             if (teamBlockEvent.getTeam() == parent) {
                 value = teamBlockEvent.getNewValue();
+                changed = LocalTime.now();
+            }
+        }
+        if (event instanceof MinionDamagedEvent) {
+            MinionDamagedEvent minionDamagedEvent = (MinionDamagedEvent) event;
+            if (minionDamagedEvent.getMinion() == parent) {
+                value = minionDamagedEvent.getNewValue();
                 changed = LocalTime.now();
             }
         }

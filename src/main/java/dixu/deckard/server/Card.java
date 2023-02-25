@@ -23,13 +23,13 @@ public class Card {
         this(CardType.BLOCK);
     }
 
-    public void play(Team team, Minion minion) {
+    public void play(Team team, Minion minion,Game game) {
         if (type == CardType.BLOCK) {
             minion.remove(this);
             team.addBlock(value);
         }
         if (type == CardType.ATTACK) {
-            EventBus.getInstance().post(new RandomDmgEvent(team.getSide(),value));
+            game.getEnemyTeamFor(team).applyRandomDmg(value);
             minion.remove(this);
         }
         Game.animate();

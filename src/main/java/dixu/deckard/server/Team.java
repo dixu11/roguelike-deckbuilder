@@ -17,9 +17,9 @@ public class Team {
         return minions;
     }
 
-    public void playCards() {
+    public void playCards(Game game) {
         for (Minion minion : minions) {
-            minion.playCards(this);
+            minion.playCards(this,game);
         }
     }
 
@@ -75,4 +75,5 @@ public class Team {
         EventBus.getInstance().post(new TeamBlockEvent(value+block, block, this));
         block += value;
     }
+
 }

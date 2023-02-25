@@ -51,10 +51,10 @@ public class Minion {
         return discard;
     }
 
-    public void playCards(Team team) {
+    public void playCards(Team team,Game game) {
         for (Card card : new ArrayList<>(hand)) {
             EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
-            card.play(team, this);
+            card.play(team, this,game);
         }
     }
 
@@ -67,10 +67,11 @@ public class Minion {
         return minionCard;
     }
 
-    public void obtainDamage(Team team,int value) {
+    public void obtainDamage(Team team, int value) {
+        EventBus.getInstance().post(new MinionDamagedEvent(hp-value,hp,this));
         hp -= value;
         if (hp <= 0) {
-            EventBus.getInstance().post(new MinionDiedEvent(team.getSide(),this));
+            EventBus.getInstance().post(new MinionDiedEvent(team.getSide(), this));
         }
     }
 
