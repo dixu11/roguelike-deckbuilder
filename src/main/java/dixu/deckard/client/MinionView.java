@@ -35,6 +35,7 @@ public class MinionView implements EventHandler {
         this.discardCounter = discardCounter;
         EventBus.getInstance().register(this,CardPlayedEvent.class);
         EventBus.getInstance().register(this,DrawCardEvent.class);
+        EventBus.getInstance().register(this,ShuffleEvent.class);
     }
 
     public void render(Graphics g) {
@@ -65,6 +66,13 @@ public class MinionView implements EventHandler {
             DrawCardEvent drawCardEvent = (DrawCardEvent) event;
             if (drawCardEvent.getMinion() == minion) {
                 handView.addCard(drawCardEvent.getCard());
+                drawCounter.setValue(minion.getDraw().size());
+            }
+        }
+        if (event instanceof ShuffleEvent) {
+            ShuffleEvent shuffleEvent = (ShuffleEvent) event;
+            if (shuffleEvent.getMinion() == minion) {
+                discardCounter.setValue(minion.getDiscard().size());
                 drawCounter.setValue(minion.getDraw().size());
             }
         }

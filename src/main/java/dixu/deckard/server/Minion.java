@@ -26,6 +26,7 @@ public class Minion {
             Collections.shuffle(discard);
             draw.addAll(discard);
             discard.clear();
+            EventBus.getInstance().post(new ShuffleEvent(this));
         }
         Card card1 = draw.remove();
         hand.add(card1);

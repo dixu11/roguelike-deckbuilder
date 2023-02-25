@@ -32,7 +32,6 @@ public class Card {
             game.getEnemyTeamFor(team).applyRandomDmg(value);
             minion.remove(this);
         }
-        Game.animate();
     }
 
     public String getName() {
