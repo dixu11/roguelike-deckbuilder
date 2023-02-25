@@ -60,6 +60,9 @@ public class Team {
 
     public void characterDied(Character character) {
         characters.remove(character);
+        if (characters.isEmpty()) {
+            EventBus.getInstance().post(new GameOverEvent(this));
+        }
 
     }
 }

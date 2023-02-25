@@ -1,13 +1,13 @@
 package dixu.deckard.server;
 
 public class GameOverEvent implements Event {
-    private final Team winner;
+    private final Team lost;
 
-    public GameOverEvent(Team winner) {
-        this.winner = winner;
+    public GameOverEvent(Team lost) {
+        this.lost = lost;
     }
 
-    public Team getWinner() {
-        return winner;
+    public Team getLost() {
+        return lost;
     }
 }

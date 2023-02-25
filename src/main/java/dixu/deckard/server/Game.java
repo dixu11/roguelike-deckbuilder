@@ -1,5 +1,7 @@
 package dixu.deckard.server;
 
+import javax.swing.*;
+
 public class Game implements EventHandler {
     private final Team playerTeam;
     private final Team enemyTeam;
@@ -49,6 +51,9 @@ public class Game implements EventHandler {
             }
             target.characterDied(characterDied.getCharacter());
             System.out.println(characterDied.getCharacter().getName() + " JUST DIED!");
+        } else if (event instanceof GameOverEvent) {
+            JOptionPane.showMessageDialog(null,"Koniec gry!");
+            System.exit(0);
         }
         Game.animate();
     }
