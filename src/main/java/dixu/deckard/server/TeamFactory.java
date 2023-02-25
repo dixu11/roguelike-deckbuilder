@@ -3,7 +3,7 @@ package dixu.deckard.server;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TrainerFactory {
+public class TeamFactory {
 
     private CharacterFactory characterFactory = new CharacterFactory();
 

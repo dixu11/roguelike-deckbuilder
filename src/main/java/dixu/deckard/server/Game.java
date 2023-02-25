@@ -6,7 +6,6 @@ public class Game implements EventHandler {
     private final Team playerTeam;
     private final Team enemyTeam;
 
-
     public Game(Team playerTeam, Team enemyTeam) {
         this.playerTeam = playerTeam;
         this.enemyTeam = enemyTeam;
