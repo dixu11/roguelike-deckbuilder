@@ -8,8 +8,4 @@ public class GameController{
         this.game = game;
     }
 
-    public void start() {
-        game.start();
-    }
-
 }

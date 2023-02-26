@@ -23,19 +23,24 @@ public class Minion {
         Collections.shuffle(draw);
     }
 
-    public void drawTwo(Team team) { //refactor to method that draws 1
-        if (draw.size() < 2) {
+    public void drawCards(int count, CardContext context) {
+        for (int i = 0; i < count; i++) {
+            CardContext contextCopy = context.getCopy();
+            drawCard(contextCopy);
+        }
+    }
+
+    private void drawCard(CardContext context) {
+        if (draw.isEmpty()) {
             Collections.shuffle(discard);
             draw.addAll(discard);
             discard.clear();
             EventBus.getInstance().post(new ShuffleEvent(this));
         }
-        Card card1 = draw.remove();
-        hand.add(card1);
-        EventBus.getInstance().post(new DrawCardEvent(card1,this,team));
-        Card card2 = draw.remove();
-        hand.add(card2);
-        EventBus.getInstance().post(new DrawCardEvent(card2,this,team));
+        Card card = draw.remove();
+        hand.add(card);
+        context.setCard(card);
+        EventBus.getInstance().post(new DrawCardEvent(context));
     }
 
     public String getName() {
@@ -58,11 +63,11 @@ public class Minion {
         return discard;
     }
 
-    public void playCards(PlayContext playContext) {
+    public void playCards(CardContext cardContext) {
         for (Card card : new ArrayList<>(hand)) {
-            playContext.setCard(card);
-            EventBus.getInstance().post(new CardPlayedEvent(playContext));
-            card.play(playContext);
+            cardContext.setCard(card);
+            EventBus.getInstance().post(new CardPlayedEvent(cardContext));
+            card.play(cardContext);
             remove(card);
             Game.animate();
         }
@@ -77,7 +82,7 @@ public class Minion {
         return minionCard;
     }
 
-    public void obtainDamage(Team team, int value) {
+    public void applyDamage(Team team, int value) {
         EventBus.getInstance().post(new MinionDamagedEvent(hp-value,hp,this));
         hp -= value;
         if (hp <= 0) {

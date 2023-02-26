@@ -1,18 +1,15 @@
 package dixu.deckard.server.event;
 
-import dixu.deckard.server.Card;
-import dixu.deckard.server.Minion;
-import dixu.deckard.server.PlayContext;
-import dixu.deckard.server.Team;
+import dixu.deckard.server.CardContext;
 
 public class CardPlayedEvent implements Event {
-    private PlayContext playContext;
+    private CardContext cardContext;
 
-    public CardPlayedEvent(PlayContext playContext) {
-        this.playContext = playContext;
+    public CardPlayedEvent(CardContext cardContext) {
+        this.cardContext = cardContext;
     }
 
-    public PlayContext getPlayContext() {
-        return playContext;
+    public CardContext getPlayContext() {
+        return cardContext;
     }
 }

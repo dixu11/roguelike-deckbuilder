@@ -21,14 +21,14 @@ public class TeamView implements EventHandler {
     public TeamView(Team team, Direction direction) {
         this.team = team;
         this.direction = direction;
-        this.characters = team.getCharacters().stream()
+        this.characters = team.getMinions().stream()
                 .map(MinionView::new)
                 .toList();
         characters = new ArrayList<>(this.characters);
         EventCounterView blockCounterEvent = new EventCounterView(Direction.TOP, Direction.LEFT,  Color.GRAY);
         blockCounterEvent.setDescription("\uD83D\uDEE1️: ");
         blockCounterEvent.setParent(team);
-        EventBus.getInstance().register(blockCounterEvent, TeamBlockEvent.class);
+        EventBus.getInstance().register(blockCounterEvent, TeamBlockChangedEvent.class);
         blockCounter = blockCounterEvent;
 
         EventBus.getInstance().register(this, MinionDiedEvent.class);

@@ -23,15 +23,29 @@ public class Game implements EventHandler {
     @Override
     public void handle(Event event) {
         if (event instanceof StartTurnEvent) {
-            playerTeam.drawCards();
-            computerTeam.drawCards();
+            playerTeam.startTurnDrawCards(createContextForPlayer());
+            computerTeam.startTurnDrawCards(createContextForComputer());
             playerTeam.clearBlock();
         } else if (event instanceof EndTurnEvent) {
-            playerTeam.playCards(new PlayContext(playerTeam, computerTeam));
+            playerTeam.playCards(createContextForPlayer());
             computerTeam.clearBlock();
-            computerTeam.playCards(new PlayContext(computerTeam, playerTeam));
+            computerTeam.playCards(createContextForComputer());
             EventBus.getInstance().post(new StartTurnEvent());
         }
+    }
+
+    private CardContext createContextForPlayer() {
+        return CardContext.builder()
+                .actionTeam(playerTeam)
+                .enemyTeam(computerTeam)
+                .build();
+    }
+
+    private CardContext createContextForComputer() {
+        return CardContext.builder()
+                .actionTeam(computerTeam)
+                .enemyTeam(computerTeam)
+                .build();
     }
 
     //get current player

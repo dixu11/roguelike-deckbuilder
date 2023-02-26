@@ -31,7 +31,7 @@ public class EndTurnButtonView implements Clickable, EventHandler {
 
 
     @Override
-    public  void onClick(GameController controller) {
+    public  void onClick() {
         if (turnStarted.until(LocalTime.now(), ChronoUnit.SECONDS) < 1) {
             return;
         }

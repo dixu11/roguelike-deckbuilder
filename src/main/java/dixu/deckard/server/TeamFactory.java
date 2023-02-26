@@ -5,8 +5,6 @@ import java.util.List;
 
 public class TeamFactory {
 
-    private MinionFactory minionFactory = new MinionFactory();
-
     public Team createPlayer() {
         List<Minion> minions = new ArrayList<>();
         minions.add(new Minion());

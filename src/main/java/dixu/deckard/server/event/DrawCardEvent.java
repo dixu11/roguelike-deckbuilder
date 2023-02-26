@@ -1,29 +1,20 @@
 package dixu.deckard.server.event;
 
 import dixu.deckard.server.Card;
+import dixu.deckard.server.CardContext;
 import dixu.deckard.server.Minion;
 import dixu.deckard.server.Team;
 
 public class DrawCardEvent implements Event {
-    private Card card;
-    private Minion minion;
-    private Team team;
+    private CardContext context;
 
-    public DrawCardEvent(Card card, Minion minion, Team team) {
-        this.card = card;
-        this.minion = minion;
-        this.team = team;
+    private CardContext cardContext;
+
+    public DrawCardEvent(CardContext cardContext) {
+        this.cardContext = cardContext;
     }
 
-    public Card getCard() {
-        return card;
-    }
-
-    public Minion getMinion() {
-        return minion;
-    }
-
-    public Team getTeam() {
-        return team;
+    public CardContext getPlayContext() {
+        return cardContext;
     }
 }

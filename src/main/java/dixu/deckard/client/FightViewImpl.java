@@ -15,14 +15,13 @@ import java.awt.event.MouseListener;
 public class FightViewImpl implements FightView, MouseListener, EventHandler {
     private final TeamView playerTeam;
     private final TeamView enemyTeam;
-    private final EndTurnButtonView button;
+    private final EndTurnButtonView button = new EndTurnButtonView();
     private GameController controller;
 
 
-    public FightViewImpl(EndTurnButtonView button, TeamView playerTeam, TeamView enemyTeam) {
+    public FightViewImpl(TeamView playerTeam, TeamView enemyTeam) {
         this.playerTeam = playerTeam;
         this.enemyTeam = enemyTeam;
-        this.button = button;
 
         EventBus.getInstance().register(this, GameOverEvent.class);
     }
@@ -54,7 +53,7 @@ public class FightViewImpl implements FightView, MouseListener, EventHandler {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (button.isClicked(e.getX(), e.getY())) {
-            button.onClick(controller);
+            button.onClick();
         }
     }
 

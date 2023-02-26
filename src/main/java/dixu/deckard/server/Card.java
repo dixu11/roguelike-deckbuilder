@@ -1,7 +1,5 @@
 package dixu.deckard.server;
 
-import java.util.Random;
-
 public class Card {
     private final String name;
     private  int value;
@@ -21,9 +19,9 @@ public class Card {
         name = type.name()+ " "+ value;
     }
 
-    public void play(PlayContext context) {
+    public void play(CardContext context) {
         if (type == CardType.BLOCK) {
-            context.getPlayTeam().addBlock(value);
+            context.getActionTeam().addBlock(value);
         }
         if (type == CardType.ATTACK) {
             context.getEnemyTeam().applyDmg(value,context.getEnemyTeam().getRandomMinion());

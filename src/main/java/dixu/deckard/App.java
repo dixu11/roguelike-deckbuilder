@@ -10,21 +10,21 @@ public class App {
 
         //create team
         TeamFactory teamFactory = new TeamFactory();
-        Team enemy = teamFactory.createEnemy();
         Team player = teamFactory.createPlayer();
+        Team computer = teamFactory.createEnemy();
 
         //create views
         TeamView playerTeam = new TeamView(player,Direction.LEFT);
-        TeamView enemyTeam = new TeamView(enemy, Direction.RIGHT);
-        FightViewImpl fightViewImpl = new FightViewImpl(new EndTurnButtonView(),playerTeam,enemyTeam);
+        TeamView computerTeam = new TeamView(computer, Direction.RIGHT);
+        FightViewImpl fightViewImpl = new FightViewImpl(playerTeam,computerTeam);
 
         //create engine and connections
         GameEngine engine = new GameEngine(display, fightViewImpl);
-        Game game = new Game(player,enemy);
+        Game game = new Game(player,computer);
         GameController gameController = new GameController(game);
         fightViewImpl.setController(gameController);
         display.addListener(fightViewImpl);
-        gameController.start();
+        game.start();
         engine.start();
     }
 }

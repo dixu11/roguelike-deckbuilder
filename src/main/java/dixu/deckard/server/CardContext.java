@@ -1,18 +1,16 @@
 package dixu.deckard.server;
 
-public class PlayContext {
-    private Team playTeam;
+import lombok.Builder;
+
+@Builder
+public class CardContext {
+    private Team actionTeam;
     private Team enemyTeam;
     private Minion minion;
     private Card card;
 
-    public PlayContext(Team playTeam, Team enemyTeam) {
-        this.playTeam = playTeam;
-        this.enemyTeam = enemyTeam;
-    }
-
-    public Team getPlayTeam() {
-        return playTeam;
+    public Team getActionTeam() {
+        return actionTeam;
     }
 
     public Team getEnemyTeam() {
@@ -33,5 +31,14 @@ public class PlayContext {
 
     public Card getCard() {
         return card;
+    }
+
+    public CardContext getCopy() {
+        return builder()
+                .actionTeam(actionTeam)
+                .enemyTeam(enemyTeam)
+                .minion(minion)
+                .card(card)
+                .build();
     }
 }
