@@ -15,12 +15,9 @@ public class Game implements EventHandler {
 
     public void start() {
         EventBus eventBus = EventBus.getInstance();
-        eventBus.register(this, GameOverEvent.class);
         eventBus.register(this, EndTurnEvent.class);
         eventBus.register(this, StartTurnEvent.class);
         eventBus.register(this, MinionDiedEvent.class);
-
-//        eventBus.post(new GameStartedEvent()); // nic nie robi więc zakomentowany
         eventBus.post(new StartTurnEvent());
         enemyTeam.addBlock(3);
     }
@@ -38,10 +35,6 @@ public class Game implements EventHandler {
             playerTeam.drawCards();
             enemyTeam.drawCards();
             playerTeam.clearBlock();
-        } else if (event instanceof GameOverEvent) {
-            //todo update UI
-            JOptionPane.showMessageDialog(null,"Koniec gry!");
-            System.exit(0);
         }
     }
 
@@ -53,7 +46,7 @@ public class Game implements EventHandler {
 
     public static void animate() {
         try {
-            Thread.sleep(2000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

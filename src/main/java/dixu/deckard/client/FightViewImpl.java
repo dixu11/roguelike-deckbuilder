@@ -1,13 +1,18 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.GameController;
-import dixu.deckard.server.GameView;
+import dixu.deckard.server.FightView;
+import dixu.deckard.server.event.Event;
+import dixu.deckard.server.event.EventBus;
+import dixu.deckard.server.event.EventHandler;
+import dixu.deckard.server.event.GameOverEvent;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-public class FightViewImpl implements GameView, MouseListener {
+public class FightViewImpl implements FightView, MouseListener, EventHandler {
     private final TeamView playerTeam;
     private final TeamView enemyTeam;
     private final EndTurnButtonView button;
@@ -18,6 +23,8 @@ public class FightViewImpl implements GameView, MouseListener {
         this.playerTeam = playerTeam;
         this.enemyTeam = enemyTeam;
         this.button = button;
+
+        EventBus.getInstance().register(this, GameOverEvent.class);
     }
 
     //animations
@@ -27,7 +34,7 @@ public class FightViewImpl implements GameView, MouseListener {
 
     //rendering
     public void render(Graphics g) {
-       renderBackground(g);
+        renderBackground(g);
         playerTeam.render(g);
         enemyTeam.render(g);
         button.render(g);
@@ -48,6 +55,14 @@ public class FightViewImpl implements GameView, MouseListener {
     public void mouseReleased(MouseEvent e) {
         if (button.isClicked(e.getX(), e.getY())) {
             button.onClick(controller);
+        }
+    }
+
+    @Override
+    public void handle(Event event) {
+        if (event instanceof GameOverEvent) {
+            JOptionPane.showMessageDialog(null, "Koniec gry! ");
+            System.exit(0);
         }
     }
 
