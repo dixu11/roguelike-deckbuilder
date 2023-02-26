@@ -3,48 +3,59 @@ package dixu.deckard.server;
 import dixu.deckard.server.event.*;
 
 public class Game implements EventHandler {
-    private final Team playerTeam;
-    private final Team computerTeam;
 
-    public Game(Team playerTeam, Team computerTeam) {
-        this.playerTeam = playerTeam;
-        this.computerTeam = computerTeam;
+    private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
+    private final Team firstTeam;
+    private final Team secondTeam;
+    private final EventBus eventBus = EventBus.getInstance();
+
+    public Game(Team firstTeam, Team secondTeam) {
+        this.firstTeam = firstTeam;
+        this.secondTeam = secondTeam;
+
+        eventBus.register(this, TurnEndedEvent.class);
+        eventBus.register(this, TurnStartedEvent.class);
+        eventBus.register(this, MinionDiedEvent.class);
     }
 
     public void start() {
-        EventBus eventBus = EventBus.getInstance();
-        eventBus.register(this, EndTurnEvent.class);
-        eventBus.register(this, StartTurnEvent.class);
-        eventBus.register(this, MinionDiedEvent.class);
-        eventBus.post(new StartTurnEvent());
-        computerTeam.addBlock(3);
+        eventBus.post(new TurnStartedEvent());
+        secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK_BONUS);
     }
 
     @Override
     public void handle(Event event) {
-        if (event instanceof StartTurnEvent) {
-            playerTeam.startTurnDrawCards(createContextForPlayer());
-            computerTeam.startTurnDrawCards(createContextForComputer());
-            playerTeam.clearBlock();
-        } else if (event instanceof EndTurnEvent) {
-            playerTeam.playCards(createContextForPlayer());
-            computerTeam.clearBlock();
-            computerTeam.playCards(createContextForComputer());
-            EventBus.getInstance().post(new StartTurnEvent());
+        if (event instanceof TurnStartedEvent) {
+            onTurnStart();
+        } else if (event instanceof TurnEndedEvent) {
+            onTurnEnd();
         }
+    }
+
+    private void onTurnStart() {
+        firstTeam.startTurnDrawCards(createContextForPlayer());
+        secondTeam.startTurnDrawCards(createContextForComputer());
+        firstTeam.clearBlock();
+    }
+
+    private void onTurnEnd() {
+        firstTeam.playCards(createContextForPlayer());
+        secondTeam.clearBlock();
+        secondTeam.playCards(createContextForComputer());
+        EventBus.getInstance().post(new TurnStartedEvent());
     }
 
     private CardContext createContextForPlayer() {
         return CardContext.builder()
-                .actionTeam(playerTeam)
-                .enemyTeam(computerTeam)
+                .actionTeam(firstTeam)
+                .enemyTeam(secondTeam)
                 .build();
     }
 
     private CardContext createContextForComputer() {
         return CardContext.builder()
-                .actionTeam(computerTeam)
-                .enemyTeam(playerTeam)
+                .actionTeam(secondTeam)
+                .enemyTeam(firstTeam)
                 .build();
     }
 
@@ -55,9 +66,5 @@ public class Game implements EventHandler {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    public Team getEnemyTeamFor(Team team) {
-        return team.getSide() == TeamSide.LEFT ? computerTeam : playerTeam;
     }
 }

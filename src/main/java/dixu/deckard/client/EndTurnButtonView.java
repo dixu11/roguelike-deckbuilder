@@ -1,6 +1,5 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.GameController;
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.event.Event;
 
@@ -16,7 +15,7 @@ public class EndTurnButtonView implements Clickable, EventHandler {
 
     public EndTurnButtonView() {
         rect = new Rectangle(Display.getWidth(0.63), Display.getHeight(0.9) + 15, Display.getWidth(0.05), Display.getHeight(0.03));
-        EventBus.getInstance().register(this, StartTurnEvent.class);
+        EventBus.getInstance().register(this, TurnStartedEvent.class);
     }
 
     public void render(Graphics g) {
@@ -36,7 +35,7 @@ public class EndTurnButtonView implements Clickable, EventHandler {
             return;
         }
         visible = false;
-        EventBus.getInstance().post(new EndTurnEvent());
+        EventBus.getInstance().post(new TurnEndedEvent());
 
     }
 
@@ -47,7 +46,7 @@ public class EndTurnButtonView implements Clickable, EventHandler {
 
     @Override
     public void handle(Event event) {
-        if (event instanceof StartTurnEvent) {
+        if (event instanceof TurnStartedEvent) {
             turnStarted = LocalTime.now();
             visible = true;
         }
