@@ -1,9 +1,11 @@
 package dixu.deckard.server;
 
+import dixu.deckard.server.event.*;
+
 import java.util.List;
 import java.util.Random;
 
-public class Team {
+public class Team implements EventHandler {
     private List<Minion> minions;
     private int block;
     private TeamSide side;
@@ -11,6 +13,7 @@ public class Team {
     public Team(List<Minion> minions, TeamSide side) {
         this.minions = minions;
         this.side = side;
+        EventBus.getInstance().register(this, MinionDiedEvent.class);
     }
 
     public List<Minion> getCharacters() {
@@ -64,16 +67,26 @@ public class Team {
         block = 0;
     }
 
-    public void characterDied(Minion minion) {
-        minions.remove(minion);
-        if (minions.isEmpty()) {
-            EventBus.getInstance().post(new GameOverEvent(this));
-        }
-    }
-
     public void addBlock(int value) {
         EventBus.getInstance().post(new TeamBlockEvent(value+block, block, this));
         block += value;
     }
 
+    @Override
+    public void handle(Event event) {
+        //handle character died
+        if (event instanceof MinionDiedEvent) {
+            MinionDiedEvent minionDiedEvent = (MinionDiedEvent) event;
+            if (minionDiedEvent.getTeam() == this) {
+                characterDied(minionDiedEvent.getMinion());
+            }
+        }
+    }
+
+    private void characterDied(Minion minion) {
+        minions.remove(minion);
+        if (minions.isEmpty()) {
+            EventBus.getInstance().post(new GameOverEvent(this));
+        }
+    }
 }

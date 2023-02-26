@@ -1,5 +1,7 @@
 package dixu.deckard.server;
 
+import dixu.deckard.server.event.*;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -77,7 +79,7 @@ public class Minion {
         EventBus.getInstance().post(new MinionDamagedEvent(hp-value,hp,this));
         hp -= value;
         if (hp <= 0) {
-            EventBus.getInstance().post(new MinionDiedEvent(team.getSide(), this));
+            EventBus.getInstance().post(new MinionDiedEvent(team, this));
         }
     }
 

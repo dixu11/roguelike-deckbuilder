@@ -1,9 +1,9 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Event;
-import dixu.deckard.server.EventHandler;
-import dixu.deckard.server.MinionDamagedEvent;
-import dixu.deckard.server.TeamBlockEvent;
+import dixu.deckard.server.event.Event;
+import dixu.deckard.server.event.EventHandler;
+import dixu.deckard.server.event.MinionDamagedEvent;
+import dixu.deckard.server.event.TeamBlockEvent;
 
 import java.awt.*;
 import java.time.LocalTime;

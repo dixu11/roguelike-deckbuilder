@@ -1,4 +1,8 @@
-package dixu.deckard.server;
+package dixu.deckard.server.event;
+
+import dixu.deckard.server.Card;
+import dixu.deckard.server.Minion;
+import dixu.deckard.server.Team;
 
 public class CardPlayedEvent implements Event {
     private final Team team;

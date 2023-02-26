@@ -1,4 +1,6 @@
-package dixu.deckard.server;
+package dixu.deckard.server.event;
+
+import dixu.deckard.server.Minion;
 
 public class MinionDamagedEvent implements Event {
     private int newValue;

@@ -1,14 +1,14 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.EventBus;
+import dixu.deckard.server.event.*;
 import dixu.deckard.server.Team;
-import dixu.deckard.server.TeamBlockEvent;
+import dixu.deckard.server.event.Event;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamView {
+public class TeamView implements EventHandler {
     private static final int X_BASE_OFFSET = Display.getWidth(0.3);
     private static final int Y_BASE_OFFSET = Display.getHeight(0.3);
     private static final int X_COMPUTER_OFFSET = Display.getWidth(0.25);
@@ -30,10 +30,11 @@ public class TeamView {
         blockCounterEvent.setParent(team);
         EventBus.getInstance().register(blockCounterEvent, TeamBlockEvent.class);
         blockCounter = blockCounterEvent;
+
+        EventBus.getInstance().register(this, MinionDiedEvent.class);
     }
 
     public void render(Graphics g) {
-        characters.removeIf(view -> view.getCharacter().isDead());
         int xChange = 0;
 
         g.translate(getX(), getY());
@@ -44,7 +45,6 @@ public class TeamView {
             g.translate(xMove, 0);
             xChange += xMove;
         }
-
         g.translate(-getX() - xChange, -getY());
     }
 
@@ -54,5 +54,15 @@ public class TeamView {
 
     private int getY() {
         return Y_BASE_OFFSET;
+    }
+
+    @Override
+    public void handle(Event event) {
+        if (event instanceof MinionDiedEvent) {
+            MinionDiedEvent minionDiedEvent = (MinionDiedEvent) event;
+            if (minionDiedEvent.getTeam() == team) {
+                characters.removeIf(v -> v.getCharacter() == minionDiedEvent.getMinion());
+            }
+        }
     }
 }

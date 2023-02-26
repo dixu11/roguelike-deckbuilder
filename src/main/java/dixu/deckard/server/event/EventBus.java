@@ -1,4 +1,4 @@
-package dixu.deckard.server;
+package dixu.deckard.server.event;
 
 import java.util.ArrayList;
 import java.util.HashMap;

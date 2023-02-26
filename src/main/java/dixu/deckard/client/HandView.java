@@ -32,7 +32,6 @@ public class HandView {
     }
 
     public void remove(Card card) {
-        System.out.println("played: " + card.getName());
         cardViews.removeIf(v -> v.getCard() == card);
     }
 

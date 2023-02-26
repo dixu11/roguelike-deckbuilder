@@ -1,5 +1,7 @@
 package dixu.deckard.server;
 
+import dixu.deckard.server.event.*;
+
 import javax.swing.*;
 
 public class Game implements EventHandler {
@@ -36,13 +38,6 @@ public class Game implements EventHandler {
             playerTeam.drawCards();
             enemyTeam.drawCards();
             playerTeam.clearBlock();
-        } else if (event instanceof MinionDiedEvent) {
-            Team target = enemyTeam;
-            MinionDiedEvent characterDied = (MinionDiedEvent) event;
-            if (characterDied.getSide() == TeamSide.LEFT) {
-                target = playerTeam;
-            }
-            target.characterDied(characterDied.getCharacter());
         } else if (event instanceof GameOverEvent) {
             //todo update UI
             JOptionPane.showMessageDialog(null,"Koniec gry!");
@@ -58,7 +53,7 @@ public class Game implements EventHandler {
 
     public static void animate() {
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

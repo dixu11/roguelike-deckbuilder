@@ -1,11 +1,10 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.*;
-import dixu.deckard.server.Event;
+import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.Event;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MinionView implements EventHandler {
 
@@ -33,8 +32,8 @@ public class MinionView implements EventHandler {
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
         this.discardCounter = discardCounter;
-        EventBus.getInstance().register(this,CardPlayedEvent.class);
-        EventBus.getInstance().register(this,DrawCardEvent.class);
+        EventBus.getInstance().register(this, CardPlayedEvent.class);
+        EventBus.getInstance().register(this, DrawCardEvent.class);
         EventBus.getInstance().register(this,ShuffleEvent.class);
     }
 
