@@ -3,9 +3,9 @@ package dixu.deckard.server.event;
 import dixu.deckard.server.Team;
 
 public class TeamBlockChangedEvent implements Event {
-    private int newValue;
-    private int oldValue;
-    private Team team;
+    private final int newValue;
+    private final int oldValue;
+    private final Team team;
 
     public TeamBlockChangedEvent(int newValue, int oldValue, Team team) {
         this.newValue = newValue;
@@ -16,8 +16,6 @@ public class TeamBlockChangedEvent implements Event {
     public int getNewValue() {
         return newValue;
     }
-
-
 
     public Team getTeam() {
         return team;

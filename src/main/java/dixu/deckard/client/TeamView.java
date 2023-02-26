@@ -56,13 +56,17 @@ public class TeamView implements EventHandler {
         return Y_BASE_OFFSET;
     }
 
+    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
     @Override
     public void handle(Event event) {
-        if (event instanceof MinionDiedEvent) {
-            MinionDiedEvent minionDiedEvent = (MinionDiedEvent) event;
-            if (minionDiedEvent.getTeam() == team) {
-                characters.removeIf(v -> v.getCharacter() == minionDiedEvent.getMinion());
-            }
+        if (event instanceof MinionDiedEvent minionDiedEvent) {
+            onMinionDied(minionDiedEvent);
+        }
+    }
+
+    private void onMinionDied(MinionDiedEvent event) {
+        if (event.getTeam() == team) {
+            characters.removeIf(v -> v.getCharacter() == event.getMinion());
         }
     }
 }

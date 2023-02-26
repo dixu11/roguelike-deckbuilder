@@ -67,20 +67,24 @@ public class Team implements EventHandler {
     }
 
     //character death
+    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF CASTING?
     @Override
     public void handle(Event event) {
-        if (event instanceof MinionDiedEvent) {
-            MinionDiedEvent minionDiedEvent = (MinionDiedEvent) event;
-            if (minionDiedEvent.getTeam() == this) {
-                characterDied(minionDiedEvent.getMinion());
-            }
+        if (event instanceof MinionDiedEvent minionDiedEvent) {
+            onMinionDied(minionDiedEvent);
+        }
+    }
+
+    private void onMinionDied(MinionDiedEvent event) {
+        if (event.getTeam() == this) {
+            characterDied(event.getMinion());
         }
     }
 
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            bus.post(new GameOverEvent(this));
+            bus.post(new GameOverEvent());
         }
     }
 

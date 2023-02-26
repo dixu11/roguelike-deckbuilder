@@ -6,8 +6,6 @@ import dixu.deckard.server.Minion;
 import dixu.deckard.server.Team;
 
 public class DrawCardEvent implements Event {
-    private CardContext context;
-
     private CardContext cardContext;
 
     public DrawCardEvent(CardContext cardContext) {

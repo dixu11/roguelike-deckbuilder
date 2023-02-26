@@ -60,8 +60,7 @@ public class Game implements EventHandler {
                 .build();
     }
 
-    //get current player
-    public static void animate() {
+    public static void delayForAnimation() {
         try {
             Thread.sleep((long) (PLAY_DELAY_SECONDS*1000));
         } catch (InterruptedException e) {

@@ -26,7 +26,7 @@ public class Minion {
     //card draw
     public void drawCards(int count, CardContext context) {
         for (int i = 0; i < count; i++) {
-            CardContext contextCopy = context.getCopy();
+            CardContext contextCopy = context.getCopy(); //we play many cards so there are many contexts
             drawCard(contextCopy);
         }
     }
@@ -51,7 +51,7 @@ public class Minion {
             bus.post(new CardPlayedEvent(cardContext));
             card.play(cardContext);
             remove(card);
-            Game.animate();
+            Game.delayForAnimation();
         }
     }
 

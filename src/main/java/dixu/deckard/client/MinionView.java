@@ -8,11 +8,11 @@ import java.awt.*;
 
 public class MinionView implements EventHandler {
 
-    private Minion minion;
-    private CardView cardView;
-    private HandView handView;
-    private CounterView drawCounter;
-    private CounterView discardCounter;
+    private final Minion minion;
+    private final CardView cardView;
+    private final HandView handView;
+    private final CounterView drawCounter;
+    private final CounterView discardCounter;
 
     public MinionView(Minion minion) {
         this.minion = minion;
@@ -52,30 +52,40 @@ public class MinionView implements EventHandler {
         return minion;
     }
 
+    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
     @Override
     public void handle(Event event) {
-        if (event instanceof CardPlayedEvent) {
-            CardPlayedEvent cardPlayedEvent = (CardPlayedEvent) event;
-            CardContext context = cardPlayedEvent.getPlayContext();
-            if (context.getMinion()==minion) {
-                discardCounter.addValue(1);
-                handView.remove(context.getCard());
-            }
+        if (event instanceof CardPlayedEvent cardPlayedEvent) {
+            onCardPlayed(cardPlayedEvent);
         }
-        if (event instanceof DrawCardEvent) {
-            DrawCardEvent drawCardEvent = (DrawCardEvent) event;
-            CardContext context = drawCardEvent.getPlayContext();
-            if (context.getMinion() == minion) {
-                handView.addCard(context.getCard());
-                drawCounter.setValue(minion.getDraw().size());
-            }
+        if (event instanceof DrawCardEvent drawCardEvent) {
+            onCardDraw(drawCardEvent);
         }
-        if (event instanceof ShuffleEvent) {
-            ShuffleEvent shuffleEvent = (ShuffleEvent) event;
-            if (shuffleEvent.getMinion() == minion) {
-                discardCounter.setValue(minion.getDiscard().size());
-                drawCounter.setValue(minion.getDraw().size());
-            }
+        if (event instanceof ShuffleEvent shuffleEvent) {
+            onShuffle(shuffleEvent);
+        }
+    }
+
+    private void onCardPlayed(CardPlayedEvent event) {
+        CardContext context = event.getPlayContext();
+        if (context.getMinion()==minion) {
+            discardCounter.addValue(1);
+            handView.remove(context.getCard());
+        }
+    }
+
+    private void onCardDraw(DrawCardEvent event) {
+        CardContext context = event.getPlayContext();
+        if (context.getMinion() == minion) {
+            handView.addCard(context.getCard());
+            drawCounter.setValue(minion.getDraw().size());
+        }
+    }
+
+    private void onShuffle(ShuffleEvent shuffleEvent) {
+        if (shuffleEvent.getMinion() == minion) {
+            discardCounter.setValue(minion.getDiscard().size());
+            drawCounter.setValue(minion.getDraw().size());
         }
     }
 }

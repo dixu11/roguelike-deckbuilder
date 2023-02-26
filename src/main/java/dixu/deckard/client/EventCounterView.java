@@ -89,8 +89,10 @@ public class EventCounterView implements CounterView, EventHandler {
         this.value = value;
     }
 
+
+    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF CASTING?
     @Override
-    public void handle(Event event) { //todo try to generify
+    public void handle(Event event) {
         if (event instanceof TeamBlockChangedEvent) {
             TeamBlockChangedEvent teamBlockChangedEvent = (TeamBlockChangedEvent) event;
             if (teamBlockChangedEvent.getTeam() == parent) {
