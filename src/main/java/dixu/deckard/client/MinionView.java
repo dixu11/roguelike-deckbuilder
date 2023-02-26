@@ -64,8 +64,9 @@ public class MinionView implements EventHandler {
         }
         if (event instanceof DrawCardEvent) {
             DrawCardEvent drawCardEvent = (DrawCardEvent) event;
-            if (drawCardEvent.getMinion() == minion) {
-                handView.addCard(drawCardEvent.getCard());
+            CardContext context = drawCardEvent.getPlayContext();
+            if (context.getMinion() == minion) {
+                handView.addCard(context.getCard());
                 drawCounter.setValue(minion.getDraw().size());
             }
         }

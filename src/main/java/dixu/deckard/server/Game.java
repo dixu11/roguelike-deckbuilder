@@ -44,7 +44,7 @@ public class Game implements EventHandler {
     private CardContext createContextForComputer() {
         return CardContext.builder()
                 .actionTeam(computerTeam)
-                .enemyTeam(computerTeam)
+                .enemyTeam(playerTeam)
                 .build();
     }
 
