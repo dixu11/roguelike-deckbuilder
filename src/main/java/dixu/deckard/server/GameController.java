@@ -12,7 +12,4 @@ public class GameController{
         game.start();
     }
 
-    public void endTurn() {
-        game.endTurn();
-    }
 }

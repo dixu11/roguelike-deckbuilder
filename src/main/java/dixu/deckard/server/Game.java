@@ -38,15 +38,10 @@ public class Game implements EventHandler {
         }
     }
 
-    public void endTurn() {
-        EventBus.getInstance().post(new EndTurnEvent());
-    }
-
     //get current player
-
     public static void animate() {
         try {
-            Thread.sleep(500);
+            Thread.sleep(1500);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
