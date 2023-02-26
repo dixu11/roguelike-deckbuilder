@@ -20,9 +20,10 @@ public class Team implements EventHandler {
         return minions;
     }
 
-    public void playCards(Game game) {
+    public void playCards(PlayContext playContext) {
         for (Minion minion : minions) {
-            minion.playCards(this,game);
+            playContext.setMinion(minion);
+            minion.playCards(playContext);
         }
     }
 
@@ -30,14 +31,12 @@ public class Team implements EventHandler {
         return side;
     }
 
-    public void applyRandomDmg(int dmg) {
+    public void applyDmg(int dmg, Minion minion) {
         int dmgLeft = trashBlock(dmg);
         if (dmgLeft <= 0) {
             return;
         }
-        Random random = new Random();
-        minions.get(random.nextInt(minions.size())).obtainDamage(this,dmgLeft);
-
+        minion.obtainDamage(this,dmgLeft);
     }
 
     private int trashBlock(int dmg) {
@@ -88,5 +87,9 @@ public class Team implements EventHandler {
         if (minions.isEmpty()) {
             EventBus.getInstance().post(new GameOverEvent(this));
         }
+    }
+
+    public Minion getRandomMinion() {
+        return MyRandom.getRandomElement(minions);
     }
 }

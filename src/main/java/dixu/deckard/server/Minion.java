@@ -58,10 +58,12 @@ public class Minion {
         return discard;
     }
 
-    public void playCards(Team team,Game game) {
+    public void playCards(PlayContext playContext) {
         for (Card card : new ArrayList<>(hand)) {
-            EventBus.getInstance().post(new CardPlayedEvent(team, card, this));
-            card.play(team, this,game);
+            playContext.setCard(card);
+            EventBus.getInstance().post(new CardPlayedEvent(playContext));
+            card.play(playContext);
+            remove(card);
             Game.animate();
         }
     }

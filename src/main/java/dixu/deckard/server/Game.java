@@ -2,15 +2,13 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.*;
 
-import javax.swing.*;
-
 public class Game implements EventHandler {
     private final Team playerTeam;
-    private final Team enemyTeam;
+    private final Team computerTeam;
 
-    public Game(Team playerTeam, Team enemyTeam) {
+    public Game(Team playerTeam, Team computerTeam) {
         this.playerTeam = playerTeam;
-        this.enemyTeam = enemyTeam;
+        this.computerTeam = computerTeam;
     }
 
     public void start() {
@@ -19,22 +17,20 @@ public class Game implements EventHandler {
         eventBus.register(this, StartTurnEvent.class);
         eventBus.register(this, MinionDiedEvent.class);
         eventBus.post(new StartTurnEvent());
-        enemyTeam.addBlock(3);
+        computerTeam.addBlock(3);
     }
 
     @Override
     public void handle(Event event) {
-        if (event instanceof GameStartedEvent) {
-
-        } else if (event instanceof EndTurnEvent) {
-            playerTeam.playCards(this);
-            enemyTeam.clearBlock();
-            enemyTeam.playCards(this);
-            EventBus.getInstance().post(new StartTurnEvent());
-        } else if (event instanceof StartTurnEvent) {
+        if (event instanceof StartTurnEvent) {
             playerTeam.drawCards();
-            enemyTeam.drawCards();
+            computerTeam.drawCards();
             playerTeam.clearBlock();
+        } else if (event instanceof EndTurnEvent) {
+            playerTeam.playCards(new PlayContext(playerTeam, computerTeam));
+            computerTeam.clearBlock();
+            computerTeam.playCards(new PlayContext(computerTeam, playerTeam));
+            EventBus.getInstance().post(new StartTurnEvent());
         }
     }
 
@@ -48,6 +44,6 @@ public class Game implements EventHandler {
     }
 
     public Team getEnemyTeamFor(Team team) {
-        return team.getSide() == TeamSide.LEFT ? enemyTeam : playerTeam;
+        return team.getSide() == TeamSide.LEFT ? computerTeam : playerTeam;
     }
 }
