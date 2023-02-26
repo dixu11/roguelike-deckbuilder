@@ -2,8 +2,8 @@ package dixu.deckard.server;
 
 public class Card {
     private final String name;
-    private  int value;
-    private CardType type;
+    private final int value;
+    private final CardType type;
 
     public Card(CardType type, String name, int value) {
         this.type = type;
@@ -12,18 +12,17 @@ public class Card {
     }
 
     public void play(CardContext context) {
-        if (type == CardType.BLOCK) {
-            context.getActionTeam().addBlock(value);
-        }
-        if (type == CardType.ATTACK) {
-            context.getEnemyTeam().applyDmgTo(value,context.getEnemyTeam().getRandomMinion());
+        switch (type) {
+            case ATTACK -> context.getEnemyTeam()
+                    .applyDmgTo(value, context.getEnemyTeam().getRandomMinion());
+            case BLOCK -> context.getActionTeam().addBlock(value);
+            case MINION -> throw new IllegalArgumentException("THIS TYPE CANNOT BE PLAYED");
         }
     }
 
     public String getName() {
         return name;
     }
-
 
     @Override
     public String toString() {

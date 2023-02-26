@@ -4,6 +4,7 @@ import dixu.deckard.server.event.*;
 
 public class Game implements EventHandler {
 
+    private final static double PLAY_DELAY_SECONDS = 1.0;
     private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
     private final EventBus bus = EventBus.getInstance();
     private final Team firstTeam;
@@ -62,7 +63,7 @@ public class Game implements EventHandler {
     //get current player
     public static void animate() {
         try {
-            Thread.sleep(1500);
+            Thread.sleep((long) (PLAY_DELAY_SECONDS*1000));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

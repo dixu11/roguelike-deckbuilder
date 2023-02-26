@@ -5,6 +5,11 @@ import dixu.deckard.server.*;
 
 public class App {
     public static void main(String[] args) {
+        //UNCOMMENT THIS IF YOU DON'T SEE GAME WINDOW:
+//        Display.LOCATION_ON_SCREEN_X = 0;
+//        Display.LOCATION_ON_SCREEN_Y = 0;
+
+
         //create frame class and initialize window size
         Display display = new Display("Deckard Thief");
 
