@@ -24,7 +24,7 @@ public class Card {
             context.getActionTeam().addBlock(value);
         }
         if (type == CardType.ATTACK) {
-            context.getEnemyTeam().applyDmg(value,context.getEnemyTeam().getRandomMinion());
+            context.getEnemyTeam().applyDmgTo(value,context.getEnemyTeam().getRandomMinion());
         }
     }
 

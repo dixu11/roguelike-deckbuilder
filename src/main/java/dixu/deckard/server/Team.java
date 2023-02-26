@@ -6,35 +6,34 @@ import java.util.List;
 
 public class Team implements EventHandler {
     private static final int START_TURN_CARD_DRAW_COUNT_PER_MINION = 2;
+    private final EventBus bus = EventBus.getInstance();
     private final List<Minion> minions;
-    private final TeamSide side;
     private int block;
 
-    public Team(List<Minion> minions, TeamSide side) {
+    public Team(List<Minion> minions) {
         this.minions = minions;
-        this.side = side;
 
-        EventBus.getInstance().register(this, MinionDiedEvent.class);
+        bus.register(this, MinionDiedEvent.class);
     }
 
     //draws
-    public void playCards(CardContext cardContext) {
-        for (Minion minion : minions) {
-            cardContext.setMinion(minion);
-            minion.playCards(cardContext);
-        }
-    }
-
-    public void startTurnDrawCards(CardContext context) {
+    public void executeStartTurnCardDraws(CardContext context) {
         for (Minion minion : minions) {
             context.setMinion(minion);
             minion.drawCards(START_TURN_CARD_DRAW_COUNT_PER_MINION, context);
         }
     }
 
+    public void playAllCards(CardContext cardContext) {
+        for (Minion minion : minions) {
+            cardContext.setMinion(minion);
+            minion.playCards(cardContext);
+        }
+    }
+
     //damage / block
 
-    public void applyDmg(int dmg, Minion minion) {
+    public void applyDmgTo(int dmg, Minion minion) {
         int dmgLeft = applyDmgToBlock(dmg);
         if (dmgLeft <= 0) return;
 
@@ -53,17 +52,17 @@ public class Team implements EventHandler {
             dmg = 0;
         }
 
-        EventBus.getInstance().post(new TeamBlockChangedEvent(block, oldBlock, this));
+        bus.post(new TeamBlockChangedEvent(block, oldBlock, this));
         return dmg;
     }
 
     public void clearBlock() {
-        EventBus.getInstance().post(new TeamBlockChangedEvent(0, block, this));
+        bus.post(new TeamBlockChangedEvent(0, block, this));
         block = 0;
     }
 
     public void addBlock(int value) {
-        EventBus.getInstance().post(new TeamBlockChangedEvent(value + block, block, this));
+        bus.post(new TeamBlockChangedEvent(value + block, block, this));
         block += value;
     }
 
@@ -81,10 +80,9 @@ public class Team implements EventHandler {
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            EventBus.getInstance().post(new GameOverEvent(this));
+            bus.post(new GameOverEvent(this));
         }
     }
-
 
     //minion access
     public Minion getRandomMinion() {
@@ -93,11 +91,5 @@ public class Team implements EventHandler {
 
     public List<Minion> getMinions() {
         return minions;
-    }
-
-
-    //getters setters
-    public TeamSide getSide() {
-        return side;
     }
 }

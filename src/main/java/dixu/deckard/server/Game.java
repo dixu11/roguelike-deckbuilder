@@ -5,21 +5,21 @@ import dixu.deckard.server.event.*;
 public class Game implements EventHandler {
 
     private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
+    private final EventBus bus = EventBus.getInstance();
     private final Team firstTeam;
     private final Team secondTeam;
-    private final EventBus eventBus = EventBus.getInstance();
 
     public Game(Team firstTeam, Team secondTeam) {
         this.firstTeam = firstTeam;
         this.secondTeam = secondTeam;
 
-        eventBus.register(this, TurnEndedEvent.class);
-        eventBus.register(this, TurnStartedEvent.class);
-        eventBus.register(this, MinionDiedEvent.class);
+        bus.register(this, TurnEndedEvent.class);
+        bus.register(this, TurnStartedEvent.class);
+        bus.register(this, MinionDiedEvent.class);
     }
 
     public void start() {
-        eventBus.post(new TurnStartedEvent());
+        bus.post(new TurnStartedEvent());
         secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK_BONUS);
     }
 
@@ -33,15 +33,15 @@ public class Game implements EventHandler {
     }
 
     private void onTurnStart() {
-        firstTeam.startTurnDrawCards(createContextForPlayer());
-        secondTeam.startTurnDrawCards(createContextForComputer());
+        firstTeam.executeStartTurnCardDraws(createContextForPlayer());
+        secondTeam.executeStartTurnCardDraws(createContextForComputer());
         firstTeam.clearBlock();
     }
 
     private void onTurnEnd() {
-        firstTeam.playCards(createContextForPlayer());
+        firstTeam.playAllCards(createContextForPlayer());
         secondTeam.clearBlock();
-        secondTeam.playCards(createContextForComputer());
+        secondTeam.playAllCards(createContextForComputer());
         EventBus.getInstance().post(new TurnStartedEvent());
     }
 

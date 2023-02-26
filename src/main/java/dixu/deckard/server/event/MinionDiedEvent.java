@@ -2,7 +2,6 @@ package dixu.deckard.server.event;
 
 import dixu.deckard.server.Minion;
 import dixu.deckard.server.Team;
-import dixu.deckard.server.TeamSide;
 
 public class MinionDiedEvent implements Event {
     private Team team;
