@@ -27,7 +27,7 @@ public class Team implements EventHandler {
     public void playAllCards(CardContext cardContext) {
         for (Minion minion : minions) {
             cardContext.setMinion(minion);
-            minion.playCards(cardContext);
+            minion.playAllCards(cardContext);
         }
     }
 

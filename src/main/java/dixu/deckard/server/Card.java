@@ -4,19 +4,11 @@ public class Card {
     private final String name;
     private  int value;
     private CardType type;
-    private static int nextNr = 1;
 
-    public Card(CardType type) {
+    public Card(CardType type, String name, int value) {
         this.type = type;
-        value = 1;
-        if (type == CardType.ATTACK) {
-            value = 2;
-        } else if (type == CardType.MINION) {
-            value = nextNr;
-        }
-        nextNr++;
-
-        name = type.name()+ " "+ value;
+        this.name = name;
+        this.value = value;
     }
 
     public void play(CardContext context) {
