@@ -1,5 +1,10 @@
 package dixu.deckard.server.event;
 
-public class TurnStartedEvent implements Event {
+import dixu.deckard.server.Game;
 
+public class TurnStartedEvent implements GameEvent {
+    @Override
+    public void accept(Game visitor) {
+        visitor.handleTurnStart(this);
+    }
 }

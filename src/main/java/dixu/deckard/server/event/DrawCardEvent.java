@@ -1,15 +1,18 @@
 package dixu.deckard.server.event;
 
-import dixu.deckard.server.Card;
+import dixu.deckard.client.MinionView;
 import dixu.deckard.server.CardContext;
-import dixu.deckard.server.Minion;
-import dixu.deckard.server.Team;
 
-public class DrawCardEvent implements Event {
+public class DrawCardEvent implements MinionEvent {
     private CardContext cardContext;
 
     public DrawCardEvent(CardContext cardContext) {
         this.cardContext = cardContext;
+    }
+
+    @Override
+    public void accept(MinionView visitor) {
+        visitor.handleCardDraw(this);
     }
 
     public CardContext getPlayContext() {

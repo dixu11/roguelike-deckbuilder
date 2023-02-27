@@ -4,7 +4,7 @@ import dixu.deckard.server.event.*;
 
 import java.util.List;
 
-public class Team implements EventHandler {
+public class Team implements EventHandler<MinionDiedEvent> {
     private static final int START_TURN_CARD_DRAW_COUNT_PER_MINION = 2;
     private final EventBus bus = EventBus.getInstance();
     private final List<Minion> minions;
@@ -69,10 +69,8 @@ public class Team implements EventHandler {
     //character death
     //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF CASTING?
     @Override
-    public void handle(Event event) {
-        if (event instanceof MinionDiedEvent minionDiedEvent) {
-            onMinionDied(minionDiedEvent);
-        }
+    public void handle(MinionDiedEvent event) {
+        onMinionDied(event);
     }
 
     private void onMinionDied(MinionDiedEvent event) {

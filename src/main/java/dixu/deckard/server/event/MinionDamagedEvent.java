@@ -1,8 +1,9 @@
 package dixu.deckard.server.event;
 
+import dixu.deckard.client.EventCounterView;
 import dixu.deckard.server.Minion;
 
-public class MinionDamagedEvent implements Event {
+public class MinionDamagedEvent implements EventCounterEvent {
     private int newValue;
     private int oldValue;
     private Minion minion;
@@ -11,6 +12,11 @@ public class MinionDamagedEvent implements Event {
         this.newValue = newValue;
         this.oldValue = oldValue;
         this.minion = minion;
+    }
+
+    @Override
+    public void accept(EventCounterView visitor) {
+        visitor.handleMinionDamaged(this);
     }
 
     public int getNewValue() {
