@@ -9,7 +9,7 @@ public class CoreEvent implements Event<CoreEventName> {
 
     @Override
     public CoreEventName getName() {
-        return null;
+        return name;
     }
 
     public static CoreEvent of(CoreEventName name) {
