@@ -9,10 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TeamView implements EventHandler {
-    private static final int X_BASE_OFFSET = Display.getWidth(0.3);
-    private static final int Y_BASE_OFFSET = Display.getHeight(0.3);
-    private static final int X_COMPUTER_OFFSET = Display.getWidth(0.25);
-    private static final int PADDING = Display.getWidth(0.08);
+    private static final int X_BASE_OFFSET = GuiParams.getWidth(0.3);
+    private static final int Y_BASE_OFFSET = GuiParams.getHeight(0.3);
+    private static final int X_COMPUTER_OFFSET = GuiParams.getWidth(0.25);
+    private static final int PADDING = GuiParams.getWidth(0.08);
     private List<MinionView> characters;
     private Team team;
     private Direction direction;

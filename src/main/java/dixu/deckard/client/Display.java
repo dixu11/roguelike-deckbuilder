@@ -4,18 +4,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseListener;
 
+import static dixu.deckard.client.GuiParams.*;
 import static javax.swing.WindowConstants.EXIT_ON_CLOSE;
 
 //manages game frame and canvas
 public final class Display {
-
-    public static int LOCATION_ON_SCREEN_X = 2200;
-    public static int LOCATION_ON_SCREEN_Y = 50;
-    private static final int DEFAULT_WIDTH = 2100;
-    private static final int DEFAULT_HEIGHT = 800;
-
-    private volatile static int width;
-    private volatile static int height;
 
     private JFrame frame;
     private Canvas canvas;
@@ -25,9 +18,7 @@ public final class Display {
 
     public Display(String title) {
         this.title = title;
-        width = DEFAULT_WIDTH;
-        height = DEFAULT_HEIGHT;
-        size = new Dimension(width, height);
+        size = new Dimension(WIDTH, HEIGHT);
 
         createAndSetupFrame();
         createAndSetupCanvas();
@@ -60,14 +51,6 @@ public final class Display {
         return canvas;
     }
 
-    public static int getHeight() {
-        return height;
-    }
-
-    public static int getWidth() {
-        return width;
-    }
-
     public void addListener(MouseListener listener) {
         canvas.addMouseListener(listener);
     }
@@ -76,11 +59,5 @@ public final class Display {
         frame.setVisible(true);
     }
 
-    public static int getWidth(double percent) {
-        return (int) (getWidth() * percent);
-    }
 
-    public static int getHeight(double percent) {
-        return (int) (getHeight() * percent);
-    }
 }

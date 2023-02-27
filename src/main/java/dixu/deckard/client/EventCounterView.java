@@ -90,22 +90,28 @@ public class EventCounterView implements CounterView, EventHandler {
     }
 
 
-    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF CASTING?
+    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
     @Override
     public void handle(Event event) {
-        if (event instanceof TeamBlockChangedEvent) {
-            TeamBlockChangedEvent teamBlockChangedEvent = (TeamBlockChangedEvent) event;
-            if (teamBlockChangedEvent.getTeam() == parent) {
-                value = teamBlockChangedEvent.getNewValue();
-                changed = LocalTime.now();
-            }
+        if (event instanceof TeamBlockChangedEvent teamBlockChangedEvent) {
+            onTeamBlockChanged(teamBlockChangedEvent);
         }
-        if (event instanceof MinionDamagedEvent) {
-            MinionDamagedEvent minionDamagedEvent = (MinionDamagedEvent) event;
-            if (minionDamagedEvent.getMinion() == parent) {
-                value = minionDamagedEvent.getNewValue();
-                changed = LocalTime.now();
-            }
+        if (event instanceof MinionDamagedEvent minionDamagedEvent) {
+            onMinionDamaged(minionDamagedEvent);
+        }
+    }
+
+    private void onTeamBlockChanged(TeamBlockChangedEvent teamBlockChangedEvent) {
+        if (teamBlockChangedEvent.getTeam() == parent) {
+            value = teamBlockChangedEvent.getNewValue();
+            changed = LocalTime.now();
+        }
+    }
+
+    private void onMinionDamaged(MinionDamagedEvent minionDamagedEvent) {
+        if (minionDamagedEvent.getMinion() == parent) {
+            value = minionDamagedEvent.getNewValue();
+            changed = LocalTime.now();
         }
     }
 

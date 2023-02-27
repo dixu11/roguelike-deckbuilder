@@ -14,7 +14,7 @@ public class EndTurnButtonView implements Clickable, EventHandler {
     private boolean visible = true;
 
     public EndTurnButtonView() {
-        rect = new Rectangle(Display.getWidth(0.63), Display.getHeight(0.9) + 15, Display.getWidth(0.05), Display.getHeight(0.03));
+        rect = new Rectangle(GuiParams.getWidth(0.63), GuiParams.getHeight(0.9) + 15, GuiParams.getWidth(0.05), GuiParams.getHeight(0.03));
         EventBus.getInstance().register(this, TurnStartedEvent.class);
     }
 

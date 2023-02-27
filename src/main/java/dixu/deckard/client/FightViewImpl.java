@@ -12,18 +12,21 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import static dixu.deckard.client.GuiParams.*;
+
 public class FightViewImpl implements FightView, MouseListener, EventHandler {
-    private final TeamView playerTeam;
-    private final TeamView enemyTeam;
-    private final EndTurnButtonView button = new EndTurnButtonView();
-    private GameController controller;
+    private final EventBus bus = EventBus.getInstance();
+    private final TeamView firstTeam;
+    private final TeamView secondTeam;
+    private final EndTurnButtonView endTurn = new EndTurnButtonView();
+    private GameController controller;//todo możliwe że będzie do usinięcia
 
 
-    public FightViewImpl(TeamView playerTeam, TeamView enemyTeam) {
-        this.playerTeam = playerTeam;
-        this.enemyTeam = enemyTeam;
+    public FightViewImpl(TeamView firstTeam, TeamView secondTeam) {
+        this.firstTeam = firstTeam;
+        this.secondTeam = secondTeam;
 
-        EventBus.getInstance().register(this, GameOverEvent.class);
+        bus.register(this, GameOverEvent.class);
     }
 
     //animations
@@ -34,36 +37,38 @@ public class FightViewImpl implements FightView, MouseListener, EventHandler {
     //rendering
     public void render(Graphics g) {
         renderBackground(g);
-        playerTeam.render(g);
-        enemyTeam.render(g);
-        button.render(g);
+        firstTeam.render(g);
+        secondTeam.render(g);
+        endTurn.render(g);
     }
 
     private void renderBackground(Graphics g) {
-        g.setColor(Color.DARK_GRAY);
-        g.fillRect(0, 0, Display.getWidth(), Display.getHeight());
+        g.setColor(MAIN_COLOR_DARK);
+        g.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
 
     //interaction
-    public void setController(GameController controller) {
-        this.controller = controller;
-    }
-
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (button.isClicked(e.getX(), e.getY())) {
-            button.onClick();
+        if (endTurn.isClicked(e.getX(), e.getY())) {
+            endTurn.onClick();
         }
     }
 
     @Override
     public void handle(Event event) {
         if (event instanceof GameOverEvent) {
-            JOptionPane.showMessageDialog(null, "Koniec gry! ");
+            JOptionPane.showMessageDialog(null, "Game over! ");
             System.exit(0);
         }
     }
+
+    public void setController(GameController controller) {
+        this.controller = controller;
+    }
+
+    //garbage
 
     @Override
     public void mouseClicked(MouseEvent e) {

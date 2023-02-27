@@ -4,6 +4,9 @@ package dixu.deckard.client;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
+import static dixu.deckard.client.GuiParams.HEIGHT;
+import static dixu.deckard.client.GuiParams.WIDTH;
+
 //system timer that ticks and renders game every frame
 public final class GameEngine implements Runnable {
 
@@ -72,7 +75,7 @@ public final class GameEngine implements Runnable {
 
     private void renderFrame() {
         Graphics graphics = strategy.getDrawGraphics();
-        graphics.clearRect(0, 0, Display.getWidth(), Display.getHeight());
+        graphics.clearRect(0, 0, WIDTH, HEIGHT);
         fightViewImpl.render(graphics);
         strategy.show();
         graphics.dispose();
