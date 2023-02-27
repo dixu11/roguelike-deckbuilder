@@ -3,7 +3,6 @@ package dixu.deckard.client;
 import dixu.deckard.server.GameController;
 import dixu.deckard.server.FightView;
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.event.Event;
 
 import javax.swing.*;
 import java.awt.*;

@@ -13,7 +13,7 @@ public final class Display {
     private JFrame frame;
     private Canvas canvas;
 
-    private String title;
+    private final String title;
     private Dimension size;
 
     public Display(String title) {

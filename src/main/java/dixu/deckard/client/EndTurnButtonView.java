@@ -1,7 +1,6 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.event.Event;
 
 import java.awt.*;
 import java.time.LocalTime;
@@ -24,14 +23,14 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
             return;
         }
         g.setColor(Color.GRAY);
-        g.fillRect(rect.x, rect.y , rect.width, rect.height);
+        g.fillRect(rect.x, rect.y, rect.width, rect.height);
         g.setColor(Color.DARK_GRAY);
-        g.drawString("End turn",rect.x+10,rect.y +15);
+        g.drawString("End turn", rect.x + 10, rect.y + 15);
     }
 
 
     @Override
-    public  void onClick() {
+    public void onClick() {
         if (turnStarted.until(LocalTime.now(), ChronoUnit.SECONDS) < 1) {
             return;
         }

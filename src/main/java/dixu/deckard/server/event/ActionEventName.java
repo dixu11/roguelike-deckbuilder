@@ -11,11 +11,6 @@ public enum ActionEventName {
     MINION_SHUFFLE,
     TEAM_BLOCK_CHANGED;
 
-   /* public Object determineSource(ActionEventName name,) {
-        if () {
-        }
-    }*/
-
     public static Object determineSourceFromEventName(ActionEvent actionEvent) {
         if (actionEvent.getName().name().startsWith("MINION")) {
             return actionEvent.getMinion();

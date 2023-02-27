@@ -14,9 +14,9 @@ public class TeamView implements ActionEventHandler {
     private static final int PADDING = GuiParams.getWidth(0.08);
     private final BusManager bus = BusManager.instance();
     private List<MinionView> characters;
-    private Team team;
-    private Direction direction;
-    private CounterView blockCounter;
+    private final Team team;
+    private final Direction direction;
+    private final CounterView blockCounter;
 
     public TeamView(Team team, Direction direction) {
         this.team = team;
@@ -28,6 +28,7 @@ public class TeamView implements ActionEventHandler {
         EventCounterView blockCounterEvent = new EventCounterView(Direction.TOP, Direction.LEFT,  Color.GRAY);
         blockCounterEvent.setDescription("\uD83D\uDEE1️: ");
         blockCounterEvent.setSource(team);
+        blockCounterEvent.setStrategy((oldVal, e)-> e.value());
         bus.register(blockCounterEvent, ActionEventName.TEAM_BLOCK_CHANGED);
         blockCounter = blockCounterEvent;
 
@@ -39,9 +40,9 @@ public class TeamView implements ActionEventHandler {
 
         g.translate(getX(), getY());
         blockCounter.render(g, new Rectangle(0, CardView.CARD_HEIGHT * 2, 100, 100));
-        for (int i = 0; i < characters.size(); i++) { //todo foreach
+        for (MinionView character : characters) {
             int xMove = PADDING + CardView.CARD_WIDTH;
-            characters.get(i).render(g);
+            character.render(g);
             g.translate(xMove, 0);
             xChange += xMove;
         }

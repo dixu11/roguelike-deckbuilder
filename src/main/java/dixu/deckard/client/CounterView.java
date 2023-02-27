@@ -10,6 +10,4 @@ public interface CounterView {
     void setValue(int health);
 
     void setBlinking(boolean blinking);
-
-    void addValue(int value);
 }

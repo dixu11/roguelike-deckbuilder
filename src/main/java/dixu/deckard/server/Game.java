@@ -60,7 +60,7 @@ public class Game implements CoreEventHandler {
 
     public static void delayForAnimation() {
         try {
-            Thread.sleep((long) (PLAY_DELAY_SECONDS*1000));
+            Thread.sleep((long) (PLAY_DELAY_SECONDS * 1000));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

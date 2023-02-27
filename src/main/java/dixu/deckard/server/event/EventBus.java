@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventBus<T,E extends Event<T>> {
+public class EventBus<T, E extends Event<T>> {
 
     EventBus() {
     }
@@ -17,7 +17,7 @@ public class EventBus<T,E extends Event<T>> {
         handlersByClass.add(handler);
     }
 
-    public  void post(E event){
+    public void post(E event) {
         List<EventHandler<E>> eventHandlers = allHandlers.get(event.getName());
         if (eventHandlers != null) {
             for (EventHandler<E> handler : eventHandlers) {

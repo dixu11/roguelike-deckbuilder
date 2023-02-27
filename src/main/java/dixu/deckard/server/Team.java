@@ -59,7 +59,7 @@ public class Team implements ActionEventHandler {
     }
 
     public void addBlock(int value) {
-        postBlockChangedEvent(value+block);
+        postBlockChangedEvent(value + block);
         block += value;
     }
 

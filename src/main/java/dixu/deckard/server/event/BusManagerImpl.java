@@ -7,7 +7,6 @@ public class BusManagerImpl implements BusManager {
     private final EventBus<ActionEventName, ActionEvent> effectBus = new EventBus<>();
 
 
-
     private BusManagerImpl() {
     }
 
@@ -17,7 +16,7 @@ public class BusManagerImpl implements BusManager {
 
     @Override
     public void register(ActionEventHandler handler, ActionEventName name) {
-        effectBus.register(handler,name);
+        effectBus.register(handler, name);
     }
 
     @Override

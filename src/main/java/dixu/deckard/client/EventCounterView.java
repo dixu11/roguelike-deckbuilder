@@ -2,7 +2,6 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.event.ActionEventHandler;
 import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventName;
 
 import java.awt.*;
 import java.time.LocalTime;
@@ -20,11 +19,12 @@ public class EventCounterView implements CounterView, ActionEventHandler {
 
     //value
     private int value;
+    private Object source;
+    private CountingStrategy strategy;
 
     //looks
     private Color color;
     private String description = "";
-    private Object source;
 
 
     //update animation
@@ -74,11 +74,6 @@ public class EventCounterView implements CounterView, ActionEventHandler {
         this.blinking = blinking;
     }
 
-    @Override
-    public void addValue(int value) {
-        this.value += value;
-    }
-
     public void setDescription(String description) {
         this.description = description;
     }
@@ -88,50 +83,19 @@ public class EventCounterView implements CounterView, ActionEventHandler {
         this.value = value;
     }
 
-
+    public void setStrategy(CountingStrategy strategy) {
+        this.strategy = strategy;
+    }
 
     @Override
-    public void handle(ActionEvent event) { //TODO try to do it without checking event type, cause u registered for correct type
-        if (event.getName() == ActionEventName.TEAM_BLOCK_CHANGED) {
-            onTeamBlockChanged(event);
-        }
-        if (event.getName() == ActionEventName.MINION_DAMAGED) {
-            onMinionDamaged(event);
-        }
-        if (event.getName() == ActionEventName.MINION_CARD_DRAW) {
-            onDrawCard(event);
-        }
-        if (event.getName() == ActionEventName.MINION_CARD_PLAYED) {
-            onMinionCardPlayed(event);
-        }
-    }
-
-    private void onTeamBlockChanged(ActionEvent event) {
-        if (event.getSource() == source) {
-            System.out.println("test");
-            value = event.value();
-            changed = LocalTime.now();
-        }
-    }
-
-    private void onMinionDamaged(ActionEvent event) {
-        if (event.getSource() == source) {
-            value = event.value();
-            changed = LocalTime.now();
-        }
-    }
-
-    private void onDrawCard(ActionEvent event) {
-        if (event.getSource() == source) {
-            value = event.getMinion().getDraw().size();
-            changed = LocalTime.now();
-        }
-    }
-
-    private void onMinionCardPlayed(ActionEvent event) {
-        if (event.getSource() == source) {
-            value++;
-            changed = LocalTime.now();
+    public void handle(ActionEvent event) {
+        if (strategy != null) {
+            if (event.getSource() == source) {
+                value = strategy.updateValue(value, event);
+                changed = LocalTime.now();
+            }
+        } else {
+            throw new IllegalStateException("STRATEGY MUST BE DEFINED ON EVERY COUNTER");
         }
     }
 
