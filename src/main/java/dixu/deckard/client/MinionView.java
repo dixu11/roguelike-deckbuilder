@@ -24,13 +24,17 @@ public class MinionView implements ActionEventHandler {
         healthCounter.setValue(minion.getHealth());
         bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
         cardView.addCounter(healthCounter);
-        CounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
+        EventCounterView drawCounter = new EventCounterView(Direction.BOTTOM, Direction.LEFT, Color.GRAY);
         drawCounter.setDescription("\uD83C\uDCA0: ");
         drawCounter.setValue(minion.getDraw().size());
+        drawCounter.setSource(minion);
+        bus.register(drawCounter,ActionEventName.MINION_CARD_DRAW);
         this.drawCounter = drawCounter;
-        CounterView discardCounter = new EventCounterView(Direction.BOTTOM, Direction.RIGHT, Color.GRAY);
+        EventCounterView discardCounter = new EventCounterView(Direction.BOTTOM, Direction.RIGHT, Color.GRAY);
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
+        discardCounter.setSource(minion);
+        bus.register(discardCounter,ActionEventName.MINION_CARD_PLAYED);
         this.discardCounter = discardCounter;
         bus.register(this, ActionEventName.MINION_CARD_PLAYED);
         bus.register(this, ActionEventName.MINION_CARD_DRAW);
@@ -59,7 +63,6 @@ public class MinionView implements ActionEventHandler {
 
     private void onCardPlayed(ActionEvent event) {
         if (event.getMinion()==minion) {
-            discardCounter.addValue(1);
             handView.remove(event.getCard());
         }
     }
@@ -67,14 +70,12 @@ public class MinionView implements ActionEventHandler {
     private void onCardDraw(ActionEvent event) {
         if (event.getMinion() == minion) {
             handView.addCard(event.getCard());
-            drawCounter.setValue(minion.getDraw().size());
         }
     }
 
     private void onShuffle(ActionEvent event) {
         if (event.getMinion() == minion) {
-            discardCounter.setValue(minion.getDiscard().size());
-            drawCounter.setValue(minion.getDraw().size());
+            discardCounter.setValue(minion.getDiscard().size()); //todo wsztrzyknąć tę logikę do countera jako obsługę on shuffle
         }
     }
 

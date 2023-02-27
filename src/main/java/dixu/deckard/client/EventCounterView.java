@@ -98,10 +98,17 @@ public class EventCounterView implements CounterView, ActionEventHandler {
         if (event.getName() == ActionEventName.MINION_DAMAGED) {
             onMinionDamaged(event);
         }
+        if (event.getName() == ActionEventName.MINION_CARD_DRAW) {
+            onDrawCard(event);
+        }
+        if (event.getName() == ActionEventName.MINION_CARD_PLAYED) {
+            onMinionCardPlayed(event);
+        }
     }
 
     private void onTeamBlockChanged(ActionEvent event) {
         if (event.getSource() == source) {
+            System.out.println("test");
             value = event.value();
             changed = LocalTime.now();
         }
@@ -110,6 +117,20 @@ public class EventCounterView implements CounterView, ActionEventHandler {
     private void onMinionDamaged(ActionEvent event) {
         if (event.getSource() == source) {
             value = event.value();
+            changed = LocalTime.now();
+        }
+    }
+
+    private void onDrawCard(ActionEvent event) {
+        if (event.getSource() == source) {
+            value = event.getMinion().getDraw().size();
+            changed = LocalTime.now();
+        }
+    }
+
+    private void onMinionCardPlayed(ActionEvent event) {
+        if (event.getSource() == source) {
+            value++;
             changed = LocalTime.now();
         }
     }

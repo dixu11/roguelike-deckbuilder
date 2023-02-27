@@ -59,7 +59,7 @@ public class Team implements ActionEventHandler {
     }
 
     public void addBlock(int value) {
-        postBlockChangedEvent(value);
+        postBlockChangedEvent(value+block);
         block += value;
     }
 
@@ -67,7 +67,7 @@ public class Team implements ActionEventHandler {
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.TEAM_BLOCK_CHANGED)
                 .value(newValue)
-                .source(this)
+                .ownTeam(this)
                 .build()
         );
     }
