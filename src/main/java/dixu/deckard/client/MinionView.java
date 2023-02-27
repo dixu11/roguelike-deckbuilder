@@ -2,11 +2,10 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.*;
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.event.Event;
 
 import java.awt.*;
 
-public class MinionView implements FightEventHandler {
+public class MinionView implements ActionEventHandler {
 
     private final BusManager bus = BusManager.instance();
     private final Minion minion;
@@ -23,7 +22,7 @@ public class MinionView implements FightEventHandler {
         healthCounter.setDescription("♥: ");
         healthCounter.setSource(minion);
         healthCounter.setValue(minion.getHealth());
-        bus.register(healthCounter, FightEventName.MINION_DAMAGED);
+        bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
         cardView.addCounter(healthCounter);
         CounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
         drawCounter.setDescription("\uD83C\uDCA0: ");
@@ -33,9 +32,9 @@ public class MinionView implements FightEventHandler {
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
         this.discardCounter = discardCounter;
-        bus.register(this, FightEventName.MINION_CARD_PLAYED);
-        bus.register(this, FightEventName.MINION_CARD_DRAW);
-        bus.register(this,FightEventName.MINION_SHUFFLE);
+        bus.register(this, ActionEventName.MINION_CARD_PLAYED);
+        bus.register(this, ActionEventName.MINION_CARD_DRAW);
+        bus.register(this, ActionEventName.MINION_SHUFFLE);
     }
 
     public void render(Graphics g) {
@@ -50,7 +49,7 @@ public class MinionView implements FightEventHandler {
 
 
     @Override
-    public void handle(FightEvent event) {
+    public void handle(ActionEvent event) {
         switch (event.getName()) {
             case MINION_CARD_PLAYED -> onCardPlayed(event);
             case MINION_CARD_DRAW -> onCardDraw(event);
@@ -58,21 +57,21 @@ public class MinionView implements FightEventHandler {
         }
     }
 
-    private void onCardPlayed(FightEvent event) {
+    private void onCardPlayed(ActionEvent event) {
         if (event.getMinion()==minion) {
             discardCounter.addValue(1);
             handView.remove(event.getCard());
         }
     }
 
-    private void onCardDraw(FightEvent event) {
+    private void onCardDraw(ActionEvent event) {
         if (event.getMinion() == minion) {
             handView.addCard(event.getCard());
             drawCounter.setValue(minion.getDraw().size());
         }
     }
 
-    private void onShuffle(FightEvent event) {
+    private void onShuffle(ActionEvent event) {
         if (event.getMinion() == minion) {
             discardCounter.setValue(minion.getDiscard().size());
             drawCounter.setValue(minion.getDraw().size());

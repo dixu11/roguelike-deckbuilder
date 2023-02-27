@@ -58,6 +58,4 @@ public final class Display {
     public void showGame() {
         frame.setVisible(true);
     }
-
-
 }

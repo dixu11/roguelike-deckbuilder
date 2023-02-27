@@ -7,7 +7,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamView implements FightEventHandler {
+public class TeamView implements ActionEventHandler {
     private static final int X_BASE_OFFSET = GuiParams.getWidth(0.3);
     private static final int Y_BASE_OFFSET = GuiParams.getHeight(0.3);
     private static final int X_COMPUTER_OFFSET = GuiParams.getWidth(0.25);
@@ -28,10 +28,10 @@ public class TeamView implements FightEventHandler {
         EventCounterView blockCounterEvent = new EventCounterView(Direction.TOP, Direction.LEFT,  Color.GRAY);
         blockCounterEvent.setDescription("\uD83D\uDEE1️: ");
         blockCounterEvent.setSource(team);
-        bus.register(blockCounterEvent, FightEventName.TEAM_BLOCK_CHANGED);
+        bus.register(blockCounterEvent, ActionEventName.TEAM_BLOCK_CHANGED);
         blockCounter = blockCounterEvent;
 
-        bus.register(this, FightEventName.MINION_DIED);
+        bus.register(this, ActionEventName.MINION_DIED);
     }
 
     public void render(Graphics g) {
@@ -57,13 +57,13 @@ public class TeamView implements FightEventHandler {
     }
 
     @Override
-    public void handle(FightEvent event) {
+    public void handle(ActionEvent event) {
         switch (event.getName()) {
             case MINION_DIED -> onMinionDied(event);
         }
     }
 
-    private void onMinionDied(FightEvent event) {
+    private void onMinionDied(ActionEvent event) {
         if (event.getOwnTeam() == team) {
             characters.removeIf(v -> v.getCharacter() == event.getMinion());
         }

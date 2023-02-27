@@ -42,12 +42,12 @@ public class Minion {
         Card card = draw.remove();
         hand.add(card);
         context.setCard(card);
-        bus.post(FightEvent.of(FightEventName.MINION_CARD_DRAW, context));
+        bus.post(ActionEvent.of(ActionEventName.MINION_CARD_DRAW, context));
     }
 
     private void postShuffleEvent() {
-        bus.post(FightEvent.builder()
-                .name(FightEventName.MINION_SHUFFLE)
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_SHUFFLE)
                 .minion(this)
                 .source(this)
                 .build()
@@ -58,7 +58,7 @@ public class Minion {
     public void playAllCards(CardContext cardContext) {
         for (Card card : new ArrayList<>(hand)) {
             cardContext.setCard(card);
-            bus.post(FightEvent.of(FightEventName.MINION_CARD_PLAYED, cardContext));
+            bus.post(ActionEvent.of(ActionEventName.MINION_CARD_PLAYED, cardContext));
             card.play(cardContext);
             remove(card);
             Game.delayForAnimation();
@@ -72,8 +72,8 @@ public class Minion {
 
     //fight
     public void applyDamage(Team team, int value) {
-        bus.post(FightEvent.builder()   //todo refactor to factory method
-                .name(FightEventName.MINION_DAMAGED)
+        bus.post(ActionEvent.builder()   //todo refactor to factory method
+                .name(ActionEventName.MINION_DAMAGED)
                 .value(hp - value)
                 .minion(this)
                 .source(this) //todo czy na pewno potrzebujemy tego source?
@@ -81,8 +81,8 @@ public class Minion {
         );
         hp -= value;
         if (hp <= 0) {
-            bus.post(FightEvent.builder()
-                    .name(FightEventName.MINION_DIED)
+            bus.post(ActionEvent.builder()
+                    .name(ActionEventName.MINION_DIED)
                     .minion(this)
                     .ownTeam(team)
                     .source(this)

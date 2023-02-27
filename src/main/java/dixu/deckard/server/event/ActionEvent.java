@@ -7,8 +7,8 @@ import dixu.deckard.server.Team;
 import lombok.Builder;
 
 @Builder
-public class FightEvent implements Event<FightEventName>{
-    private FightEventName name;
+public class ActionEvent implements Event<ActionEventName>{
+    private ActionEventName name;
     private Object source;
     private Team ownTeam;
     private Team enemyTeam;
@@ -16,12 +16,12 @@ public class FightEvent implements Event<FightEventName>{
     private Card card;
     private int value;
 
-    public static FightEvent of(FightEventName name) {
+    public static ActionEvent of(ActionEventName name) {
         return ofName(name)
                 .build();
     }
 
-    public static FightEvent of(FightEventName name, CardContext context) {
+    public static ActionEvent of(ActionEventName name, CardContext context) {
        return ofName(name)
                 .ownTeam(context.getOwnTeam())
                 .enemyTeam(context.getEnemyTeam())
@@ -30,12 +30,12 @@ public class FightEvent implements Event<FightEventName>{
                 .build();
     }
 
-    private static FightEventBuilder ofName(FightEventName name) {
+    private static FightEventBuilder ofName(ActionEventName name) {
         return builder()
                 .name(name);
     }
     @Override
-    public FightEventName getName() {
+    public ActionEventName getName() {
         return name;
     }
 

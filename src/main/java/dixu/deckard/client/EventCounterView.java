@@ -1,14 +1,14 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.event.FightEventHandler;
-import dixu.deckard.server.event.FightEvent;
-import dixu.deckard.server.event.FightEventName;
+import dixu.deckard.server.event.ActionEventHandler;
+import dixu.deckard.server.event.ActionEvent;
+import dixu.deckard.server.event.ActionEventName;
 
 import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class EventCounterView implements CounterView, FightEventHandler {
+public class EventCounterView implements CounterView, ActionEventHandler {
 
     private static final double MARGIN_PERCENT = 0.2;
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;
@@ -91,23 +91,23 @@ public class EventCounterView implements CounterView, FightEventHandler {
 
 
     @Override
-    public void handle(FightEvent event) { //TODO try to do it without checking event type, cause u registered for correct type
-        if (event.getName() == FightEventName.TEAM_BLOCK_CHANGED) {
+    public void handle(ActionEvent event) { //TODO try to do it without checking event type, cause u registered for correct type
+        if (event.getName() == ActionEventName.TEAM_BLOCK_CHANGED) {
             onTeamBlockChanged(event);
         }
-        if (event.getName() == FightEventName.MINION_DAMAGED) {
+        if (event.getName() == ActionEventName.MINION_DAMAGED) {
             onMinionDamaged(event);
         }
     }
 
-    private void onTeamBlockChanged(FightEvent event) {
+    private void onTeamBlockChanged(ActionEvent event) {
         if (event.getSource() == source) {
             value = event.value();
             changed = LocalTime.now();
         }
     }
 
-    private void onMinionDamaged(FightEvent event) {
+    private void onMinionDamaged(ActionEvent event) {
         if (event.getSource() == source) {
             value = event.value();
             changed = LocalTime.now();

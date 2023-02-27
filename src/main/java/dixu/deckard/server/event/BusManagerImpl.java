@@ -4,7 +4,7 @@ public class BusManagerImpl implements BusManager {
 
     private final static BusManagerImpl manager = new BusManagerImpl();
     private final EventBus<CoreEventName, CoreEvent> structureBus = new EventBus<>();
-    private final EventBus<FightEventName, FightEvent> effectBus = new EventBus<>();
+    private final EventBus<ActionEventName, ActionEvent> effectBus = new EventBus<>();
 
 
 
@@ -16,7 +16,7 @@ public class BusManagerImpl implements BusManager {
     }
 
     @Override
-    public void register(FightEventHandler handler, FightEventName name) {
+    public void register(ActionEventHandler handler, ActionEventName name) {
         effectBus.register(handler,name);
     }
 
@@ -31,7 +31,7 @@ public class BusManagerImpl implements BusManager {
     }
 
     @Override
-    public void post(FightEvent event) {
+    public void post(ActionEvent event) {
         effectBus.post(event);
     }
 }

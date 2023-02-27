@@ -4,7 +4,7 @@ import dixu.deckard.server.event.*;
 
 import java.util.List;
 
-public class Team implements FightEventHandler {
+public class Team implements ActionEventHandler {
     private static final int START_TURN_CARD_DRAW_COUNT_PER_MINION = 2;
     private final BusManager bus = BusManager.instance();
     private final List<Minion> minions;
@@ -13,7 +13,7 @@ public class Team implements FightEventHandler {
     public Team(List<Minion> minions) {
         this.minions = minions;
 
-        bus.register(this, FightEventName.MINION_DIED);
+        bus.register(this, ActionEventName.MINION_DIED);
     }
 
     //draws
@@ -64,8 +64,8 @@ public class Team implements FightEventHandler {
     }
 
     private void postBlockChangedEvent(int newValue) {
-        bus.post(FightEvent.builder()
-                .name(FightEventName.TEAM_BLOCK_CHANGED)
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.TEAM_BLOCK_CHANGED)
                 .value(newValue)
                 .source(this)
                 .build()
@@ -74,13 +74,13 @@ public class Team implements FightEventHandler {
 
     //character death
     @Override
-    public void handle(FightEvent event) {
-        if (event.getName() == FightEventName.MINION_DIED) {
+    public void handle(ActionEvent event) {
+        if (event.getName() == ActionEventName.MINION_DIED) {
             onMinionDied(event);
         }
     }
 
-    private void onMinionDied(FightEvent event) {
+    private void onMinionDied(ActionEvent event) {
         if (event.getOwnTeam() == this) {
             characterDied(event.getMinion());
         }
