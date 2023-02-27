@@ -2,11 +2,12 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.event.ActionEventHandler;
 import dixu.deckard.server.event.ActionEvent;
+import lombok.Builder;
 
 import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-
+@Builder
 public class EventCounterView implements CounterView, ActionEventHandler {
 
     private static final double MARGIN_PERCENT = 0.2;
@@ -14,8 +15,8 @@ public class EventCounterView implements CounterView, ActionEventHandler {
     private static final Font FONT = new Font(Font.SERIF, Font.PLAIN, 20);
 
     //location on rectangle
-    private Direction direction1;
-    private Direction direction2;
+    private Direction straightDirection;
+    private Direction diagonalShift;
 
     //value
     private int value;
@@ -24,50 +25,59 @@ public class EventCounterView implements CounterView, ActionEventHandler {
 
     //looks
     private Color color;
+    @Builder.Default
     private String description = "";
 
 
     //update animation
+    @Builder.Default
     private LocalTime changed = LocalTime.now();
+    @Builder.Default
     private boolean blinking = true;
 
-    public EventCounterView(Direction direction1, Direction direction2) {
-        this(direction1, direction2, DEFAULT_COLOR);
-    }
-
-
-    public EventCounterView(Direction direction1, Direction direction2, Color color) {
-        this.direction1 = direction1;
-        this.direction2 = direction2;
-        this.color = color;
-    }
-
-
+    //dont have patience to refactor this further ;)
     public void render(Graphics g, Rectangle rect) {
         int marginX = (int) (rect.width * MARGIN_PERCENT);
         int marginY = (int) (rect.height * MARGIN_PERCENT);
+
         int x = rect.x;
         int y = rect.y;
-        switch (direction1) {
+
+        switch (straightDirection) {
             case TOP -> y += marginY;
             case BOTTOM -> y += rect.height - marginY;
         }
-        switch (direction2) {
+        switch (diagonalShift) {
             case LEFT -> x += marginX;
             case RIGHT -> x += rect.width - marginX;
             case BOTTOM -> x += marginX * 2;
         }
-//        g.setColor(Color.CYAN);
-//        g.fillRect(rect.x,rect.y,rect.width,rect.height);
+
         Color color = this.color;
         if (changed.until(LocalTime.now(), ChronoUnit.SECONDS) < 1 && blinking) {
             color = Color.YELLOW;
         }
+
         g.setColor(color);
         Font standard = g.getFont();
         g.setFont(FONT);
         g.drawString(description + value, x, y);
         g.setFont(standard);
+
+        //for debug
+//        g.setColor(Color.CYAN);
+//        g.fillRect(rect.x,rect.y,rect.width,rect.height);
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        if (strategy == null) {
+            throw new IllegalStateException("STRATEGY MUST BE DEFINED ON EVERY COUNTER");
+        }
+        if (event.getSource() == source) {
+            value = strategy.updateValue(value, event);
+            changed = LocalTime.now();
+        }
     }
 
     public void setBlinking(boolean blinking) {
@@ -85,18 +95,6 @@ public class EventCounterView implements CounterView, ActionEventHandler {
 
     public void setStrategy(CountingStrategy strategy) {
         this.strategy = strategy;
-    }
-
-    @Override
-    public void handle(ActionEvent event) {
-        if (strategy != null) {
-            if (event.getSource() == source) {
-                value = strategy.updateValue(value, event);
-                changed = LocalTime.now();
-            }
-        } else {
-            throw new IllegalStateException("STRATEGY MUST BE DEFINED ON EVERY COUNTER");
-        }
     }
 
     public void setSource(Object source) {

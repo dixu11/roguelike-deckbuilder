@@ -6,32 +6,34 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dixu.deckard.client.GuiParams.*;
+
 public class CardView {
 
-    private List<CounterView> counters = new ArrayList<>();
+    private final List<CounterView> counters = new ArrayList<>();
     private final Card card;
-    public static final int CARD_WIDTH = 80;
-    public static final int CARD_HEIGHT = 120;
 
     public CardView(Card card) {
         this.card = card;
-    }
-
-    public void addCounter(CounterView counter) {
-        counters.add(counter);
     }
 
     public void render(Graphics g) {
         if (card == null) {
             return;
         }
-        g.setColor(Color.GRAY);
+        g.setColor(MAIN_COLOR_BRIGHT);
         g.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
-        g.setColor(Color.DARK_GRAY);
+
+        g.setColor(MAIN_COLOR_DARK);
         g.drawString(card.getName(), CARD_WIDTH / 10, CARD_HEIGHT / 6);
+
         for (CounterView counter : counters) {
             counter.render(g, new Rectangle(0, 0, CARD_WIDTH, CARD_HEIGHT));
         }
+    }
+
+    public void addCounter(CounterView counter) {
+        counters.add(counter);
     }
 
     public Card getCard() {

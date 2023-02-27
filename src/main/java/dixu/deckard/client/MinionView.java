@@ -5,6 +5,9 @@ import dixu.deckard.server.event.*;
 
 import java.awt.*;
 
+import static dixu.deckard.client.GuiParams.CARD_HEIGHT;
+import static dixu.deckard.client.GuiParams.CARD_WIDTH;
+
 public class MinionView implements ActionEventHandler {
 
     private final BusManager bus = BusManager.instance();
@@ -27,31 +30,45 @@ public class MinionView implements ActionEventHandler {
     }
 
     private void setupCounters() {
-        EventCounterView healthCounter = new EventCounterView(Direction.BOTTOM, Direction.BOTTOM);
-        healthCounter.setDescription("♥: ");
-        healthCounter.setSource(minion);
-        healthCounter.setValue(minion.getHealth());
-        healthCounter.setStrategy(((oldValue, e) -> e.value()));
+        EventCounterView healthCounter = EventCounterView.builder()
+                .straightDirection(Direction.BOTTOM)
+                .diagonalShift(Direction.BOTTOM)
+                .description("♥: ")
+                .source(minion)
+                .value(minion.getHealth())
+                .strategy(((oldValue, e) -> e.value()))
+                .build();
+
         bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
         cardView.addCounter(healthCounter);
 
-        EventCounterView drawCounter = new EventCounterView(Direction.BOTTOM, Direction.LEFT, Color.GRAY);
-        drawCounter.setDescription("\uD83C\uDCA0: ");
-        drawCounter.setValue(minion.getDraw().size());
-        drawCounter.setSource(minion);
-        drawCounter.setStrategy(
-                ((oldValue, e) -> e.getName() == ActionEventName.MINION_SHUFFLE ?
-                        e.getMinion().getDraw().size() : oldValue - 1)
-        );
+        EventCounterView drawCounter = EventCounterView.builder()
+                .straightDirection(Direction.BOTTOM)
+                .diagonalShift(Direction.LEFT)
+                .color(GuiParams.MAIN_COLOR_BRIGHT)
+                .description("\uD83C\uDCA0: ")
+                .value(minion.getDraw().size())
+                .source(minion)
+                .strategy(
+                        ((oldValue, e) -> e.getName() == ActionEventName.MINION_SHUFFLE ?
+                                e.getMinion().getDraw().size() : oldValue - 1)
+                )
+                .build();
+
         bus.register(drawCounter, ActionEventName.MINION_CARD_DRAW);
         bus.register(drawCounter, ActionEventName.MINION_SHUFFLE);
         this.drawCounter = drawCounter;
 
-        EventCounterView discardCounter = new EventCounterView(Direction.BOTTOM, Direction.RIGHT, Color.GRAY);
-        discardCounter.setBlinking(false);
-        discardCounter.setDescription("\uD83C\uDCC1: ");
-        discardCounter.setSource(minion);
-        discardCounter.setStrategy(((oldValue, e) -> e.getName() == ActionEventName.MINION_SHUFFLE ? 0 : oldValue + 1));
+        EventCounterView discardCounter = EventCounterView.builder()
+                .straightDirection(Direction.BOTTOM)
+                .diagonalShift(Direction.RIGHT)
+                .color(GuiParams.MAIN_COLOR_BRIGHT)
+                .blinking(false)
+                .description("\uD83C\uDCC1: ")
+                .source(minion)
+                .strategy(((oldValue, e) -> e.getName() == ActionEventName.MINION_SHUFFLE ? 0 : oldValue + 1))
+                .build();
+
         bus.register(discardCounter, ActionEventName.MINION_CARD_PLAYED);
         bus.register(discardCounter, ActionEventName.MINION_SHUFFLE);
         this.discardCounter = discardCounter;
@@ -59,10 +76,10 @@ public class MinionView implements ActionEventHandler {
 
     public void render(Graphics g) {
         cardView.render(g);
-        g.translate(-CardView.CARD_WIDTH, -CardView.CARD_HEIGHT - 20);
+        g.translate(-CARD_WIDTH, -CARD_HEIGHT - 20); //todo definitively needs refactor ^^'
         handView.render(g);
-        g.translate(CardView.CARD_WIDTH, CardView.CARD_HEIGHT + 20);
-        Rectangle r = new Rectangle(0, CardView.CARD_HEIGHT / 2, CardView.CARD_WIDTH, CardView.CARD_HEIGHT);
+        g.translate(CARD_WIDTH, CARD_HEIGHT + 20);
+        Rectangle r = new Rectangle(0, CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
         drawCounter.render(g, r);
         discardCounter.render(g, r);
     }
@@ -84,7 +101,7 @@ public class MinionView implements ActionEventHandler {
 
     private void onCardDraw(ActionEvent event) {
         if (event.getMinion() == minion) {
-            handView.addCard(event.getCard());
+            handView.add(event.getCard());
         }
     }
 

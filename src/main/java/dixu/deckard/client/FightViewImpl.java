@@ -16,7 +16,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     private final TeamView firstTeam;
     private final TeamView secondTeam;
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
-    private GameController controller;//todo możliwe że będzie do usinięcia
+    private GameController controller;//TODO możliwe że będzie do usinięcia
 
 
     public FightViewImpl(TeamView firstTeam, TeamView secondTeam) {
@@ -44,7 +44,6 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         g.fillRect(0, 0, WIDTH, HEIGHT);
     }
 
-
     //interaction
     @Override
     public void mouseReleased(MouseEvent e) {
@@ -55,7 +54,9 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
 
     @Override
     public void handle(CoreEvent event) {
-        onGameOver();
+        if (event.getName() == CoreEventName.GAME_OVER) {
+            onGameOver();
+        }
     }
 
     private static void onGameOver() {

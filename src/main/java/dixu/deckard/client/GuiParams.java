@@ -12,6 +12,8 @@ public class GuiParams {
     private static final int DEFAULT_HEIGHT = 800;
     public static final int WIDTH = DEFAULT_WIDTH;
     public static final int HEIGHT = DEFAULT_HEIGHT;
+    public static final int CARD_WIDTH = 80;
+    public static final int CARD_HEIGHT = 120;
 
     public static int getWidth(double percent) {
         return (int) (WIDTH * percent);
