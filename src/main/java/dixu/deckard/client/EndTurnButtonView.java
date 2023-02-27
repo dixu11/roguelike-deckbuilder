@@ -7,15 +7,16 @@ import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class EndTurnButtonView implements Clickable, EventHandler {
+public class EndTurnButtonView implements Clickable, CoreEventHandler {
 
-    private Rectangle rect;
+    private final BusManager bus = BusManager.instance();
+    private final Rectangle rect;
     private LocalTime turnStarted = LocalTime.now();
     private boolean visible = true;
 
     public EndTurnButtonView() {
         rect = new Rectangle(GuiParams.getWidth(0.63), GuiParams.getHeight(0.9) + 15, GuiParams.getWidth(0.05), GuiParams.getHeight(0.03));
-        EventBus.getInstance().register(this, TurnStartedEvent.class);
+        bus.register(this, CoreEventName.TURN_STARTED);
     }
 
     public void render(Graphics g) {
@@ -35,8 +36,7 @@ public class EndTurnButtonView implements Clickable, EventHandler {
             return;
         }
         visible = false;
-        EventBus.getInstance().post(new TurnEndedEvent());
-
+        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
     }
 
     @Override
@@ -45,10 +45,14 @@ public class EndTurnButtonView implements Clickable, EventHandler {
     }
 
     @Override
-    public void handle(Event event) {
-        if (event instanceof TurnStartedEvent) {
-            turnStarted = LocalTime.now();
-            visible = true;
+    public void handle(CoreEvent event) {
+        switch (event.getName()) {
+            case TURN_STARTED -> onTurnStart();
         }
+    }
+
+    private void onTurnStart() {
+        turnStarted = LocalTime.now();
+        visible = true;
     }
 }

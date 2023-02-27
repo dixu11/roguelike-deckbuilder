@@ -6,8 +6,9 @@ import dixu.deckard.server.event.Event;
 
 import java.awt.*;
 
-public class MinionView implements EventHandler {
+public class MinionView implements FightEventHandler {
 
+    private final BusManager bus = BusManager.instance();
     private final Minion minion;
     private final CardView cardView;
     private final HandView handView;
@@ -20,9 +21,9 @@ public class MinionView implements EventHandler {
         cardView = new CardView( minion.getMinionCard());
         EventCounterView healthCounter = new EventCounterView(Direction.BOTTOM, Direction.BOTTOM);
         healthCounter.setDescription("♥: ");
-        healthCounter.setParent(minion);
+        healthCounter.setSource(minion);
         healthCounter.setValue(minion.getHealth());
-        EventBus.getInstance().register(healthCounter, MinionDamagedEvent.class);
+        bus.register(healthCounter, FightEventName.MINION_DAMAGED);
         cardView.addCounter(healthCounter);
         CounterView drawCounter = new SourceCounterView(Direction.BOTTOM, Direction.LEFT, () -> minion.getDraw().size(), Color.GRAY);
         drawCounter.setDescription("\uD83C\uDCA0: ");
@@ -32,9 +33,9 @@ public class MinionView implements EventHandler {
         discardCounter.setBlinking(false);
         discardCounter.setDescription("\uD83C\uDCC1: ");
         this.discardCounter = discardCounter;
-        EventBus.getInstance().register(this, CardPlayedEvent.class);
-        EventBus.getInstance().register(this, DrawCardEvent.class);
-        EventBus.getInstance().register(this,ShuffleEvent.class);
+        bus.register(this, FightEventName.MINION_CARD_PLAYED);
+        bus.register(this, FightEventName.MINION_CARD_DRAW);
+        bus.register(this,FightEventName.MINION_SHUFFLE);
     }
 
     public void render(Graphics g) {
@@ -48,44 +49,37 @@ public class MinionView implements EventHandler {
     }
 
 
-    public Minion getCharacter() {
-        return minion;
-    }
-
-    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
     @Override
-    public void handle(Event event) {
-        if (event instanceof CardPlayedEvent cardPlayedEvent) {
-            onCardPlayed(cardPlayedEvent);
-        }
-        if (event instanceof DrawCardEvent drawCardEvent) {
-            onCardDraw(drawCardEvent);
-        }
-        if (event instanceof ShuffleEvent shuffleEvent) {
-            onShuffle(shuffleEvent);
+    public void handle(FightEvent event) {
+        switch (event.getName()) {
+            case MINION_CARD_PLAYED -> onCardPlayed(event);
+            case MINION_CARD_DRAW -> onCardDraw(event);
+            case MINION_SHUFFLE -> onShuffle(event);
         }
     }
 
-    private void onCardPlayed(CardPlayedEvent event) {
-        CardContext context = event.getPlayContext();
-        if (context.getMinion()==minion) {
+    private void onCardPlayed(FightEvent event) {
+        if (event.getMinion()==minion) {
             discardCounter.addValue(1);
-            handView.remove(context.getCard());
+            handView.remove(event.getCard());
         }
     }
 
-    private void onCardDraw(DrawCardEvent event) {
-        CardContext context = event.getPlayContext();
-        if (context.getMinion() == minion) {
-            handView.addCard(context.getCard());
+    private void onCardDraw(FightEvent event) {
+        if (event.getMinion() == minion) {
+            handView.addCard(event.getCard());
             drawCounter.setValue(minion.getDraw().size());
         }
     }
 
-    private void onShuffle(ShuffleEvent shuffleEvent) {
-        if (shuffleEvent.getMinion() == minion) {
+    private void onShuffle(FightEvent event) {
+        if (event.getMinion() == minion) {
             discardCounter.setValue(minion.getDiscard().size());
             drawCounter.setValue(minion.getDraw().size());
         }
+    }
+
+    public Minion getCharacter() {
+        return minion;
     }
 }

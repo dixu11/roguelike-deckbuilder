@@ -2,10 +2,8 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.GameController;
 import dixu.deckard.server.FightView;
+import dixu.deckard.server.event.*;
 import dixu.deckard.server.event.Event;
-import dixu.deckard.server.event.EventBus;
-import dixu.deckard.server.event.EventHandler;
-import dixu.deckard.server.event.GameOverEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -14,8 +12,8 @@ import java.awt.event.MouseListener;
 
 import static dixu.deckard.client.GuiParams.*;
 
-public class FightViewImpl implements FightView, MouseListener, EventHandler {
-    private final EventBus bus = EventBus.getInstance();
+public class FightViewImpl implements FightView, MouseListener, CoreEventHandler {
+    private final BusManager bus = BusManager.instance();
     private final TeamView firstTeam;
     private final TeamView secondTeam;
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
@@ -26,7 +24,7 @@ public class FightViewImpl implements FightView, MouseListener, EventHandler {
         this.firstTeam = firstTeam;
         this.secondTeam = secondTeam;
 
-        bus.register(this, GameOverEvent.class);
+        bus.register(this, CoreEventName.GAME_OVER);
     }
 
     //animations
@@ -57,11 +55,13 @@ public class FightViewImpl implements FightView, MouseListener, EventHandler {
     }
 
     @Override
-    public void handle(Event event) {
-        if (event instanceof GameOverEvent) {
-            JOptionPane.showMessageDialog(null, "Game over! ");
-            System.exit(0);
-        }
+    public void handle(CoreEvent event) {
+        onGameOver();
+    }
+
+    private static void onGameOver() {
+        JOptionPane.showMessageDialog(null, "Game over! ");
+        System.exit(0);
     }
 
     public void setController(GameController controller) {

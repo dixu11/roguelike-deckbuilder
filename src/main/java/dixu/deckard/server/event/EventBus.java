@@ -5,28 +5,22 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EventBus {
+public class EventBus<T,E extends Event<T>> {
 
-    private static final EventBus instance = new EventBus();
-
-    private EventBus() {
+    EventBus() {
     }
 
-    public static EventBus getInstance() {
-        return instance;
-    }
+    private final Map<T, List<EventHandler<E>>> allHandlers = new HashMap<>();
 
-    private final Map<Class<?>, List<EventHandler>> allHandlers = new HashMap<>();
-
-    public <T> void register(EventHandler handler, Class<T> eventType) {
-        List<EventHandler> handlersByClass = allHandlers.computeIfAbsent(eventType, handlers -> new ArrayList<>());
+    public void register(EventHandler<E> handler, T name) {
+        List<EventHandler<E>> handlersByClass = allHandlers.computeIfAbsent(name, handlers -> new ArrayList<>());
         handlersByClass.add(handler);
     }
 
-    public  void post(Event event){
-        List<EventHandler> eventHandlers = allHandlers.get(event.getClass());
+    public  void post(E event){
+        List<EventHandler<E>> eventHandlers = allHandlers.get(event.getName());
         if (eventHandlers != null) {
-            for (EventHandler handler : eventHandlers) {
+            for (EventHandler<E> handler : eventHandlers) {
                 handler.handle(event);
             }
         }

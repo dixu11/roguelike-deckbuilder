@@ -4,13 +4,13 @@ import lombok.Builder;
 
 @Builder
 public class CardContext {
-    private Team actionTeam;
+    private Team ownTeam;
     private Team enemyTeam;
     private Minion minion;
     private Card card;
 
-    public Team getActionTeam() {
-        return actionTeam;
+    public Team getOwnTeam() {
+        return ownTeam;
     }
 
     public Team getEnemyTeam() {
@@ -35,7 +35,7 @@ public class CardContext {
 
     public CardContext getCopy() {
         return builder()
-                .actionTeam(actionTeam)
+                .ownTeam(ownTeam)
                 .enemyTeam(enemyTeam)
                 .minion(minion)
                 .card(card)

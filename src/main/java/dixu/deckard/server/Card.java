@@ -15,7 +15,7 @@ public class Card {
         switch (type) {
             case ATTACK -> context.getEnemyTeam()
                     .applyDmgTo(value, context.getEnemyTeam().getRandomMinion());
-            case BLOCK -> context.getActionTeam().addBlock(value);
+            case BLOCK -> context.getOwnTeam().addBlock(value);
             case MINION -> throw new IllegalArgumentException("THIS TYPE CANNOT BE PLAYED");
         }
     }

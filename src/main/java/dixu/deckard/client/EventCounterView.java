@@ -1,15 +1,14 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.event.Event;
-import dixu.deckard.server.event.EventHandler;
-import dixu.deckard.server.event.MinionDamagedEvent;
-import dixu.deckard.server.event.TeamBlockChangedEvent;
+import dixu.deckard.server.event.FightEventHandler;
+import dixu.deckard.server.event.FightEvent;
+import dixu.deckard.server.event.FightEventName;
 
 import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class EventCounterView implements CounterView, EventHandler {
+public class EventCounterView implements CounterView, FightEventHandler {
 
     private static final double MARGIN_PERCENT = 0.2;
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;
@@ -25,7 +24,7 @@ public class EventCounterView implements CounterView, EventHandler {
     //looks
     private Color color;
     private String description = "";
-    private Object parent;
+    private Object source;
 
 
     //update animation
@@ -90,32 +89,32 @@ public class EventCounterView implements CounterView, EventHandler {
     }
 
 
-    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
+
     @Override
-    public void handle(Event event) {
-        if (event instanceof TeamBlockChangedEvent teamBlockChangedEvent) {
-            onTeamBlockChanged(teamBlockChangedEvent);
+    public void handle(FightEvent event) { //TODO try to do it without checking event type, cause u registered for correct type
+        if (event.getName() == FightEventName.TEAM_BLOCK_CHANGED) {
+            onTeamBlockChanged(event);
         }
-        if (event instanceof MinionDamagedEvent minionDamagedEvent) {
-            onMinionDamaged(minionDamagedEvent);
+        if (event.getName() == FightEventName.MINION_DAMAGED) {
+            onMinionDamaged(event);
         }
     }
 
-    private void onTeamBlockChanged(TeamBlockChangedEvent teamBlockChangedEvent) {
-        if (teamBlockChangedEvent.getTeam() == parent) {
-            value = teamBlockChangedEvent.getNewValue();
+    private void onTeamBlockChanged(FightEvent event) {
+        if (event.getSource() == source) {
+            value = event.value();
             changed = LocalTime.now();
         }
     }
 
-    private void onMinionDamaged(MinionDamagedEvent minionDamagedEvent) {
-        if (minionDamagedEvent.getMinion() == parent) {
-            value = minionDamagedEvent.getNewValue();
+    private void onMinionDamaged(FightEvent event) {
+        if (event.getSource() == source) {
+            value = event.value();
             changed = LocalTime.now();
         }
     }
 
-    public void setParent(Object parent) {
-        this.parent = parent;
+    public void setSource(Object source) {
+        this.source = source;
     }
 }

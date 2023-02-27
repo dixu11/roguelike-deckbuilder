@@ -4,16 +4,16 @@ import dixu.deckard.server.event.*;
 
 import java.util.List;
 
-public class Team implements EventHandler {
+public class Team implements FightEventHandler {
     private static final int START_TURN_CARD_DRAW_COUNT_PER_MINION = 2;
-    private final EventBus bus = EventBus.getInstance();
+    private final BusManager bus = BusManager.instance();
     private final List<Minion> minions;
     private int block;
 
     public Team(List<Minion> minions) {
         this.minions = minions;
 
-        bus.register(this, MinionDiedEvent.class);
+        bus.register(this, FightEventName.MINION_DIED);
     }
 
     //draws
@@ -42,8 +42,6 @@ public class Team implements EventHandler {
 
     private int applyDmgToBlock(int dmg) {
         if (block == 0) return dmg;
-
-        int oldBlock = block;
         if (block <= dmg) {
             dmg -= block;
             block = 0;
@@ -51,32 +49,39 @@ public class Team implements EventHandler {
             block -= dmg;
             dmg = 0;
         }
-
-        bus.post(new TeamBlockChangedEvent(block, oldBlock, this));
+        postBlockChangedEvent(block);
         return dmg;
     }
 
     public void clearBlock() {
-        bus.post(new TeamBlockChangedEvent(0, block, this));
+        postBlockChangedEvent(0);
         block = 0;
     }
 
     public void addBlock(int value) {
-        bus.post(new TeamBlockChangedEvent(value + block, block, this));
+        postBlockChangedEvent(value);
         block += value;
     }
 
+    private void postBlockChangedEvent(int newValue) {
+        bus.post(FightEvent.builder()
+                .name(FightEventName.TEAM_BLOCK_CHANGED)
+                .value(newValue)
+                .source(this)
+                .build()
+        );
+    }
+
     //character death
-    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF CASTING?
     @Override
-    public void handle(Event event) {
-        if (event instanceof MinionDiedEvent minionDiedEvent) {
-            onMinionDied(minionDiedEvent);
+    public void handle(FightEvent event) {
+        if (event.getName() == FightEventName.MINION_DIED) {
+            onMinionDied(event);
         }
     }
 
-    private void onMinionDied(MinionDiedEvent event) {
-        if (event.getTeam() == this) {
+    private void onMinionDied(FightEvent event) {
+        if (event.getOwnTeam() == this) {
             characterDied(event.getMinion());
         }
     }
@@ -84,11 +89,11 @@ public class Team implements EventHandler {
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            bus.post(new GameOverEvent());
+            bus.post(CoreEvent.of(CoreEventName.GAME_OVER));
         }
     }
-
     //minion access
+
     public Minion getRandomMinion() {
         return MyRandom.getRandomElement(minions);
     }

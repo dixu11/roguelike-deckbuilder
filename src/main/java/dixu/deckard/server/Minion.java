@@ -6,7 +6,7 @@ import java.util.*;
 
 public class Minion {
     private static int nextId = 1;
-    private final EventBus bus = EventBus.getInstance();
+    private final BusManager bus = BusManager.instance();
     private int hp = 3;
     private final Card minionCard;
     private final LinkedList<Card> draw = new LinkedList<>();
@@ -36,19 +36,29 @@ public class Minion {
             Collections.shuffle(discard);
             draw.addAll(discard);
             discard.clear();
-            bus.post(new ShuffleEvent(this));
+            postShuffleEvent();
+
         }
         Card card = draw.remove();
         hand.add(card);
         context.setCard(card);
-        bus.post(new DrawCardEvent(context));
+        bus.post(FightEvent.of(FightEventName.MINION_CARD_DRAW, context));
+    }
+
+    private void postShuffleEvent() {
+        bus.post(FightEvent.builder()
+                .name(FightEventName.MINION_SHUFFLE)
+                .minion(this)
+                .source(this)
+                .build()
+        );
     }
 
     //cards play
     public void playAllCards(CardContext cardContext) {
         for (Card card : new ArrayList<>(hand)) {
             cardContext.setCard(card);
-            bus.post(new CardPlayedEvent(cardContext));
+            bus.post(FightEvent.of(FightEventName.MINION_CARD_PLAYED, cardContext));
             card.play(cardContext);
             remove(card);
             Game.delayForAnimation();
@@ -62,10 +72,22 @@ public class Minion {
 
     //fight
     public void applyDamage(Team team, int value) {
-        bus.post(new MinionDamagedEvent(hp-value,hp,this));
+        bus.post(FightEvent.builder()   //todo refactor to factory method
+                .name(FightEventName.MINION_DAMAGED)
+                .value(hp - value)
+                .minion(this)
+                .source(this) //todo czy na pewno potrzebujemy tego source?
+                .build()
+        );
         hp -= value;
         if (hp <= 0) {
-            bus.post(new MinionDiedEvent(team, this));
+            bus.post(FightEvent.builder()
+                    .name(FightEventName.MINION_DIED)
+                    .minion(this)
+                    .ownTeam(team)
+                    .source(this)
+                    .build()
+            );
         }
     }
 

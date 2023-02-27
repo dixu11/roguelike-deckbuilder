@@ -2,17 +2,17 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.Team;
-import dixu.deckard.server.event.Event;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TeamView implements EventHandler {
+public class TeamView implements FightEventHandler {
     private static final int X_BASE_OFFSET = GuiParams.getWidth(0.3);
     private static final int Y_BASE_OFFSET = GuiParams.getHeight(0.3);
     private static final int X_COMPUTER_OFFSET = GuiParams.getWidth(0.25);
     private static final int PADDING = GuiParams.getWidth(0.08);
+    private final BusManager bus = BusManager.instance();
     private List<MinionView> characters;
     private Team team;
     private Direction direction;
@@ -27,11 +27,11 @@ public class TeamView implements EventHandler {
         characters = new ArrayList<>(this.characters);
         EventCounterView blockCounterEvent = new EventCounterView(Direction.TOP, Direction.LEFT,  Color.GRAY);
         blockCounterEvent.setDescription("\uD83D\uDEE1️: ");
-        blockCounterEvent.setParent(team);
-        EventBus.getInstance().register(blockCounterEvent, TeamBlockChangedEvent.class);
+        blockCounterEvent.setSource(team);
+        bus.register(blockCounterEvent, FightEventName.TEAM_BLOCK_CHANGED);
         blockCounter = blockCounterEvent;
 
-        EventBus.getInstance().register(this, MinionDiedEvent.class);
+        bus.register(this, FightEventName.MINION_DIED);
     }
 
     public void render(Graphics g) {
@@ -39,7 +39,7 @@ public class TeamView implements EventHandler {
 
         g.translate(getX(), getY());
         blockCounter.render(g, new Rectangle(0, CardView.CARD_HEIGHT * 2, 100, 100));
-        for (int i = 0; i < characters.size(); i++) {
+        for (int i = 0; i < characters.size(); i++) { //todo foreach
             int xMove = PADDING + CardView.CARD_WIDTH;
             characters.get(i).render(g);
             g.translate(xMove, 0);
@@ -56,16 +56,15 @@ public class TeamView implements EventHandler {
         return Y_BASE_OFFSET;
     }
 
-    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
     @Override
-    public void handle(Event event) {
-        if (event instanceof MinionDiedEvent minionDiedEvent) {
-            onMinionDied(minionDiedEvent);
+    public void handle(FightEvent event) {
+        switch (event.getName()) {
+            case MINION_DIED -> onMinionDied(event);
         }
     }
 
-    private void onMinionDied(MinionDiedEvent event) {
-        if (event.getTeam() == team) {
+    private void onMinionDied(FightEvent event) {
+        if (event.getOwnTeam() == team) {
             characters.removeIf(v -> v.getCharacter() == event.getMinion());
         }
     }

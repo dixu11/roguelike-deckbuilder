@@ -2,11 +2,11 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.*;
 
-public class Game implements EventHandler {
+public class Game implements CoreEventHandler {
 
     private final static double PLAY_DELAY_SECONDS = 1.0;
     private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
-    private final EventBus bus = EventBus.getInstance();
+    private final BusManager bus = BusManager.instance();
     private final Team firstTeam;
     private final Team secondTeam;
 
@@ -14,22 +14,20 @@ public class Game implements EventHandler {
         this.firstTeam = firstTeam;
         this.secondTeam = secondTeam;
 
-        bus.register(this, TurnEndedEvent.class);
-        bus.register(this, TurnStartedEvent.class);
-        bus.register(this, MinionDiedEvent.class);
+        bus.register(this, CoreEventName.TURN_ENDED);
+        bus.register(this, CoreEventName.TURN_STARTED);
     }
 
     public void start() {
-        bus.post(new TurnStartedEvent());
+        bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
         secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK_BONUS);
     }
 
     @Override
-    public void handle(Event event) {
-        if (event instanceof TurnStartedEvent) {
-            onTurnStart();
-        } else if (event instanceof TurnEndedEvent) {
-            onTurnEnd();
+    public void handle(CoreEvent event) {
+        switch (event.getName()) {
+            case TURN_STARTED -> onTurnStart();
+            case TURN_ENDED -> onTurnEnd();
         }
     }
 
@@ -43,19 +41,19 @@ public class Game implements EventHandler {
         firstTeam.playAllCards(createContextForPlayer());
         secondTeam.clearBlock();
         secondTeam.playAllCards(createContextForComputer());
-        EventBus.getInstance().post(new TurnStartedEvent());
+        bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
     }
 
     private CardContext createContextForPlayer() {
         return CardContext.builder()
-                .actionTeam(firstTeam)
+                .ownTeam(firstTeam)
                 .enemyTeam(secondTeam)
                 .build();
     }
 
     private CardContext createContextForComputer() {
         return CardContext.builder()
-                .actionTeam(secondTeam)
+                .ownTeam(secondTeam)
                 .enemyTeam(firstTeam)
                 .build();
     }

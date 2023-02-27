@@ -1,7 +1,6 @@
 package dixu.deckard.server.event;
 
 @FunctionalInterface
-public interface EventHandler {
-    void handle(Event event);
-    //canHandle?
+public interface EventHandler<E extends Event> {
+    void handle(E event);
 }
