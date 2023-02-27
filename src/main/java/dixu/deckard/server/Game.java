@@ -2,7 +2,7 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.*;
 
-public class Game implements EventHandler {
+public class Game implements EventHandler<GameEvent> {
 
     private final static double PLAY_DELAY_SECONDS = 1.0;
     private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
@@ -16,7 +16,6 @@ public class Game implements EventHandler {
 
         bus.register(this, TurnEndedEvent.class);
         bus.register(this, TurnStartedEvent.class);
-        bus.register(this, MinionDiedEvent.class);
     }
 
     public void start() {
@@ -25,12 +24,16 @@ public class Game implements EventHandler {
     }
 
     @Override
-    public void handle(Event event) {
-        if (event instanceof TurnStartedEvent) {
-            onTurnStart();
-        } else if (event instanceof TurnEndedEvent) {
-            onTurnEnd();
-        }
+    public void handle(GameEvent event) {
+        event.accept(this);
+    }
+
+    public void handleTurnStart(TurnStartedEvent event) {
+        onTurnStart();
+    }
+
+    public void handleTurnEnd(TurnEndedEvent event) {
+        onTurnEnd();
     }
 
     private void onTurnStart() {

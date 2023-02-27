@@ -2,11 +2,10 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.*;
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.event.Event;
 
 import java.awt.*;
 
-public class MinionView implements EventHandler {
+public class MinionView implements EventHandler<MinionEvent> {
 
     private final Minion minion;
     private final CardView cardView;
@@ -53,20 +52,13 @@ public class MinionView implements EventHandler {
     }
 
     //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF INSTANCEOF?
+
     @Override
-    public void handle(Event event) {
-        if (event instanceof CardPlayedEvent cardPlayedEvent) {
-            onCardPlayed(cardPlayedEvent);
-        }
-        if (event instanceof DrawCardEvent drawCardEvent) {
-            onCardDraw(drawCardEvent);
-        }
-        if (event instanceof ShuffleEvent shuffleEvent) {
-            onShuffle(shuffleEvent);
-        }
+    public void handle(MinionEvent event) {
+        event.accept(this);
     }
 
-    private void onCardPlayed(CardPlayedEvent event) {
+    public void handleCardPlayed(CardPlayedEvent event) {
         CardContext context = event.getPlayContext();
         if (context.getMinion()==minion) {
             discardCounter.addValue(1);
@@ -74,7 +66,7 @@ public class MinionView implements EventHandler {
         }
     }
 
-    private void onCardDraw(DrawCardEvent event) {
+    public void handleCardDraw(DrawCardEvent event) {
         CardContext context = event.getPlayContext();
         if (context.getMinion() == minion) {
             handView.addCard(context.getCard());
@@ -82,7 +74,7 @@ public class MinionView implements EventHandler {
         }
     }
 
-    private void onShuffle(ShuffleEvent shuffleEvent) {
+    public void handleShuffle(ShuffleEvent shuffleEvent) {
         if (shuffleEvent.getMinion() == minion) {
             discardCounter.setValue(minion.getDiscard().size());
             drawCounter.setValue(minion.getDraw().size());

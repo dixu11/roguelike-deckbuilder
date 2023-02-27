@@ -1,8 +1,9 @@
 package dixu.deckard.server.event;
 
+import dixu.deckard.client.EventCounterView;
 import dixu.deckard.server.Team;
 
-public class TeamBlockChangedEvent implements Event {
+public class TeamBlockChangedEvent implements EventCounterEvent {
     private final int newValue;
     private final int oldValue;
     private final Team team;
@@ -11,6 +12,11 @@ public class TeamBlockChangedEvent implements Event {
         this.newValue = newValue;
         this.oldValue = oldValue;
         this.team = team;
+    }
+
+    @Override
+    public void accept(EventCounterView visitor) {
+        visitor.handleTeamBlockChanged(this);
     }
 
     public int getNewValue() {

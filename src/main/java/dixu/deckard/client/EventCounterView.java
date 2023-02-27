@@ -1,15 +1,12 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.event.Event;
-import dixu.deckard.server.event.EventHandler;
-import dixu.deckard.server.event.MinionDamagedEvent;
-import dixu.deckard.server.event.TeamBlockChangedEvent;
+import dixu.deckard.server.event.*;
 
 import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class EventCounterView implements CounterView, EventHandler {
+public class EventCounterView implements CounterView, EventHandler<EventCounterEvent> {
 
     private static final double MARGIN_PERCENT = 0.2;
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;
@@ -89,23 +86,22 @@ public class EventCounterView implements CounterView, EventHandler {
         this.value = value;
     }
 
-
-    //todo CAN SOMEBODY TELL ME HOW TO IMPLEMENT THIS WITHOUT NEED OF CASTING?
     @Override
-    public void handle(Event event) {
-        if (event instanceof TeamBlockChangedEvent) {
-            TeamBlockChangedEvent teamBlockChangedEvent = (TeamBlockChangedEvent) event;
-            if (teamBlockChangedEvent.getTeam() == parent) {
-                value = teamBlockChangedEvent.getNewValue();
-                changed = LocalTime.now();
-            }
+    public void handle(EventCounterEvent event) {
+        event.accept(this);
+    }
+
+    public void handleTeamBlockChanged(TeamBlockChangedEvent event) {
+        if (event.getTeam() == parent) {
+            value = event.getNewValue();
+            changed = LocalTime.now();
         }
-        if (event instanceof MinionDamagedEvent) {
-            MinionDamagedEvent minionDamagedEvent = (MinionDamagedEvent) event;
-            if (minionDamagedEvent.getMinion() == parent) {
-                value = minionDamagedEvent.getNewValue();
-                changed = LocalTime.now();
-            }
+    }
+
+    public void handleMinionDamaged(MinionDamagedEvent event) {
+        if (event.getMinion() == parent) {
+            value = event.getNewValue();
+            changed = LocalTime.now();
         }
     }
 
