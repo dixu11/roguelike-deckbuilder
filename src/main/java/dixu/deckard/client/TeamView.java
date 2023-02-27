@@ -7,6 +7,9 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dixu.deckard.client.GuiParams.CARD_HEIGHT;
+import static dixu.deckard.client.GuiParams.CARD_WIDTH;
+
 public class TeamView implements ActionEventHandler {
     //layout
     private static final int X_FIRST_TEAM_POSITION = GuiParams.getWidth(0.27);
@@ -54,10 +57,10 @@ public class TeamView implements ActionEventHandler {
     public void render(Graphics g) {
         int xChange = 0;
         g.translate(getX(), getY());
-        blockCounter.render(g, new Rectangle((int) (PADDING*0.75), CardView.CARD_HEIGHT * 2, CardView.CARD_WIDTH, CardView.CARD_HEIGHT));
+        blockCounter.render(g, new Rectangle((int) (PADDING*0.75), CARD_HEIGHT * 2, CARD_WIDTH, CARD_HEIGHT));
 
         for (MinionView character : minions) {
-            int xMove = PADDING + CardView.CARD_WIDTH;
+            int xMove = PADDING + CARD_WIDTH;
             character.render(g);
             g.translate(xMove, 0);
             xChange += xMove;

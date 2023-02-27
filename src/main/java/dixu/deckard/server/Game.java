@@ -4,7 +4,7 @@ import dixu.deckard.server.event.*;
 
 public class Game implements CoreEventHandler {
 
-    private final static double PLAY_DELAY_SECONDS = 1.0;
+    private final static double PLAY_DELAY_SECONDS = 2;
     private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
     private final BusManager bus = BusManager.instance();
     private final Team firstTeam;
