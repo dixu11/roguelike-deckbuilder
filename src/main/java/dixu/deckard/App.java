@@ -15,17 +15,17 @@ public class App {
 
         //create team
         TeamFactory teamFactory = new TeamFactory();
-        Team player = teamFactory.createFirst();
-        Team computer = teamFactory.createSecond();
+        Team firstTeam = teamFactory.createFirst();
+        Team secondTeam = teamFactory.createSecond();
 
         //create views
-        TeamView playerTeam = new TeamView(player,Direction.LEFT);
-        TeamView computerTeam = new TeamView(computer, Direction.RIGHT);
-        FightViewImpl fightViewImpl = new FightViewImpl(playerTeam,computerTeam);
+        TeamView firstTeamView = new TeamView(firstTeam,Direction.LEFT);
+        TeamView secondTeamView = new TeamView(secondTeam, Direction.RIGHT);
+        FightViewImpl fightViewImpl = new FightViewImpl(firstTeamView,secondTeamView);
 
         //create engine and connections
         GameEngine engine = new GameEngine(display, fightViewImpl);
-        Game game = new Game(player,computer);
+        Game game = new Game(firstTeam,secondTeam);
         GameController gameController = new GameController(game);
         fightViewImpl.setController(gameController);
         display.addListener(fightViewImpl);
