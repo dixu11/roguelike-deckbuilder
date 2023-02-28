@@ -59,9 +59,9 @@ public class TeamView implements ActionEventHandler {
         g.translate(getX(), getY());
         blockCounter.render(g, new Rectangle((int) (PADDING*0.75), CARD_HEIGHT * 2, CARD_WIDTH, CARD_HEIGHT));
 
-        for (MinionView character : minions) {
+        for (MinionView minion : new ArrayList<>(minions)) {
             int xMove = PADDING + CARD_WIDTH;
-            character.render(g);
+            minion.render(g);
             g.translate(xMove, 0);
             xChange += xMove;
         }

@@ -21,7 +21,7 @@ public class HandView {
         int xChange = -CARD_WIDTH + 10;
         g.translate(xChange, 0);
         int space = CARD_WIDTH + CARD_PADDING;
-        for (CardView cardView : cardViews) {
+        for (CardView cardView : new ArrayList<>(cardViews)) {
             g.translate(space, 0);
             cardView.render(g);
             xChange += space;

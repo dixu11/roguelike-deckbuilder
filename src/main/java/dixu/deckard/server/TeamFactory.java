@@ -12,7 +12,7 @@ public class TeamFactory {
         return new Team(minions);
     }
 
-    public Team createCreateSecond() {
+    public Team createSecond() {
         List<Minion> minions = new ArrayList<>();
         minions.add(new Minion());
         minions.add(new Minion());

@@ -24,7 +24,7 @@ class GameTest {
         bus = BusManager.instance();
         TeamFactory factory = new TeamFactory();
         firstTeam = factory.createFirst();
-        secondTeam = factory.createCreateSecond();
+        secondTeam = factory.createSecond();
         Game game = new Game(firstTeam, secondTeam);
         game.start();
     }

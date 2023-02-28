@@ -34,26 +34,26 @@ public class Game implements CoreEventHandler {
     }
 
     private void onTurnStart() {
-        firstTeam.executeStartTurnCardDraws(createContextForPlayer());
-        secondTeam.executeStartTurnCardDraws(createContextForComputer());
+        firstTeam.executeStartTurnCardDraws(createContextForFirstTeam());
+        secondTeam.executeStartTurnCardDraws(createContextForSecondTeam());
         firstTeam.clearBlock();
     }
 
     private void onTurnEnd() {
-        firstTeam.playAllCards(createContextForPlayer());
+        firstTeam.playAllCards(createContextForFirstTeam());
         secondTeam.clearBlock();
-        secondTeam.playAllCards(createContextForComputer());
+        secondTeam.playAllCards(createContextForSecondTeam());
         bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
     }
 
-    private CardContext createContextForPlayer() {
+    private CardContext createContextForFirstTeam() {
         return CardContext.builder()
                 .ownTeam(firstTeam)
                 .enemyTeam(secondTeam)
                 .build();
     }
 
-    private CardContext createContextForComputer() {
+    private CardContext createContextForSecondTeam() {
         return CardContext.builder()
                 .ownTeam(secondTeam)
                 .enemyTeam(firstTeam)
