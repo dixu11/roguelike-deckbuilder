@@ -12,7 +12,7 @@ public class Minion {
     private int hp = MINION_INITIAL_HP;
     private final Card minionCard;
     private final LinkedList<Card> draw = new LinkedList<>();
-    private final List<Card> hand = new LinkedList<>();
+    private List<Card> hand = new LinkedList<>();
     private final List<Card> discard = new LinkedList<>();
 
 
@@ -111,5 +111,9 @@ public class Minion {
 
     public Card getMinionCard() {
         return minionCard;
+    }
+
+    public void setHand(List<Card> newHand) {
+        hand = newHand;
     }
 }

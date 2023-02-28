@@ -10,6 +10,7 @@ public class Game implements CoreEventHandler {
     private final BusManager bus = BusManager.instance();
     private final Team firstTeam;
     private final Team secondTeam;
+    private static boolean delayCardPlay = true;
 
     public Game(Team firstTeam, Team secondTeam) {
         this.firstTeam = firstTeam;
@@ -60,10 +61,17 @@ public class Game implements CoreEventHandler {
     }
 
     public static void delayForAnimation() {
+        if (!delayCardPlay) {
+            return;
+        }
         try {
             Thread.sleep((long) (PLAY_DELAY_SECONDS * 1000));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public static void disableDaley() {
+        delayCardPlay = false;
     }
 }

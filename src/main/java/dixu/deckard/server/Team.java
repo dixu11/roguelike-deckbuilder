@@ -10,6 +10,7 @@ public class Team implements ActionEventHandler {
     private final BusManager bus = BusManager.instance();
     private final List<Minion> minions;
     private int block;
+    private boolean clearBlockEnabled = true;
 
     public Team(List<Minion> minions) {
         this.minions = minions;
@@ -55,6 +56,9 @@ public class Team implements ActionEventHandler {
     }
 
     public void clearBlock() {
+        if (!clearBlockEnabled) {
+            return;
+        }
         postBlockChangedEvent(0);
         block = 0;
     }
@@ -106,5 +110,9 @@ public class Team implements ActionEventHandler {
     //getters setters n stuff
     public int getBlock() {
         return block;
+    }
+
+    public void setClearBlockEnabled(boolean clearBlockEnabled) {
+        this.clearBlockEnabled = clearBlockEnabled;
     }
 }
