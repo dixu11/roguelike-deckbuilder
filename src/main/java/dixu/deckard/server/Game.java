@@ -2,10 +2,11 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.*;
 
+import static dixu.deckard.server.GameParams.SECOND_TEAM_INITIAL_BLOCK;
+
 public class Game implements CoreEventHandler {
 
     private final static double PLAY_DELAY_SECONDS = 2;
-    private static final int SECOND_TEAM_INITIAL_BLOCK_BONUS = 3;
     private final BusManager bus = BusManager.instance();
     private final Team firstTeam;
     private final Team secondTeam;
@@ -20,7 +21,7 @@ public class Game implements CoreEventHandler {
 
     public void start() {
         bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
-        secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK_BONUS);
+        secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK);
     }
 
     @Override

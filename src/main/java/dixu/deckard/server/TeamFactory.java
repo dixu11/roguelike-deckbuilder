@@ -5,14 +5,14 @@ import java.util.List;
 
 public class TeamFactory {
 
-    public Team createPlayer() {
+    public Team createFirst() {
         List<Minion> minions = new ArrayList<>();
         minions.add(new Minion());
         minions.add(new Minion());
         return new Team(minions);
     }
 
-    public Team createEnemy() {
+    public Team createCreateSecond() {
         List<Minion> minions = new ArrayList<>();
         minions.add(new Minion());
         minions.add(new Minion());

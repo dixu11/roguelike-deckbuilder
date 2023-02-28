@@ -12,4 +12,8 @@ public interface BusManager {
     static BusManager instance() {
         return BusManagerImpl.getInstance();
     }
+
+    static void reset() {
+        BusManagerImpl.getInstance().reset();
+    }
 }

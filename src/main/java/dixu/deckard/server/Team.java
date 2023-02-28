@@ -4,8 +4,9 @@ import dixu.deckard.server.event.*;
 
 import java.util.List;
 
+import static dixu.deckard.server.GameParams.MINION_DRAW_PER_TURN;
+
 public class Team implements ActionEventHandler {
-    private static final int START_TURN_CARD_DRAW_COUNT_PER_MINION = 2;
     private final BusManager bus = BusManager.instance();
     private final List<Minion> minions;
     private int block;
@@ -20,7 +21,7 @@ public class Team implements ActionEventHandler {
     public void executeStartTurnCardDraws(CardContext context) {
         for (Minion minion : minions) {
             context.setMinion(minion);
-            minion.drawCards(START_TURN_CARD_DRAW_COUNT_PER_MINION, context);
+            minion.drawCards(MINION_DRAW_PER_TURN, context);
         }
     }
 
@@ -100,5 +101,10 @@ public class Team implements ActionEventHandler {
 
     public List<Minion> getMinions() {
         return minions;
+    }
+
+    //getters setters n stuff
+    public int getBlock() {
+        return block;
     }
 }

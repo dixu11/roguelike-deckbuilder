@@ -4,10 +4,12 @@ import dixu.deckard.server.event.*;
 
 import java.util.*;
 
+import static dixu.deckard.server.GameParams.MINION_INITIAL_HP;
+
 public class Minion {
     private static int nextId = 1;
     private final BusManager bus = BusManager.instance();
-    private int hp = 3;
+    private int hp = MINION_INITIAL_HP;
     private final Card minionCard;
     private final LinkedList<Card> draw = new LinkedList<>();
     private final List<Card> hand = new LinkedList<>();

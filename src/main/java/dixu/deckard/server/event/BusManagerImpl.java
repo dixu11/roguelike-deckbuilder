@@ -3,11 +3,12 @@ package dixu.deckard.server.event;
 public class BusManagerImpl implements BusManager {
 
     private final static BusManagerImpl manager = new BusManagerImpl();
-    private final EventBus<CoreEventName, CoreEvent> structureBus = new EventBus<>();
-    private final EventBus<ActionEventName, ActionEvent> effectBus = new EventBus<>();
+    private  EventBus<CoreEventName, CoreEvent> structureBus = new EventBus<>();
+    private  EventBus<ActionEventName, ActionEvent> effectBus = new EventBus<>();
 
 
     private BusManagerImpl() {
+
     }
 
     public static BusManagerImpl getInstance() {
@@ -32,5 +33,10 @@ public class BusManagerImpl implements BusManager {
     @Override
     public void post(ActionEvent event) {
         effectBus.post(event);
+    }
+
+    public void reset() {
+        structureBus = new EventBus<>();
+        effectBus = new EventBus<>();
     }
 }

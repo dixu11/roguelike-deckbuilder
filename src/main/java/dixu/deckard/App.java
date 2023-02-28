@@ -15,8 +15,8 @@ public class App {
 
         //create team
         TeamFactory teamFactory = new TeamFactory();
-        Team player = teamFactory.createPlayer();
-        Team computer = teamFactory.createEnemy();
+        Team player = teamFactory.createFirst();
+        Team computer = teamFactory.createCreateSecond();
 
         //create views
         TeamView playerTeam = new TeamView(player,Direction.LEFT);
