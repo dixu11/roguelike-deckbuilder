@@ -54,6 +54,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         if (endTurn.isClicked(e.getX(), e.getY())) {
             endTurn.onClick();
         }
+        firstLeaderHand.reactToClickOnScreen(e.getX(), e.getY());
     }
 
     @Override
