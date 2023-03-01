@@ -65,4 +65,8 @@ public class CardView {
     public void onClick() {
         active = true;
     }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 }

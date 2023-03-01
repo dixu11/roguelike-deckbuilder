@@ -12,6 +12,7 @@ public class LeaderHandView{
     public static final int X = GuiParams.getWidth(0.37);
     public static final int Y = GuiParams.getHeight(0.8);
     private final List<CardView> cardViews = new ArrayList<>();
+    private CardView highlightedCard = null;
 
     public LeaderHandView(Leader leader) {
         leader.getHand()
@@ -35,6 +36,10 @@ public class LeaderHandView{
             CardView cardView = cardViews.get(i);
             if (cardView.isClicked(x, y, X, Y, i)) {
                 cardView.onClick();
+                if (highlightedCard != null) {
+                    highlightedCard.setActive(false);
+                }
+                highlightedCard = cardView;
                 return;
             }
         }
