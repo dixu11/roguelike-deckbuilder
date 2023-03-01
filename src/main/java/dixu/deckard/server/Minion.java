@@ -6,6 +6,12 @@ import java.util.*;
 
 import static dixu.deckard.server.GameParams.MINION_INITIAL_HP;
 
+/**
+ * {@link Minion}s form a {@link Team} to take part in a {@link Fight} for their {@link Leader}, controlled by player
+ * or computer. Every {@link Minion} has its deck of {@link Card}s and plays {@link GameParams#MINION_DRAW_PER_TURN} number of
+ * them every turn automatically. Minion die and leaves a {@link Team} when its {@link Minion#hp} reaches 0.
+* */
+
 public class Minion {
     private static int nextId = 1;
     private final BusManager bus = BusManager.instance();

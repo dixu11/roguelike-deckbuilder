@@ -3,6 +3,24 @@ package dixu.deckard.server;
 import dixu.deckard.server.event.*;
 
 import static dixu.deckard.server.GameParams.SECOND_TEAM_INITIAL_BLOCK;
+/**
+ * {@link Fight} is central gameplay part of whole game. In {@link Fight}s {@link Leader}s put their {@link Minion}s
+ * to the test for live and death. Concept is a little similar to the Pokémon series because {@link Minion}s are not
+ * directly controlled and {@link Leader} can influence their actions by modifying their decks of {@link Card}s.
+ *<p>
+ *  In this version first {@link Leader} is controlled by a player and second is controlled by the game. Only
+ *  player have {@link Special} abilities, and he needs them to win a {@link Fight}. The greatest power of
+ *  player {@link Leader} is ability to steal {@link Card}s form enemy {@link Minion}s and to pass them to their {@link Minion}s.
+ *  <p>
+ * Round consist of two phases. In first phase, called a turn, both leaders spend their {@link Leader#getEnergy}
+ * to use their {@link Special}s until they decide to pass a turn.
+ * <p>
+ * In second phase first {@link Team} clears block and its {@link Minion}s play their {@link Card}s than
+ * second {@link Team} block is cleared, and they play {@link Card}s.
+ * <p>
+ * Now next round starts by {@link Minion}s drawing their new {@link Card}s and shuffling their decks if needed. {@link Fight} lasts
+ * until all {@link Minion}s of one {@link Team} are slayed.
+* */
 
 public class Fight implements CoreEventHandler {
 

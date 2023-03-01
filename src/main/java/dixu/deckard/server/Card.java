@@ -2,6 +2,11 @@ package dixu.deckard.server;
 
 import java.util.Optional;
 
+/**
+ * {@link Card} is an action that {@link Minion}s can store in their decks and play every turn if drawn.
+ * {@link Card}s can also be held by {@link Leader}s and given to their {@link Minion}s to modify their decks.
+ * {@link Card}'s effect is determined by its {@link Card#type}.
+* */
 public class Card {
     private final String name;
     private final int value;
