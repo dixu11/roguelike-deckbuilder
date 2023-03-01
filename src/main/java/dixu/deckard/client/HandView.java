@@ -6,11 +6,11 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static dixu.deckard.client.GuiParams.CARD_PADDING;
 import static dixu.deckard.client.GuiParams.CARD_WIDTH;
 
+//todo refactor to match LeaderHandView
 public class HandView {
-    public static final int CARD_PADDING = 20;
-
     private final List<CardView> cardViews = new ArrayList<>();
 
     public void render(Graphics g) {

@@ -32,6 +32,13 @@ public class CardView {
         }
     }
 
+    public void render(Graphics g, int index) {
+        int translateX = index * (CARD_WIDTH + CARD_PADDING);
+        g.translate(translateX, 0);
+        render(g);
+        g.translate(-translateX, 0);
+    }
+
     public void addCounter(CounterView counter) {
         counters.add(counter);
     }

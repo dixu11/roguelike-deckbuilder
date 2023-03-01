@@ -38,15 +38,9 @@ public class App {
         LeaderFactory factory = new LeaderFactory();
         Leader firstLeader = factory.create(LeaderType.PLAYER);
         Leader secondLeader = factory.create(LeaderType.SIMPLE_BOT);
-        Team firstTeam =  firstLeader.getTeam();
-        Team secondTeam = secondLeader.getTeam();
-
-        //create views
-        TeamView firstTeamView = new TeamView(firstTeam,Direction.LEFT);
-        TeamView secondTeamView = new TeamView(secondTeam, Direction.RIGHT);
-        FightViewImpl fightViewImpl = new FightViewImpl(firstTeamView,secondTeamView);
 
         //create engine and connections
+        FightViewImpl fightViewImpl = new FightViewImpl(firstLeader,secondLeader);
         GameEngine engine = new GameEngine(display, fightViewImpl);
         Fight fight = new Fight(firstLeader,secondLeader);
         FightController fightController = new FightController(fight);

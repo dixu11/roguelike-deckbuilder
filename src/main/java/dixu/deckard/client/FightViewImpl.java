@@ -2,6 +2,7 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.FightController;
 import dixu.deckard.server.FightView;
+import dixu.deckard.server.Leader;
 import dixu.deckard.server.event.*;
 
 import javax.swing.*;
@@ -15,13 +16,15 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     private final BusManager bus = BusManager.instance();
     private final TeamView firstTeam;
     private final TeamView secondTeam;
+    private final LeaderHandView firstLeaderHand;
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
     private FightController controller;//TODO możliwe że będzie do usinięcia
 
 
-    public FightViewImpl(TeamView firstTeam, TeamView secondTeam) {
-        this.firstTeam = firstTeam;
-        this.secondTeam = secondTeam;
+    public FightViewImpl(Leader firstLeader, Leader secondLeader) {
+        this.firstTeam = new TeamView(firstLeader.getTeam(),Direction.LEFT);
+        this.secondTeam = new TeamView(secondLeader.getTeam(),Direction.RIGHT);
+        firstLeaderHand = new LeaderHandView(firstLeader);
 
         bus.register(this, CoreEventName.GAME_OVER);
     }
@@ -36,6 +39,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         renderBackground(g);
         firstTeam.render(g);
         secondTeam.render(g);
+        firstLeaderHand.render(g);
         endTurn.render(g);
     }
 
