@@ -1,6 +1,9 @@
 package dixu.deckard.server;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static dixu.deckard.server.GameParams.INITIAL_ENERGY;
 
 /**
@@ -12,10 +15,15 @@ import static dixu.deckard.server.GameParams.INITIAL_ENERGY;
 
 public class Leader {
     private Team team;
+    private List<Card> hand = new ArrayList<>();
     private int energy = INITIAL_ENERGY;
 
     public Leader(Team team) {
         this.team = team;
+    }
+
+    public void addCards(List<Card> cards) {
+        hand.addAll(cards);
     }
 
     public Team getTeam() {
@@ -24,5 +32,9 @@ public class Leader {
 
     public int getEnergy() {
         return energy;
+    }
+
+    public List<Card> getHand() {
+        return hand;
     }
 }

@@ -36,8 +36,8 @@ public class App {
 
         //create team
         LeaderFactory factory = new LeaderFactory();
-        Leader firstLeader = factory.create();
-        Leader secondLeader = factory.create();
+        Leader firstLeader = factory.create(LeaderType.PLAYER);
+        Leader secondLeader = factory.create(LeaderType.SIMPLE_BOT);
         Team firstTeam =  firstLeader.getTeam();
         Team secondTeam = secondLeader.getTeam();
 
