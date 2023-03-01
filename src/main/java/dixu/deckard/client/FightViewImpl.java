@@ -1,6 +1,6 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.GameController;
+import dixu.deckard.server.FightController;
 import dixu.deckard.server.FightView;
 import dixu.deckard.server.event.*;
 
@@ -16,7 +16,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     private final TeamView firstTeam;
     private final TeamView secondTeam;
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
-    private GameController controller;//TODO możliwe że będzie do usinięcia
+    private FightController controller;//TODO możliwe że będzie do usinięcia
 
 
     public FightViewImpl(TeamView firstTeam, TeamView secondTeam) {
@@ -64,7 +64,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         System.exit(0);
     }
 
-    public void setController(GameController controller) {
+    public void setController(FightController controller) {
         this.controller = controller;
     }
 

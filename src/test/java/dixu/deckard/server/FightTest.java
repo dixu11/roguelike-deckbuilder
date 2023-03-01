@@ -1,5 +1,6 @@
 package dixu.deckard.server;
 
+import dixu.deckard.LeaderFactory;
 import dixu.deckard.server.event.*;
 import org.junit.jupiter.api.*;
 
@@ -11,7 +12,7 @@ import static dixu.deckard.server.GameParams.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 //tests for core game functionalities
-class GameTest {
+class FightTest {
 
     private Team firstTeam;
     private Team secondTeam;
@@ -169,14 +170,16 @@ class GameTest {
         DEFAULT_ATTACK_VALUE = 2;
     }
 
-    private void loadGame() {
-        Game.disableDaley();
+    private void loadGame() { //todo refactor copying same code here and in App
+        Fight.disableDaley();
         bus = BusManager.instance();
-        TeamFactory factory = new TeamFactory();
-        firstTeam = factory.create();
-        secondTeam = factory.create();
-        Game game = new Game(firstTeam, secondTeam);
-        game.start();
+        LeaderFactory leaderFactory = new LeaderFactory();
+        Leader firstLeader = leaderFactory.create();
+        Leader secondLeader = leaderFactory.create();
+        firstTeam = firstLeader.getTeam();
+        secondTeam = secondLeader.getTeam();
+        Fight fight = new Fight(firstLeader,secondLeader);
+        fight.start();
     }
 
     private void reloadGame() {

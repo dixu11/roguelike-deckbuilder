@@ -11,5 +11,6 @@ public class GameParams {
     //cards
     public static int DEFAULT_BLOCK_VALUE = 1;
     public static int DEFAULT_ATTACK_VALUE = 2;
+    public static final int INITIAL_ENERGY = 3;
 
 }

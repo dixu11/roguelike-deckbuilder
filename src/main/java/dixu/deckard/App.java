@@ -6,17 +6,19 @@ import dixu.deckard.server.*;
 public class App {
     public static void main(String[] args) {
         //UNCOMMENT THIS IF YOU DON'T SEE GAME WINDOW:
-        GuiParams.LOCATION_ON_SCREEN_X = 0;
-        GuiParams.LOCATION_ON_SCREEN_Y = 0;
+//        GuiParams.LOCATION_ON_SCREEN_X = 0;
+//        GuiParams.LOCATION_ON_SCREEN_Y = 0;
 
 
         //create frame class and initialize window size
         Display display = new Display("Deckard Thief");
 
         //create team
-        TeamFactory teamFactory = new TeamFactory();
-        Team firstTeam = teamFactory.create();
-        Team secondTeam = teamFactory.create();
+        LeaderFactory factory = new LeaderFactory();
+        Leader firstLeader = factory.create();
+        Leader secondLeader = factory.create();
+        Team firstTeam =  firstLeader.getTeam();
+        Team secondTeam = secondLeader.getTeam();
 
         //create views
         TeamView firstTeamView = new TeamView(firstTeam,Direction.LEFT);
@@ -25,11 +27,11 @@ public class App {
 
         //create engine and connections
         GameEngine engine = new GameEngine(display, fightViewImpl);
-        Game game = new Game(firstTeam,secondTeam);
-        GameController gameController = new GameController(game);
-        fightViewImpl.setController(gameController);
+        Fight fight = new Fight(firstLeader,secondLeader);
+        FightController fightController = new FightController(fight);
+        fightViewImpl.setController(fightController);
         display.addListener(fightViewImpl);
-        game.start();
+        fight.start();
         engine.start();
     }
 }

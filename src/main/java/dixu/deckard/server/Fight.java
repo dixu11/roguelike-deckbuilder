@@ -4,7 +4,7 @@ import dixu.deckard.server.event.*;
 
 import static dixu.deckard.server.GameParams.SECOND_TEAM_INITIAL_BLOCK;
 
-public class Game implements CoreEventHandler {
+public class Fight implements CoreEventHandler {
 
     private final static double PLAY_DELAY_SECONDS = 2;
     private final BusManager bus = BusManager.instance();
@@ -12,9 +12,9 @@ public class Game implements CoreEventHandler {
     private final Team secondTeam;
     private static boolean delayCardPlay = true;
 
-    public Game(Team firstTeam, Team secondTeam) {
-        this.firstTeam = firstTeam;
-        this.secondTeam = secondTeam;
+    public Fight(Leader firstLeader, Leader secondLeader) {
+        this.firstTeam = firstLeader.getTeam();
+        this.secondTeam = secondLeader.getTeam();
 
         bus.register(this, CoreEventName.TURN_ENDED);
         bus.register(this, CoreEventName.TURN_STARTED);

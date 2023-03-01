@@ -63,7 +63,7 @@ public class Minion {
             bus.post(ActionEvent.of(ActionEventName.MINION_CARD_PLAYED, cardContext));
             card.play(cardContext);
             remove(card);
-            Game.delayForAnimation();
+            Fight.delayForAnimation();
         }
     }
 
