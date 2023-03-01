@@ -3,6 +3,7 @@ package dixu.deckard.server;
 import dixu.deckard.server.event.*;
 
 import java.util.List;
+import java.util.Optional;
 
 import static dixu.deckard.server.GameParams.MINION_DRAW_PER_TURN;
 
@@ -99,7 +100,7 @@ public class Team implements ActionEventHandler {
     }
     //minion access
 
-    public Minion getRandomMinion() {
+    public Optional<Minion> getRandomMinion() {
         return MyRandom.getRandomElement(minions);
     }
 

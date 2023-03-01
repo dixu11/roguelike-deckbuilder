@@ -7,9 +7,10 @@ import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static dixu.deckard.server.GameParams.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 //tests for core game functionalities
 class GameTest {
@@ -86,6 +87,24 @@ class GameTest {
         assertEquals(blockFromCards, secondTeam.getBlock());
     }
 
+    @Test
+    @DisplayName("After slaying all minions enemy has empty team and game ends")
+    public void test6() {
+        DEFAULT_BLOCK_VALUE = 0;
+        DEFAULT_ATTACK_VALUE = 3;
+        giveMinionsCards(firstTeam, CardType.ATTACK, CardType.ATTACK);
+        giveMinionsCards(secondTeam, CardType.BLOCK);
+        AtomicBoolean gameOverPosted = new AtomicBoolean(false);
+        bus.register(e -> gameOverPosted.set(true), CoreEventName.GAME_OVER);
+
+        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
+
+        assertTrue(secondTeam.getMinions().isEmpty());
+        if (!gameOverPosted.get()) {
+            fail();
+        }
+    }
+
     private void disableClearBlock() {
         firstTeam.setClearBlockEnabled(false);
         secondTeam.setClearBlockEnabled(false);
@@ -96,6 +115,11 @@ class GameTest {
         all.addAll(firstTeam.getMinions());
         all.addAll(secondTeam.getMinions());
         return all;
+    }
+
+    private void giveMinionsCards(Team team, CardType... cards) {
+        team.getMinions()
+                .forEach(minion -> composeMinionHand(minion,cards));
     }
 
     private void giveAllMinionsBlockCard() {
