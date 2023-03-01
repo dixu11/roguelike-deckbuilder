@@ -25,7 +25,7 @@ class GameTest {
     @AfterEach
     public void after() {
         //Buses are singleton and also needs to be re-initialized after each test
-        BusManager.reset();
+        BusManager.reInitialize();
     }
 
     @Test
@@ -57,11 +57,11 @@ class GameTest {
     @Test
     @DisplayName("Block card gives block to team")
     public void test4() {
-        disableClearBlock();
+        disableBlockClear();
         giveAllMinionsBlockCard();
+        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
 
         executeTurn();
-        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
 
         assertEquals(blockFromCards, firstTeam.getBlock());
         assertEquals(blockFromCards + SECOND_TEAM_INITIAL_BLOCK, secondTeam.getBlock());
@@ -71,9 +71,9 @@ class GameTest {
     @DisplayName("Block is cleared for every team, first team - after plays, second - before plays")
     public void test5() {
         giveAllMinionsBlockCard();
+        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
 
         executeTurn();
-        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
 
         assertEquals(0, firstTeam.getBlock());
         assertEquals(blockFromCards, secondTeam.getBlock());
@@ -117,11 +117,12 @@ class GameTest {
         DEFAULT_ATTACK_VALUE = 2;
         SECOND_TEAM_INITIAL_BLOCK = 3;
         reloadGame();
-        disableClearBlock();
+        disableBlockClear();
         giveMinionsCards(firstTeam, CardType.ATTACK);
         clearMinionsHand(secondTeam);
 
         executeTurn();
+
         assertEquals(1, secondTeam.getBlock());
     }
 
@@ -158,7 +159,7 @@ class GameTest {
         }
     }
 
-    public void setClassicParams() {
+    private void setClassicParams() {
         MINION_PER_TEAM = 2;
         INITIAL_MINION_DECK_SIZE = 4;
         MINION_DRAW_PER_TURN = 2;
@@ -168,7 +169,7 @@ class GameTest {
         DEFAULT_ATTACK_VALUE = 2;
     }
 
-    public void loadGame() {
+    private void loadGame() {
         Game.disableDaley();
         bus = BusManager.instance();
         TeamFactory factory = new TeamFactory();
@@ -183,13 +184,18 @@ class GameTest {
         loadGame();
     }
 
-    private void failIfWasNotPosted(AtomicBoolean wasPosted) {
-        if (!wasPosted.get()) {
-            fail();
-        }
+    private void executeTurn() {
+        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
     }
 
+    private List<Minion> allMinions() {
+        List<Minion> all = new ArrayList<>();
+        all.addAll(firstTeam.getMinions());
+        all.addAll(secondTeam.getMinions());
+        return all;
+    }
     //todo could not find way to avoid repetition - my try was EventName interface but i can't figure out how to
+
     //put it back to overloaded  bus.register() call - it makes compile error -> 'suspicious call'
     private <T> AtomicBoolean listenEventPosted(CoreEventName eventName) {
         //  T elem = eventName.getObject();
@@ -204,24 +210,19 @@ class GameTest {
         return wasPosted;
     }
 
+    private void failIfWasNotPosted(AtomicBoolean wasPosted) {
+        if (!wasPosted.get()) {
+            fail();
+        }
+    }
+
     private void clearMinionsHand(Team team) {
         giveMinionsCards(team);
     }
 
-    private void executeTurn() {
-        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
-    }
-
-    private void disableClearBlock() {
+    private void disableBlockClear() {
         firstTeam.setClearBlockEnabled(false);
         secondTeam.setClearBlockEnabled(false);
-    }
-
-    private List<Minion> allMinions() {
-        List<Minion> all = new ArrayList<>();
-        all.addAll(firstTeam.getMinions());
-        all.addAll(secondTeam.getMinions());
-        return all;
     }
 
     /**

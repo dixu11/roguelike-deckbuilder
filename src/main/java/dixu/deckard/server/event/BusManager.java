@@ -13,7 +13,7 @@ public interface BusManager {
         return BusManagerImpl.getInstance();
     }
 
-    static void reset() {
+    static void reInitialize() {
         BusManagerImpl.getInstance().reset();
     }
 }
