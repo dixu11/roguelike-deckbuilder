@@ -15,8 +15,8 @@ public class App {
 
         //create team
         TeamFactory teamFactory = new TeamFactory();
-        Team firstTeam = teamFactory.createFirst();
-        Team secondTeam = teamFactory.createSecond();
+        Team firstTeam = teamFactory.create();
+        Team secondTeam = teamFactory.create();
 
         //create views
         TeamView firstTeamView = new TeamView(firstTeam,Direction.LEFT);

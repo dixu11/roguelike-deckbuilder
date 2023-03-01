@@ -19,15 +19,9 @@ class GameTest {
 
     @BeforeEach
     public void before() {
-        Game.disableDaley();
-        bus = BusManager.instance();
-        TeamFactory factory = new TeamFactory();
-        firstTeam = factory.createFirst();
-        secondTeam = factory.createSecond();
-        Game game = new Game(firstTeam, secondTeam);
-        game.start();
+        setClassicParams();
+        loadGame(); //remove if performance get worse because tests with custom params load engine twice
     }
-
     @AfterEach
     public void after() {
         //Buses are singleton and also needs to be re-initialized after each test
@@ -90,6 +84,7 @@ class GameTest {
     public void test6() {
         DEFAULT_BLOCK_VALUE = 0;
         DEFAULT_ATTACK_VALUE = 3;
+        reloadGame();
         giveMinionsCards(firstTeam, CardType.ATTACK, CardType.ATTACK);
         giveMinionsCards(secondTeam, CardType.BLOCK);
         AtomicBoolean wasPosted = listenEventPosted(CoreEventName.GAME_OVER);
@@ -104,6 +99,7 @@ class GameTest {
     @DisplayName("After character died proper event is post and it's no longer in team")
     public void test7() {
         DEFAULT_ATTACK_VALUE = 3;
+        reloadGame();
         giveMinionsCards(firstTeam, CardType.ATTACK);
         clearMinionsHand(secondTeam);
         AtomicBoolean wasPosted = listenEventPosted(ActionEventName.MINION_DIED);
@@ -114,6 +110,79 @@ class GameTest {
         assertEquals(MINION_PER_TEAM - 1, secondTeam.getMinions().size());
     }
 
+    @Test
+    @DisplayName("Block is reduced after attack")
+    public void test8() {
+        MINION_PER_TEAM = 1;
+        DEFAULT_ATTACK_VALUE = 2;
+        SECOND_TEAM_INITIAL_BLOCK = 3;
+        reloadGame();
+        disableClearBlock();
+        giveMinionsCards(firstTeam, CardType.ATTACK);
+        clearMinionsHand(secondTeam);
+
+        executeTurn();
+        assertEquals(1, secondTeam.getBlock());
+    }
+
+    @Test
+    @DisplayName("Attack over block hit minion")
+    public void test9() {
+        MINION_PER_TEAM = 1;
+        DEFAULT_ATTACK_VALUE = 5;
+        reloadGame();
+        giveMinionsCards(firstTeam, CardType.ATTACK);
+        clearMinionsHand(secondTeam);
+
+        executeTurn();
+
+        Minion theOnlyOneMinion = secondTeam.getRandomMinion().get();
+        assertEquals(MINION_INITIAL_HP + SECOND_TEAM_INITIAL_BLOCK - DEFAULT_ATTACK_VALUE,
+                theOnlyOneMinion.getHealth());
+    }
+
+    @Test
+    @DisplayName("After all minion cards were played discard deck is shuffled and put as draw deck")
+    public void test10() {
+        DEFAULT_ATTACK_VALUE = 0;
+        reloadGame();
+
+        executeTurn();
+        executeTurn();
+
+        for (Minion minion : allMinions()) {
+            assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
+            assertEquals(INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
+                    minion.getDraw().size());
+            assertEquals(0, minion.getDiscard().size());
+        }
+    }
+
+    public void setClassicParams() {
+        MINION_PER_TEAM = 2;
+        INITIAL_MINION_DECK_SIZE = 4;
+        MINION_DRAW_PER_TURN = 2;
+        MINION_INITIAL_HP = 3;
+        SECOND_TEAM_INITIAL_BLOCK = 3;
+        DEFAULT_BLOCK_VALUE = 1;
+        DEFAULT_ATTACK_VALUE = 2;
+    }
+
+    public void loadGame() {
+        Game.disableDaley();
+        bus = BusManager.instance();
+        TeamFactory factory = new TeamFactory();
+        firstTeam = factory.create();
+        secondTeam = factory.create();
+        Game game = new Game(firstTeam, secondTeam);
+        game.start();
+    }
+
+    private void reloadGame() {
+        after(); //reset bus
+        loadGame();
+    }
+
     private void failIfWasNotPosted(AtomicBoolean wasPosted) {
         if (!wasPosted.get()) {
             fail();
@@ -121,10 +190,11 @@ class GameTest {
     }
 
     //todo could not find way to avoid repetition - my try was EventName interface but i can't figure out how to
-    //put it back to overloaded bus.register call - it makes compile error - suspicious call
-    private AtomicBoolean listenEventPosted(CoreEventName eventName) {
+    //put it back to overloaded  bus.register() call - it makes compile error -> 'suspicious call'
+    private <T> AtomicBoolean listenEventPosted(CoreEventName eventName) {
+        //  T elem = eventName.getObject();
         AtomicBoolean wasPosted = new AtomicBoolean(false);
-        bus.register(event -> wasPosted.set(true), eventName);
+        bus.register(event -> wasPosted.set(true), eventName); // if i pass elem here - there's a problem
         return wasPosted;
     }
 

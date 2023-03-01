@@ -2,6 +2,7 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,7 +15,7 @@ public class Team implements ActionEventHandler {
     private boolean clearBlockEnabled = true;
 
     public Team(List<Minion> minions) {
-        this.minions = minions;
+        this.minions = new ArrayList<>(minions);
 
         bus.register(this, ActionEventName.MINION_DIED);
     }

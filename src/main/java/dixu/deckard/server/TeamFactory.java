@@ -2,20 +2,15 @@ package dixu.deckard.server;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.IntStream;
 
 public class TeamFactory {
 
-    public Team createFirst() {
-        List<Minion> minions = new ArrayList<>();
-        minions.add(new Minion());
-        minions.add(new Minion());
-        return new Team(minions);
-    }
-
-    public Team createSecond() {
-        List<Minion> minions = new ArrayList<>();
-        minions.add(new Minion());
-        minions.add(new Minion());
-        return new Team(minions);
+    public Team create() {
+        return new Team(IntStream.range(0, GameParams.MINION_PER_TEAM)
+                .boxed()
+                .map(num -> new Minion())
+                .toList()
+        );
     }
 }
