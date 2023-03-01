@@ -1,8 +1,6 @@
 package dixu.deckard.server;
 
-import dixu.deckard.server.event.BusManager;
-import dixu.deckard.server.event.CoreEvent;
-import dixu.deckard.server.event.CoreEventName;
+import dixu.deckard.server.event.*;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
@@ -68,8 +66,8 @@ class GameTest {
         disableClearBlock();
         giveAllMinionsBlockCard();
 
-        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
-        int blockFromCards = DEFAULT_BLOCK_VALUE* MINION_PER_TEAM;
+        executeTurn();
+        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
 
         assertEquals(blockFromCards, firstTeam.getBlock());
         assertEquals(blockFromCards + SECOND_TEAM_INITIAL_BLOCK, secondTeam.getBlock());
@@ -80,8 +78,8 @@ class GameTest {
     public void test5() {
         giveAllMinionsBlockCard();
 
-        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
-        int blockFromCards = DEFAULT_BLOCK_VALUE* MINION_PER_TEAM;
+        executeTurn();
+        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
 
         assertEquals(0, firstTeam.getBlock());
         assertEquals(blockFromCards, secondTeam.getBlock());
@@ -94,15 +92,54 @@ class GameTest {
         DEFAULT_ATTACK_VALUE = 3;
         giveMinionsCards(firstTeam, CardType.ATTACK, CardType.ATTACK);
         giveMinionsCards(secondTeam, CardType.BLOCK);
-        AtomicBoolean gameOverPosted = new AtomicBoolean(false);
-        bus.register(e -> gameOverPosted.set(true), CoreEventName.GAME_OVER);
+        AtomicBoolean wasPosted = listenEventPosted(CoreEventName.GAME_OVER);
 
-        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
+        executeTurn();
 
         assertTrue(secondTeam.getMinions().isEmpty());
-        if (!gameOverPosted.get()) {
+        failIfWasNotPosted(wasPosted);
+    }
+
+    @Test
+    @DisplayName("After character died proper event is post and it's no longer in team")
+    public void test7() {
+        DEFAULT_ATTACK_VALUE = 3;
+        giveMinionsCards(firstTeam, CardType.ATTACK);
+        clearMinionsHand(secondTeam);
+        AtomicBoolean wasPosted = listenEventPosted(ActionEventName.MINION_DIED);
+
+        executeTurn();
+
+        failIfWasNotPosted(wasPosted);
+        assertEquals(MINION_PER_TEAM - 1, secondTeam.getMinions().size());
+    }
+
+    private void failIfWasNotPosted(AtomicBoolean wasPosted) {
+        if (!wasPosted.get()) {
             fail();
         }
+    }
+
+    //todo could not find way to avoid repetition - my try was EventName interface but i can't figure out how to
+    //put it back to overloaded bus.register call - it makes compile error - suspicious call
+    private AtomicBoolean listenEventPosted(CoreEventName eventName) {
+        AtomicBoolean wasPosted = new AtomicBoolean(false);
+        bus.register(event -> wasPosted.set(true), eventName);
+        return wasPosted;
+    }
+
+    private AtomicBoolean listenEventPosted(ActionEventName eventName) {
+        AtomicBoolean wasPosted = new AtomicBoolean(false);
+        bus.register(event -> wasPosted.set(true), eventName);
+        return wasPosted;
+    }
+
+    private void clearMinionsHand(Team team) {
+        giveMinionsCards(team);
+    }
+
+    private void executeTurn() {
+        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
     }
 
     private void disableClearBlock() {
@@ -117,13 +154,16 @@ class GameTest {
         return all;
     }
 
+    /**
+     * @param cards when no elements are passed minion has no cards in hand
+     */
     private void giveMinionsCards(Team team, CardType... cards) {
         team.getMinions()
-                .forEach(minion -> composeMinionHand(minion,cards));
+                .forEach(minion -> composeMinionHand(minion, cards));
     }
 
     private void giveAllMinionsBlockCard() {
-        allMinions().forEach(minion -> composeMinionHand(minion,CardType.BLOCK));
+        allMinions().forEach(minion -> composeMinionHand(minion, CardType.BLOCK));
     }
 
     private void composeMinionHand(Minion minion, CardType... cards) {

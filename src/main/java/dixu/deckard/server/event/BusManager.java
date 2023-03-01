@@ -5,6 +5,7 @@ public interface BusManager {
 
     void register(ActionEventHandler handler, ActionEventName name);
 
+
     void post(CoreEvent event);
 
     void post(ActionEvent event);

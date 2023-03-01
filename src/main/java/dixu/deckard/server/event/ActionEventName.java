@@ -3,7 +3,7 @@ package dixu.deckard.server.event;
 /**
  * (SOURCE)_(EVENT NAME)
 * */
-public enum ActionEventName {
+public enum ActionEventName implements EventName {
     MINION_CARD_PLAYED,
     MINION_CARD_DRAW,
     MINION_DAMAGED,
@@ -19,5 +19,10 @@ public enum ActionEventName {
         } else {
             throw new IllegalStateException("UNKNOWN EVENT SOURCE");
         }
+    }
+
+    @Override
+    public String getName() {
+        return name();
     }
 }
