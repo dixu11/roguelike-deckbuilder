@@ -9,9 +9,9 @@ import java.util.Optional;
 import static dixu.deckard.server.GameParams.MINION_DRAW_PER_TURN;
 
 /**
- * {@link Team} is group of {@link Minion}s, controlled by {@link Leader}, acting on one side of a {@link Fight}.
- * When {@link Leader} ended a turn {@link Minion}s of a {@link Team} play their cards automatically.
- * {@link Team} has {@link Team#block} attribute, protecting it from attacks which lasts for one turn.
+ * {@link Team} is group of {@link Minion}s, controlled by {@link Leader}, spawning on one side of the {@link Fight}.
+ * When {@link Leader} ends his turn {@link Minion}s of all {@link Team}s play their cards automatically.
+ * {@link Team}s have {@link Team#block} attribute that lasts one turn and protects them from the attacks.
 * */
 
 public class Team implements ActionEventHandler {

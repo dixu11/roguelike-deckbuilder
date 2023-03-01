@@ -4,20 +4,20 @@ import dixu.deckard.client.*;
 import dixu.deckard.server.*;
 
 /**
- * If you want to learn about game rules and central elements of the system start from {@link Fight} class :)
+ * If you want to learn about the rules of the game and central elements of the system start from {@link Fight} class :)
  * <p>
  *     You can also check diagrams in resources package.
  * <p>
  * {@link dixu.deckard.server.event.Event} notifications are central architecture element of this project and working with
  * {@link dixu.deckard.server.event.Event}s is executed by {@link dixu.deckard.server.event.BusManager}.
  * <p>
- *     ANY suggestions how to improve code, especially concerning architecture, are strongly recommended. I'm open for
- *     all sorts of feedback if you like, you can contact me on GitHub, e-mail or facebook.
+ *     ANY suggestions how to improve this code, especially concerning architecture, are strongly recommended. I'm open for
+ *     all sorts of feedback. If you like, you can contact me on GitHub, e-mail or facebook.
  *     <p>
  * I'm planning to make roguelike deckbuilder with special steal mechanics and little mix of auto-battle genre.
  * <p>
- * For now im trying to stabilize central {@link Fight} mechanics before adding content like more {@link Card}s,
- * different {@link Minion}s or {@link Special} abilities. There also are no progression system jet and game lasts for
+ * For now im trying to stabilize central {@link Fight} mechanics before adding content, like more {@link Card}s,
+ * different {@link Minion}s or more {@link Special} abilities. There is no progression system jet and game lasts for
  * only one {@link Fight}.
  * <p>
  * {@link App} create all objects from client and from server and starts an app.
