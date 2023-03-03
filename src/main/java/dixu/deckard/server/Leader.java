@@ -7,9 +7,11 @@ import dixu.deckard.server.event.ActionEventName;
 import dixu.deckard.server.event.BusManager;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import static dixu.deckard.server.GameParams.INITIAL_ENERGY;
+import static dixu.deckard.server.GameParams.*;
 
 /**
  * {@link Leader} is player entity or computer that is controlling one side of a fight.
@@ -23,12 +25,19 @@ public class Leader implements ActionEventHandler {
     private BusManager bus = BusManager.instance();
     private Team team;
     private List<Card> hand = new ArrayList<>();
+    private Map<ActionEventName,Special> specials = new HashMap<>();
     private int energy = INITIAL_ENERGY;
 
     public Leader(Team team) {
         this.team = team;
 
+        specials.put(ActionEventName.LEADER_SPECIAL_STEAL, new Special(STEAL_SPECIAL_COST));
+        specials.put(ActionEventName.LEADER_SPECIAL_UPGRADE, new Special(UPGRADE_SPECIAL_COST));
+        specials.put(ActionEventName.LEADER_SPECIAL_MOVE_HAND, new Special(MOVE_SPECIAL_COST));
+
         bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
+        bus.register(this, ActionEventName.LEADER_SPECIAL_MOVE_HAND);
+        bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
     }
 
     public void addCards(List<Card> cards) {
@@ -49,6 +58,17 @@ public class Leader implements ActionEventHandler {
 
     @Override
     public void handle(ActionEvent event) {
+        if (event.isSpecial()) {
+            int cost = specials.get(event.getName()).getCost();
+            energy -= cost;
+            bus.post(ActionEvent.builder()
+                    .name(ActionEventName.LEADER_ENERGY_CHANGED)
+                    .leader(this)
+                    .value(energy)
+                    .build()
+            );
+
+        }
         if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
             hand.remove(event.getCard());
         } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {

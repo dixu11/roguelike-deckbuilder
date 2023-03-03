@@ -17,8 +17,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     private final TeamView secondTeam;
     private final LeaderHandView firstLeaderHand;
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
-    private GuiController controller;//TODO możliwe że będzie do usinięcia
-
+    private final CounterView energyCounter;
 
     public FightViewImpl(Leader firstLeader, Leader secondLeader) {
         this.firstTeam = new TeamView(firstLeader.getTeam(),Direction.LEFT);
@@ -26,6 +25,19 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         firstLeaderHand = new LeaderHandView(firstLeader);
 
         bus.register(this, CoreEventName.GAME_OVER);
+
+        EventCounterView energyCounter = EventCounterView.builder()
+                .straightDirection( Direction.BOTTOM)
+                .diagonalShift( Direction.RIGHT)
+                .color(MAIN_COLOR_BRIGHT)
+                .value(firstLeader.getEnergy())
+                .description("⚡: ")
+                .source(firstLeader)
+                .strategy(((oldValue, e) -> e.getValue()))
+                .build();
+
+        bus.register(energyCounter, ActionEventName.LEADER_ENERGY_CHANGED);
+        this.energyCounter = energyCounter;
     }
 
     //animations
@@ -40,6 +52,8 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         secondTeam.render(g);
         firstLeaderHand.render(g);
         endTurn.render(g);
+        //todo refactor position
+        energyCounter.render(g,new Rectangle(getWidth(0.34),getHeight(0.7),1,1));
     }
 
     private void renderBackground(Graphics g) {
@@ -68,10 +82,6 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     private static void onGameOver() {
         JOptionPane.showMessageDialog(null, "Game over! ");
         System.exit(0);
-    }
-
-    public void setController(GuiController controller) {
-        this.controller = controller;
     }
 
     public LeaderHandView getLeaderHand() {

@@ -44,7 +44,6 @@ public class App {
         GameEngine engine = new GameEngine(display, fightViewImpl);
         Fight fight = new Fight(firstLeader,secondLeader);
         GuiController guiController = new GuiController(fightViewImpl);
-        fightViewImpl.setController(guiController);
         display.addListener(fightViewImpl);
         fight.start();
         engine.start();
