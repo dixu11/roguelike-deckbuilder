@@ -34,7 +34,6 @@ public abstract class FunctionalTest {
 
     private void setClassicParams() {
         MINION_PER_TEAM = 2;
-        INITIAL_MINION_DECK_SIZE = 4;
         MINION_DRAW_PER_TURN = 2;
         MINION_INITIAL_HP = 3;
         SECOND_TEAM_INITIAL_BLOCK = 3;
@@ -119,5 +118,9 @@ public abstract class FunctionalTest {
             newHand.addAll(factory.createCards(1, type));
         }
         minion.setHand(newHand);
+    }
+
+    public int initialMinionDeckSize() {
+        return new Minion(LeaderType.SIMPLE_BOT).getDraw().size();
     }
 }

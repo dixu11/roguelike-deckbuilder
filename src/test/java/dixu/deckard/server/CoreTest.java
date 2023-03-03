@@ -25,7 +25,7 @@ class CoreTest extends FunctionalTest{
     public void test2() {
         for (Minion minion : allMinions()) {
             assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
-            assertEquals(INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
+            assertEquals(initialMinionDeckSize() - MINION_DRAW_PER_TURN,
                     minion.getDraw().size());
             assertEquals(0, minion.getDiscarded().size());
         }
@@ -127,19 +127,20 @@ class CoreTest extends FunctionalTest{
                 theOnlyOneMinion.getHealth());
     }
 
-    //todo niezdane testy
     @Test
     @DisplayName("After all minion cards were played discard deck is shuffled and put as draw deck")
     public void test10() {
         DEFAULT_ATTACK_VALUE = 0;
+        MINION_DRAW_PER_TURN = 1;
         reloadGame();
 
-        executeTurn();
-        executeTurn();
+        for (int i = 0; i < initialMinionDeckSize(); i++) {
+            executeTurn();
+        }
 
         for (Minion minion : allMinions()) {
             assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
-            assertEquals(INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
+            assertEquals(initialMinionDeckSize() - MINION_DRAW_PER_TURN,
                     minion.getDraw().size());
             assertEquals(0, minion.getDiscarded().size());
         }
