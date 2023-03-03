@@ -5,10 +5,12 @@ import dixu.deckard.server.event.*;
 
 public class GuiController implements GuiEventHandler {
     private final BusManager bus = BusManager.instance();
-    private LeaderHandView leaderHand;
-    private TeamView firstTeam;
-    private TeamView secondTeam;
+    private final LeaderHandView leaderHand;
+    private final TeamView firstTeam;
+    private final TeamView secondTeam;
     private CardView selectedLeaderCardView = null;
+    private CardView secondTeamCardSelectedView = null;
+    private CardView selectedMinionCardView = null;
 
     public GuiController(FightViewImpl fightView) {
         this.leaderHand = fightView.getLeaderHand();
@@ -30,7 +32,7 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void selectLeaderCard(GuiEvent event) {
-        if (selectedLeaderCardView == event.getCardView() && selectedLeaderCardView.isSelected()) {
+        if (selectedLeaderCardView == event.getCardView() && selectedLeaderCardView.isSelected()) { //duplicates too
             selectedLeaderCardView.setSelected(false);
             selectedLeaderCardView = null;
             return;
@@ -73,15 +75,25 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void stealCardSpecial(GuiEvent event) {
+        CardView newSelected =event.getCardView();
         if (event.getTeamView() != secondTeam) {
             return;
         }
-        CardView selected = event.getCardView();
-        if (!selected.isSelected()) {
-            selected.toggleSelected();
+        if (secondTeamCardSelectedView == null) {
+            secondTeamCardSelectedView = newSelected;
+            secondTeamCardSelectedView.setSelected(true);
             return;
         }
-        selected.toggleSelected();
+        if (!newSelected.isSelected()) {
+            secondTeamCardSelectedView.setSelected(false);
+            secondTeamCardSelectedView = newSelected;
+            secondTeamCardSelectedView.setSelected(true);
+            return;
+        }
+
+        newSelected.setSelected(false);
+        secondTeamCardSelectedView = null;
+
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.LEADER_SPECIAL_STEAL)
                 .leader(leaderHand.getLeader())
@@ -95,15 +107,26 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void moveMinionHandSpecial(GuiEvent event) {
+        CardView newSelected =event.getCardView();  //todo figure out how to avoid duplicates
         if (event.getTeamView() != firstTeam) {
             return;
         }
-        CardView selected = event.getCardView();
-        if (!selected.isSelected()) {
-            selected.toggleSelected();
+
+        if (selectedMinionCardView == null) {
+            selectedMinionCardView = newSelected;
+            selectedMinionCardView.setSelected(true);
             return;
         }
-        selected.toggleSelected();
+        if (!newSelected.isSelected()) {
+            selectedMinionCardView.setSelected(false);
+            selectedMinionCardView = newSelected;
+            selectedMinionCardView.setSelected(true);
+            return;
+        }
+
+        newSelected.setSelected(false);
+        selectedMinionCardView = null;
+
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.LEADER_SPECIAL_MOVE_HAND)
                 .leader(leaderHand.getLeader())
@@ -113,5 +136,6 @@ public class GuiController implements GuiEventHandler {
                 .card(event.getCardView().getCard())
                 .build()
         );
+        System.out.println("swap");
     }
 }
