@@ -136,6 +136,5 @@ public class GuiController implements GuiEventHandler {
                 .card(event.getCardView().getCard())
                 .build()
         );
-        System.out.println("swap");
     }
 }

@@ -30,10 +30,9 @@ public class Team implements ActionEventHandler {
     }
 
     //draws
-    public void executeStartTurnCardDraws(CardContext context) {
+    public void executeStartTurnCardDraws() {
         for (Minion minion : minions) {
-            context.setMinion(minion);
-            minion.drawCards(MINION_DRAW_PER_TURN, context);
+            minion.drawCards(MINION_DRAW_PER_TURN);
         }
     }
 

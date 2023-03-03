@@ -10,16 +10,16 @@ import static dixu.deckard.server.GameParams.MINION_INITIAL_HP;
  * {@link Minion}s form a {@link Team} to take a part in a {@link Fight} for their {@link Leader}, controlled by player
  * or a game. Every {@link Minion} has its deck of {@link Card}s and plays {@link GameParams#MINION_DRAW_PER_TURN} number of
  * them every turn automatically. Minion die and leaves a {@link Team} when its {@link Minion#hp} reaches 0.
-* */
+ */
 
-public class Minion implements ActionEventHandler{
+public class Minion implements ActionEventHandler {
     private static int nextId = 1;
     private final BusManager bus = BusManager.instance();
     private int hp = MINION_INITIAL_HP;
     private final Card minionCard;
     private final LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
-    private final List<Card> discard = new LinkedList<>();
+    private final List<Card> discarded = new LinkedList<>();
     private Team team;
 
 
@@ -30,30 +30,35 @@ public class Minion implements ActionEventHandler{
         draw.addAll(cardFactory.createDeck(type));
         Collections.shuffle(draw);
 
-        bus.register(this,ActionEventName.LEADER_SPECIAL_UPGRADE);
-        bus.register(this,ActionEventName.LEADER_SPECIAL_STEAL);
+        bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
+        bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
+        bus.register(this, ActionEventName.LEADER_SPECIAL_MOVE_HAND);
     }
 
     //card draw
-    public void drawCards(int count, CardContext context) { //todo simplify context couse we now have reference to team
+    public void drawCards(int count) { //todo simplify context couse we now have reference to team
         for (int i = 0; i < count; i++) {
-            CardContext contextCopy = context.getCopy(); //we play many cards so there are many contexts
-            drawCard(contextCopy);
+            drawCard();
         }
     }
 
-    private void drawCard(CardContext context) {
+    private void drawCard() {
         if (draw.isEmpty()) {
-            Collections.shuffle(discard);
-            draw.addAll(discard);
-            discard.clear();
+            Collections.shuffle(discarded);
+            draw.addAll(discarded);
+            discarded.clear();
             postShuffleEvent();
 
         }
         Card card = draw.remove();
         hand.add(card);
-        context.setCard(card);
-        bus.post(ActionEvent.of(ActionEventName.MINION_CARD_DRAW, context));
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_CARD_DRAW)
+                .ownTeam(team)
+                .minion(this)
+                .card(card)
+                .build()
+        );
     }
 
     private void postShuffleEvent() {
@@ -69,16 +74,23 @@ public class Minion implements ActionEventHandler{
     public void playAllCards(CardContext cardContext) {
         for (Card card : new ArrayList<>(hand)) {
             cardContext.setCard(card);
-            bus.post(ActionEvent.of(ActionEventName.MINION_CARD_PLAYED, cardContext));
             card.play(cardContext);
-            remove(card);
+            discard(card);
             Fight.delayForAnimation();
         }
     }
 
-    private void remove(Card card) {
+    private void discard(Card card) {
         hand.remove(card);
-        discard.add(card);
+        discarded.add(card);
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_CARD_DISCARDED)
+                .ownTeam(team)
+                .minion(this)
+                .card(card)
+                .build()
+        );
+
     }
 
     //fight
@@ -104,10 +116,14 @@ public class Minion implements ActionEventHandler{
 
     @Override
     public void handle(ActionEvent event) {
-        if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getMinion() == this) {
-            onUpgradeSpecial(event);
-        } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getMinion() == this ) {
-            onStealSpecial(event);
+        if (event.getMinion() != this) {
+            return;
+        }
+
+        switch (event.getName()) {
+            case LEADER_SPECIAL_UPGRADE -> onUpgradeSpecial(event);
+            case LEADER_SPECIAL_STEAL -> onStealSpecial(event);
+            case LEADER_SPECIAL_MOVE_HAND -> onMoveHand(event);
         }
     }
 
@@ -131,6 +147,13 @@ public class Minion implements ActionEventHandler{
         //todo draw?
     }
 
+    private void onMoveHand(ActionEvent event) {
+        if (!hand.isEmpty()) {
+            discard(hand.remove(0));
+            drawCard();
+        }
+    }
+
     public int getHealth() {
         return hp;
     }
@@ -143,8 +166,8 @@ public class Minion implements ActionEventHandler{
         return draw;
     }
 
-    public List<Card> getDiscard() {
-        return discard;
+    public List<Card> getDiscarded() {
+        return discarded;
     }
 
     public Card getMinionCard() {

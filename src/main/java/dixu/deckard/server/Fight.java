@@ -52,8 +52,8 @@ public class Fight implements CoreEventHandler {
     }
 
     private void onTurnStart() {
-        firstTeam.executeStartTurnCardDraws(createContextForFirstTeam());
-        secondTeam.executeStartTurnCardDraws(createContextForSecondTeam());
+        firstTeam.executeStartTurnCardDraws();
+        secondTeam.executeStartTurnCardDraws();
         firstTeam.clearBlock();
     }
 

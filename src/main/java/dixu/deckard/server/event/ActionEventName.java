@@ -4,7 +4,7 @@ package dixu.deckard.server.event;
  * (SOURCE)_(EVENT NAME)
 * */
 public enum ActionEventName implements EventName {
-    MINION_CARD_PLAYED,
+    MINION_CARD_DISCARDED,
     MINION_CARD_DRAW,
     MINION_DAMAGED,
     MINION_DIED,

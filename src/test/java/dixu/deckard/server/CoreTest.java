@@ -3,8 +3,6 @@ package dixu.deckard.server;
 import dixu.deckard.server.event.*;
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static dixu.deckard.server.GameParams.*;
@@ -29,7 +27,7 @@ class CoreTest extends FunctionalTest{
             assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
             assertEquals(INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
                     minion.getDraw().size());
-            assertEquals(0, minion.getDiscard().size());
+            assertEquals(0, minion.getDiscarded().size());
         }
     }
 
@@ -142,7 +140,7 @@ class CoreTest extends FunctionalTest{
             assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
             assertEquals(INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
                     minion.getDraw().size());
-            assertEquals(0, minion.getDiscard().size());
+            assertEquals(0, minion.getDiscarded().size());
         }
     }
 
