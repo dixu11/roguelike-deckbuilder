@@ -51,6 +51,8 @@ public class Leader implements ActionEventHandler {
     public void handle(ActionEvent event) {
         if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
             hand.remove(event.getCard());
+        } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
+            hand.add(event.getCard());
         }
     }
 }

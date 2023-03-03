@@ -11,7 +11,8 @@ public enum ActionEventName implements EventName {
     MINION_SHUFFLE,
     TEAM_BLOCK_CHANGED,
     LEADER_SPECIAL_UPGRADE,
-    MINION_HAND_CHANGED;
+    MINION_HAND_CHANGED,
+    LEADER_SPECIAL_STEAL;
 
     public static Object determineSourceFromEventName(ActionEvent actionEvent) {
         if (actionEvent.getName().name().startsWith("MINION")) {

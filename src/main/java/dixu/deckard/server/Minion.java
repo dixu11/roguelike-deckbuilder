@@ -31,6 +31,7 @@ public class Minion implements ActionEventHandler{
         Collections.shuffle(draw);
 
         bus.register(this,ActionEventName.LEADER_SPECIAL_UPGRADE);
+        bus.register(this,ActionEventName.LEADER_SPECIAL_STEAL);
     }
 
     //card draw
@@ -104,15 +105,30 @@ public class Minion implements ActionEventHandler{
     @Override
     public void handle(ActionEvent event) {
         if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getMinion() == this) {
-            int index = hand.indexOf(event.getOldCard());
-            hand.set(index, event.getCard());
-            bus.post(ActionEvent.builder()
-                    .name(ActionEventName.MINION_HAND_CHANGED)
-                    .minion(this)
-                    .build()
-            );
-
+            onUpgradeSpecial(event);
+        } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getMinion() == this ) {
+            onStealSpecial(event);
         }
+    }
+
+    private void onUpgradeSpecial(ActionEvent event) {
+        int index = hand.indexOf(event.getOldCard());
+        hand.set(index, event.getCard());
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_HAND_CHANGED)
+                .minion(this)
+                .build()
+        );
+    }
+
+    private void onStealSpecial(ActionEvent event) {
+        hand.remove(event.getCard());
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_HAND_CHANGED)
+                .minion(this)
+                .build()
+        );
+        //todo draw?
     }
 
     public int getHealth() {

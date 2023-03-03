@@ -80,4 +80,8 @@ public class LeaderHandView implements CoreEventHandler {
         }
         selectedCard = null;
     }
+
+    public void add(Card card) {
+        cardViews.add(new CardView(card));
+    }
 }

@@ -28,33 +28,53 @@ public class GuiController implements GuiEventHandler {
         if (event.getTeamView() == firstTeam) {
             upgradeDeckSpecial(event);
         } else {
-            //first click of steal card?
+            stealCardSpecial(event);
         }
     }
 
-    private void upgradeDeckSpecial(GuiEvent guiEvent) {
+    private void upgradeDeckSpecial(GuiEvent event) {
         Card leaderCard = selectedLeaderCard();
         Card minionCard = selectedfirstTeamCard();
         if (leaderCard == null || minionCard == null) {
             return;
         }
+
         leaderHand.remove(leaderCard);
         leaderHand.clearSelect();
         firstTeam.clearSelect();
+
         bus.post(ActionEvent.builder()
                         .name(ActionEventName.LEADER_SPECIAL_UPGRADE)
                         .leader(leaderHand.getLeader())
                         .ownTeam(firstTeam.getTeam())
-                        .ownTeam(secondTeam.getTeam())
-                        .minion(guiEvent.getMinionView().getMinion())
+                        .enemyTeam(secondTeam.getTeam())
+                        .minion(event.getMinionView().getMinion())
                         .card(leaderCard)
                         .oldCard(minionCard)
                         .build()
         );
     }
 
-    private void stealCardSpecial() {
-
+    private void stealCardSpecial(GuiEvent event) {
+        if (event.getTeamView() != secondTeam) {
+            return;
+        }
+        CardView selected = event.getCardView();
+        if (!selected.isSelected()) {
+            selected.toggleSelected();
+            return;
+        }
+        selected.toggleSelected();
+        bus.post(ActionEvent.builder()
+                        .name(ActionEventName.LEADER_SPECIAL_STEAL)
+                        .leader(leaderHand.getLeader())
+                        .ownTeam(firstTeam.getTeam())
+                        .enemyTeam(secondTeam.getTeam())
+                        .minion(event.getMinionView().getMinion())
+                        .card(event.getCardView().getCard())
+                        .build()
+        );
+        leaderHand.add(event.getCardView().getCard());
     }
 
     private void changeMinionHandSpecial() {
