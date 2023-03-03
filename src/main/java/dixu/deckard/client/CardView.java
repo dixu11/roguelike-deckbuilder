@@ -1,6 +1,7 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.Card;
+import dixu.deckard.server.event.BusManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ import java.util.List;
 import static dixu.deckard.client.GuiParams.*;
 
 public class CardView {
-
     private final List<CounterView> counters = new ArrayList<>();
     private final Card card;
     private boolean active = false;
@@ -62,11 +62,12 @@ public class CardView {
         return bounds.intersects(new Rectangle(x, y, 1, 1));
     }
 
-    public void onClick() {
+    public boolean onClick() {
         active = !active;
+        return active;
     }
 
-    public void setActive(boolean active) {
+    public void setSelected(boolean active) {
         this.active = active;
     }
 }
