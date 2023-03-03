@@ -1,12 +1,11 @@
 package dixu.deckard.server.event;
 
-import dixu.deckard.server.Card;
-import dixu.deckard.server.CardContext;
-import dixu.deckard.server.Minion;
-import dixu.deckard.server.Team;
+import dixu.deckard.server.*;
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class ActionEvent implements Event<ActionEventName> {
 
     //when adding field update lombok builder on bottom!
@@ -16,7 +15,9 @@ public class ActionEvent implements Event<ActionEventName> {
     private Team enemyTeam;
     private Minion minion;
     private Card card;
+    private Card oldCard;
     private int value;
+    private Leader leader;
 
     public static ActionEvent of(ActionEventName name, CardContext context) {
         return ofName(name)
@@ -32,35 +33,20 @@ public class ActionEvent implements Event<ActionEventName> {
                 .name(name);
     }
 
+    public boolean isSpecial() {
+        return name.isSpecial();
+    }
+
     @Override
     public ActionEventName getName() {
         return name;
     }
 
-    public Object getSource() {
-        return source;
-    }
-
-    public int value() {
-        return value;
-    }
-
-    public Team getOwnTeam() {
-        return ownTeam;
-    }
-
-    public Minion getMinion() {
-        return minion;
-    }
-
-    public Card getCard() {
-        return card;
-    }
-
     public static class ActionEventBuilder {
 
         public ActionEvent build() {
-            ActionEvent actionEvent = new ActionEvent(this.name, this.source, this.ownTeam, this.enemyTeam, this.minion, this.card, this.value);
+            ActionEvent actionEvent = new ActionEvent(this.name, this.source, this.ownTeam,
+                    this.enemyTeam, this.minion, this.card,this.oldCard, this.value,this.leader);
             actionEvent.source = ActionEventName.determineSourceFromEventName(actionEvent);
 
             return actionEvent;

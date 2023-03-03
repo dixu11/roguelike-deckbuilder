@@ -16,8 +16,10 @@ public class LeaderHandView implements CoreEventHandler {
     public static final int Y = GuiParams.getHeight(0.8);
     private final List<CardView> cardViews = new ArrayList<>();
     private CardView selectedCard = null;
+    private Leader leader;
 
     public LeaderHandView(Leader leader) {
+        this.leader = leader;
         leader.getHand()
                 .forEach(card -> cardViews.add(new CardView(card)));
 
@@ -62,5 +64,20 @@ public class LeaderHandView implements CoreEventHandler {
 
     public CardView getSelected() {
         return selectedCard;
+    }
+
+    public Leader getLeader() {
+        return leader;
+    }
+
+    public void remove(Card card) {
+        cardViews.removeIf(v -> v.getCard() == card);
+    }
+
+    public void clearSelect() {
+        if (selectedCard != null) {
+            selectedCard.setSelected(false);
+        }
+        selectedCard = null;
     }
 }

@@ -1,6 +1,11 @@
 package dixu.deckard.server;
 
 
+import dixu.deckard.server.event.ActionEvent;
+import dixu.deckard.server.event.ActionEventHandler;
+import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.BusManager;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,13 +18,17 @@ import static dixu.deckard.server.GameParams.INITIAL_ENERGY;
  * with {@link Minion}s {@link Card}s.
 * */
 
-public class Leader {
+public class Leader implements ActionEventHandler {
+
+    private BusManager bus = BusManager.instance();
     private Team team;
     private List<Card> hand = new ArrayList<>();
     private int energy = INITIAL_ENERGY;
 
     public Leader(Team team) {
         this.team = team;
+
+        bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
     }
 
     public void addCards(List<Card> cards) {
@@ -36,5 +45,12 @@ public class Leader {
 
     public List<Card> getHand() {
         return hand;
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
+            hand.remove(event.getCard());
+        }
     }
 }

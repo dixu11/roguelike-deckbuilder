@@ -8,7 +8,7 @@ public class LeaderFactory {
     public Leader create(LeaderType type) {
         Leader leader = new Leader(teamFactory.create());
         if (type == LeaderType.PLAYER) {
-            leader.addCards(cardFactory.createCards(5,CardType.ATTACK));
+            leader.addCards(cardFactory.createCards(5,CardType.ATTACK,3));
         }
         return leader;
     }

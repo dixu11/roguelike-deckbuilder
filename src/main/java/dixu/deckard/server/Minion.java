@@ -12,7 +12,7 @@ import static dixu.deckard.server.GameParams.MINION_INITIAL_HP;
  * them every turn automatically. Minion die and leaves a {@link Team} when its {@link Minion#hp} reaches 0.
 * */
 
-public class Minion {
+public class Minion implements ActionEventHandler{
     private static int nextId = 1;
     private final BusManager bus = BusManager.instance();
     private int hp = MINION_INITIAL_HP;
@@ -30,6 +30,8 @@ public class Minion {
         draw.addAll(cardFactory.createCards(2, CardType.ATTACK));
         draw.addAll(cardFactory.createCards(2, CardType.BLOCK));
         Collections.shuffle(draw);
+
+        bus.register(this,ActionEventName.LEADER_SPECIAL_UPGRADE);
     }
 
     //card draw
@@ -97,6 +99,20 @@ public class Minion {
                     .source(this)
                     .build()
             );
+        }
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getMinion() == this) {
+            int index = hand.indexOf(event.getOldCard());
+            hand.set(index, event.getCard());
+            bus.post(ActionEvent.builder()
+                    .name(ActionEventName.MINION_HAND_CHANGED)
+                    .minion(this)
+                    .build()
+            );
+
         }
     }
 

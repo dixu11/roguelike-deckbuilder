@@ -8,11 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class MinionHandView  {
+public class MinionHandView  implements ActionEventHandler{
     private final BusManager bus = BusManager.instance();
     private final List<CardView> cardViews = new ArrayList<>();
     private int translateX;
     private int translateY;
+    private final Minion minion;
+
+    public MinionHandView(Minion minion) {
+        this.minion = minion;
+
+        bus.register(this,ActionEventName.MINION_HAND_CHANGED);
+    }
 
     public void render(Graphics2D g, int x, int y) {
         if (cardViews.isEmpty()) {
@@ -50,4 +57,13 @@ public class MinionHandView  {
     }
 
 
+    @Override
+    public void handle(ActionEvent event) {
+        if (event.getName() == ActionEventName.MINION_HAND_CHANGED && event.getMinion() == minion) {
+            cardViews.clear();
+            for (Card card : minion.getHand()) {
+                add(card);
+            }
+        }
+    }
 }

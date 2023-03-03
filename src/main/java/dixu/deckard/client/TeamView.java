@@ -1,5 +1,6 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.Card;
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.Team;
 
@@ -49,7 +50,7 @@ public class TeamView implements ActionEventHandler {
                 .color(GuiParams.MAIN_COLOR_BRIGHT)
                 .description("\uD83D\uDEE1️: ")
                 .source(team)
-                .strategy((oldVal, e) -> e.value())
+                .strategy((oldVal, e) -> e.getValue())
                 .build();
 
         bus.register(blockCounterEvent, ActionEventName.TEAM_BLOCK_CHANGED);
@@ -89,6 +90,16 @@ public class TeamView implements ActionEventHandler {
                 }
                 selectedCard = newSelected;
                 newSelected.toggleSelected();
+
+                bus.post(
+                        GuiEvent.builder()
+                                .name(GuiEventName.MINION_CARD_SELECTED)
+                                .cardView(newSelected)
+                                .minionView(minion)
+                                .teamView(this)
+                                .build()
+                );
+
             }
         }
     }
@@ -102,9 +113,26 @@ public class TeamView implements ActionEventHandler {
 
     private void onMinionDied(ActionEvent event) {
         if (event.getOwnTeam() == team) {
-            minions.removeIf(v -> v.getCharacter() == event.getMinion());
+            minions.removeIf(v -> v.getMinion() == event.getMinion());
         }
     }
 
 
+    public Card getSelected() {
+        if (selectedCard == null) {
+            return null;
+        }
+        return selectedCard.getCard();
+    }
+
+    public Team getTeam() {
+        return team;
+    }
+
+    public void clearSelect() {
+        if (selectedCard != null) {
+            selectedCard.setSelected(false);
+        }
+        selectedCard = null;
+    }
 }

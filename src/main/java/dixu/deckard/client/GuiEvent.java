@@ -1,19 +1,21 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.Minion;
 import dixu.deckard.server.event.CoreEvent;
 import dixu.deckard.server.event.CoreEventName;
 import dixu.deckard.server.event.Event;
 import dixu.deckard.server.event.GuiEventName;
 import lombok.Builder;
+import lombok.Getter;
 
 @Builder
+@Getter
 public class GuiEvent implements Event<GuiEventName> {
 
     private GuiEventName name;
-
-    public GuiEvent(GuiEventName name) {
-        this.name = name;
-    }
+    private CardView cardView;
+    private MinionView minionView;
+    private TeamView teamView;
 
     @Override
     public GuiEventName getName() {

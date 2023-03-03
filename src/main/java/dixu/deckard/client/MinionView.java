@@ -23,7 +23,7 @@ public class MinionView implements ActionEventHandler {
         this.minion = minion;
         this.teamView = teamView;
 
-        minionHandView = new MinionHandView();
+        minionHandView = new MinionHandView(minion);
         cardView = new CardView(minion.getMinionCard());
 
         bus.register(this, ActionEventName.MINION_CARD_PLAYED);
@@ -39,7 +39,7 @@ public class MinionView implements ActionEventHandler {
                 .description("♥: ")
                 .source(minion)
                 .value(minion.getHealth())
-                .strategy(((oldValue, e) -> e.value()))
+                .strategy(((oldValue, e) -> e.getValue()))
                 .build();
 
         bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
@@ -110,7 +110,7 @@ public class MinionView implements ActionEventHandler {
         return minionHandView.reactToClickOnScreen(x, y);
     }
 
-    public Minion getCharacter() {
+    public Minion getMinion() {
         return minion;
     }
 }

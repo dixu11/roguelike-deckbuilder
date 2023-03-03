@@ -9,13 +9,17 @@ public enum ActionEventName implements EventName {
     MINION_DAMAGED,
     MINION_DIED,
     MINION_SHUFFLE,
-    TEAM_BLOCK_CHANGED;
+    TEAM_BLOCK_CHANGED,
+    LEADER_SPECIAL_UPGRADE,
+    MINION_HAND_CHANGED;
 
     public static Object determineSourceFromEventName(ActionEvent actionEvent) {
         if (actionEvent.getName().name().startsWith("MINION")) {
             return actionEvent.getMinion();
         } else if (actionEvent.getName().name().startsWith("TEAM")) {
             return actionEvent.getOwnTeam();
+        } else if(actionEvent.getName().name().startsWith("LEADER")){
+            return actionEvent.getLeader();
         } else {
             throw new IllegalStateException("UNKNOWN EVENT SOURCE");
         }
@@ -24,5 +28,9 @@ public enum ActionEventName implements EventName {
     @Override
     public String getName() {
         return name();
+    }
+
+    public boolean isSpecial() {
+        return name().contains("SPECIAL");
     }
 }
