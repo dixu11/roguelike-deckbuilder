@@ -184,4 +184,8 @@ public class Minion implements ActionEventHandler {
     public void setTeam(Team team) {
         this.team = team;
     }
+
+    public void clearDraw() {
+        draw.clear();
+    }
 }

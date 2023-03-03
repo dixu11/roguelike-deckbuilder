@@ -19,7 +19,7 @@ public abstract class FunctionalTest {
     Team secondTeam;
     Leader firstLeader;
     Leader secondLeader;
-    private BusManager bus;
+     BusManager bus;
 
     @BeforeEach
     public void before() {
@@ -111,7 +111,7 @@ public abstract class FunctionalTest {
         allMinions().forEach(minion -> composeMinionHand(minion, CardType.BLOCK));
     }
 
-    private void composeMinionHand(Minion minion, CardType... cards) {
+     void composeMinionHand(Minion minion, CardType... cards) {
         CardFactory factory = new CardFactory();
         List<Card> newHand = new ArrayList<>();
         for (CardType type : cards) {

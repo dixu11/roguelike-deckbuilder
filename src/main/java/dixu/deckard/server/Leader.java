@@ -71,16 +71,20 @@ public class Leader implements ActionEventHandler {
                     .build()
             );
         } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
-            hand.add(event.getCard());
-            if (hand.size() > LEADER_MAX_HAND_SIZE) {
-                hand.remove(0);
-            }
-            bus.post(ActionEvent.builder()
-                    .name(ActionEventName.LEADER_HAND_CHANGED)
-                    .leader(this)
-                    .build()
-            );
+            addCard(event.getCard());
         }
+    }
+
+     void addCard(Card card) {
+        hand.add(card);
+        if (hand.size() > LEADER_MAX_HAND_SIZE) {
+            hand.remove(0);
+        }
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.LEADER_HAND_CHANGED)
+                .leader(this)
+                .build()
+        );
     }
 
     public boolean canAfford(ActionEventName actionEventName) {
@@ -98,5 +102,9 @@ public class Leader implements ActionEventHandler {
                 .value(energy)
                 .build()
         );
+    }
+
+    public void setEnergy(int energy) {
+        this.energy = energy;
     }
 }

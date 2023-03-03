@@ -9,8 +9,7 @@ import static dixu.deckard.server.GameParams.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 //tests for core game functionalities
-class CoreTest extends FunctionalTest{
-
+class CoreTest extends FunctionalTest {
 
 
     @Test
@@ -146,5 +145,23 @@ class CoreTest extends FunctionalTest{
         }
     }
 
+    @Test
+    @DisplayName("Minions can have small number of cards")
+    public void test11() {
+        DEFAULT_ATTACK_VALUE = 0;
+        Minion minionWithTwoCards = secondTeam.getRandomMinion().get();
+        minionWithTwoCards.clearDraw();
+        Minion minionWithOneCard = firstTeam.getMinions().get(0);
+        minionWithOneCard.clearDraw();
+        composeMinionHand(minionWithOneCard,CardType.ATTACK);
+        Minion minionWithNoCards = firstTeam.getMinions().get(1);
+        composeMinionHand(minionWithNoCards);
+        minionWithNoCards.clearDraw();
 
+        for (int i = 0; i < 20; i++) {
+            executeTurn();
+        }
+
+        //no fail? success!
+    }
 }

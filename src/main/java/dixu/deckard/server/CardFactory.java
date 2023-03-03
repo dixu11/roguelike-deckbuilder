@@ -46,7 +46,7 @@ public class CardFactory {
         }
     }
 
-    private Card createCard(CardType type,Integer value) {
+    public Card createCard(CardType type,Integer value) {
         if (value == null) {
            return createCard(type);
         }
