@@ -4,23 +4,26 @@ import dixu.deckard.server.*;
 import dixu.deckard.server.event.*;
 
 import java.awt.*;
+import java.util.Optional;
 
-import static dixu.deckard.client.GuiParams.CARD_HEIGHT;
-import static dixu.deckard.client.GuiParams.CARD_WIDTH;
+import static dixu.deckard.client.GuiParams.*;
 
 public class MinionView implements ActionEventHandler {
 
     private final BusManager bus = BusManager.instance();
     private final Minion minion;
     private final CardView cardView;
-    private final HandView handView;
+    private final MinionHandView minionHandView;
     private CounterView drawCounter;
     private CounterView discardCounter;
+    private TeamView teamView;
 
-    public MinionView(Minion minion) {
+
+    public MinionView(Minion minion, TeamView teamView) {
         this.minion = minion;
+        this.teamView = teamView;
 
-        handView = new HandView();
+        minionHandView = new MinionHandView();
         cardView = new CardView(minion.getMinionCard());
 
         bus.register(this, ActionEventName.MINION_CARD_PLAYED);
@@ -74,11 +77,9 @@ public class MinionView implements ActionEventHandler {
         this.discardCounter = discardCounter;
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         cardView.render(g);
-        g.translate(-CARD_WIDTH, -CARD_HEIGHT - 20); //todo definitively needs refactor ^^'
-        handView.render(g);
-        g.translate(CARD_WIDTH, CARD_HEIGHT + 20);
+        minionHandView.render(g,CARD_PADDING-CARD_WIDTH, -CARD_HEIGHT - CARD_PADDING);//todo refactor to calculate center
         Rectangle r = new Rectangle(0, CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
         drawCounter.render(g, r);
         discardCounter.render(g, r);
@@ -95,14 +96,18 @@ public class MinionView implements ActionEventHandler {
 
     private void onCardPlayed(ActionEvent event) {
         if (event.getMinion() == minion) {
-            handView.remove(event.getCard());
+            minionHandView.remove(event.getCard());
         }
     }
 
     private void onCardDraw(ActionEvent event) {
         if (event.getMinion() == minion) {
-            handView.add(event.getCard());
+            minionHandView.add(event.getCard());
         }
+    }
+
+    public Optional<CardView> reactToClick(int x, int y) {
+        return minionHandView.reactToClickOnScreen(x, y);
     }
 
     public Minion getCharacter() {

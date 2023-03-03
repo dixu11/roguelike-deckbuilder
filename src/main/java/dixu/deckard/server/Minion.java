@@ -20,6 +20,7 @@ public class Minion {
     private final LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
     private final List<Card> discard = new LinkedList<>();
+    private Team team;
 
 
     public Minion() {
@@ -32,7 +33,7 @@ public class Minion {
     }
 
     //card draw
-    public void drawCards(int count, CardContext context) {
+    public void drawCards(int count, CardContext context) { //todo simplify context couse we now have reference to team
         for (int i = 0; i < count; i++) {
             CardContext contextCopy = context.getCopy(); //we play many cards so there are many contexts
             drawCard(contextCopy);
@@ -121,5 +122,9 @@ public class Minion {
 
     public void setHand(List<Card> newHand) {
         hand = newHand;
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
     }
 }

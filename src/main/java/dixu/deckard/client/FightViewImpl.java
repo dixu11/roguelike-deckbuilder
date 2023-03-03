@@ -34,7 +34,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     }
 
     //rendering
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         renderBackground(g);
         firstTeam.render(g);
         secondTeam.render(g);
@@ -54,6 +54,8 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
             endTurn.onClick();
         }
         firstLeaderHand.reactToClickOnScreen(e.getX(), e.getY());
+        firstTeam.reactToClickOnScreen(e.getX(), e.getY());
+        secondTeam.reactToClickOnScreen(e.getX(), e.getY());
     }
 
     @Override

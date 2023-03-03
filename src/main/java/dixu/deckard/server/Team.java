@@ -22,6 +22,9 @@ public class Team implements ActionEventHandler {
 
     public Team(List<Minion> minions) {
         this.minions = new ArrayList<>(minions);
+        for (Minion minion : minions) {
+            minion.setTeam(this);
+        }
 
         bus.register(this, ActionEventName.MINION_DIED);
     }

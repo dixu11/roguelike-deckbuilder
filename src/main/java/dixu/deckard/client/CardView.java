@@ -1,7 +1,6 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.Card;
-import dixu.deckard.server.event.BusManager;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import static dixu.deckard.client.GuiParams.*;
 public class CardView {
     private final List<CounterView> counters = new ArrayList<>();
     private final Card card;
-    private boolean active = false;
+    private boolean selected = false;
 
     public CardView(Card card) {
         this.card = card;
@@ -32,7 +31,7 @@ public class CardView {
             counter.render(g, new Rectangle(0, 0, CARD_WIDTH, CARD_HEIGHT));
         }
 
-        if (!active) {
+        if (!selected) {
             return;
         }
         g.setColor(HIGHLIGHT_COLOR);
@@ -62,12 +61,15 @@ public class CardView {
         return bounds.intersects(new Rectangle(x, y, 1, 1));
     }
 
-    public boolean onClick() {
-        active = !active;
-        return active;
+    public void toggleSelected() {
+        selected = !selected;
     }
 
-    public void setSelected(boolean active) {
-        this.active = active;
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public boolean isSelected() {
+        return selected;
     }
 }

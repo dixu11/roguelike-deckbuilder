@@ -6,6 +6,7 @@ import dixu.deckard.server.Team;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static dixu.deckard.client.GuiParams.CARD_HEIGHT;
 import static dixu.deckard.client.GuiParams.CARD_WIDTH;
@@ -22,6 +23,7 @@ public class TeamView implements ActionEventHandler {
     private final Team team;
     private final Direction direction;
     private  CounterView blockCounter;
+    private CardView selectedCard;
 
     public TeamView(Team team, Direction direction) {
         this.team = team;
@@ -35,7 +37,7 @@ public class TeamView implements ActionEventHandler {
 
     private void setupMinions(Team team) {
         this.minions = team.getMinions().stream()
-                .map(MinionView::new)
+                .map(minion ->new MinionView(minion,this))
                 .toList();
         minions = new ArrayList<>(this.minions);
     }
@@ -54,7 +56,7 @@ public class TeamView implements ActionEventHandler {
         blockCounter = blockCounterEvent;
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         int xChange = 0;
         g.translate(getX(), getY());
         blockCounter.render(g, new Rectangle((int) (PADDING*0.75), CARD_HEIGHT * 2, CARD_WIDTH, CARD_HEIGHT));
@@ -77,6 +79,20 @@ public class TeamView implements ActionEventHandler {
         return Y_FIRST_TEAM_POSITION;
     }
 
+    public void reactToClickOnScreen(int x, int y){
+        for (MinionView minion : minions) {
+            Optional<CardView> optionalSelected = minion.reactToClick(x, y);
+            if (optionalSelected.isPresent()) {
+                CardView newSelected = optionalSelected.get();
+                if (selectedCard != newSelected && selectedCard != null) {
+                    selectedCard.setSelected(false);
+                }
+                selectedCard = newSelected;
+                newSelected.toggleSelected();
+            }
+        }
+    }
+
     @Override
     public void handle(ActionEvent event) {
         switch (event.getName()) {
@@ -89,4 +105,6 @@ public class TeamView implements ActionEventHandler {
             minions.removeIf(v -> v.getCharacter() == event.getMinion());
         }
     }
+
+
 }

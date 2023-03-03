@@ -12,7 +12,7 @@ import java.util.List;
 public class LeaderHandView implements CoreEventHandler {
 
     private final BusManager bus = BusManager.instance();
-    public static final int X = GuiParams.getWidth(0.37);
+    public static final int X = GuiParams.getWidth(0.37); //extract outside?
     public static final int Y = GuiParams.getHeight(0.8);
     private final List<CardView> cardViews = new ArrayList<>();
     private CardView selectedCard = null;
@@ -43,9 +43,9 @@ public class LeaderHandView implements CoreEventHandler {
                 if (selectedCard != cardView && selectedCard != null  ) {
                     selectedCard.setSelected(false);
                 }
-                boolean selected = cardView.onClick();
+                cardView.toggleSelected();
                 selectedCard = cardView;
-                if (selected) {
+                if (cardView.isSelected()) {
                     bus.post(GuiEvent.of(GuiEventName.LEADER_CARD_SELECTED));
                 }
                 return;
