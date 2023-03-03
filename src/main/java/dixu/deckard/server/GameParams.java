@@ -13,6 +13,7 @@ public class GameParams {
     public static int BETTER_BLOCK_VALUE = 2;
     public static int DEFAULT_ATTACK_VALUE = 1;
     public static int BETTER_ATTACK_VALUE = 2;
+    public static final int LEADER_MAX_HAND_SIZE = 5;
     public static final int INITIAL_ENERGY = 3;
     public static final int STEAL_SPECIAL_COST = 3;
     public static final int UPGRADE_SPECIAL_COST = 1;

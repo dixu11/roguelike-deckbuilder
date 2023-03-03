@@ -70,7 +70,6 @@ public class GuiController implements GuiEventHandler {
 
         Card minionCard = event.getCardView().getCard();
         Card selectedLeaderCard = selectedLeaderCardView.getCard();
-        leaderHand.remove(selectedLeaderCard);
 
         selectedLeaderCardView.setSelected(false);
 
@@ -120,7 +119,6 @@ public class GuiController implements GuiEventHandler {
                 .card(event.getCardView().getCard())
                 .build()
         );
-        leaderHand.add(event.getCardView().getCard());
     }
 
     private void moveMinionHandSpecial(GuiEvent event) {

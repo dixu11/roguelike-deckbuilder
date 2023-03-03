@@ -38,10 +38,6 @@ public class Leader implements ActionEventHandler {
         bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
     }
 
-    public void addCards(List<Card> cards) {
-        hand.addAll(cards);
-    }
-
     public Team getTeam() {
         return team;
     }
@@ -69,8 +65,21 @@ public class Leader implements ActionEventHandler {
         }
         if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
             hand.remove(event.getCard());
+            bus.post(ActionEvent.builder()
+                    .name(ActionEventName.LEADER_HAND_CHANGED)
+                    .leader(this)
+                    .build()
+            );
         } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
             hand.add(event.getCard());
+            if (hand.size() > LEADER_MAX_HAND_SIZE) {
+                hand.remove(0);
+            }
+            bus.post(ActionEvent.builder()
+                    .name(ActionEventName.LEADER_HAND_CHANGED)
+                    .leader(this)
+                    .build()
+            );
         }
     }
 

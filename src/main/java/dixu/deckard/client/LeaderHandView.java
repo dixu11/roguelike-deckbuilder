@@ -9,7 +9,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class LeaderHandView {
+public class LeaderHandView implements ActionEventHandler{
 
     private final BusManager bus = BusManager.instance();
     public static final int X = GuiParams.getWidth(0.37); //extract outside?
@@ -19,6 +19,13 @@ public class LeaderHandView {
 
     public LeaderHandView(Leader leader) {
         this.leader = leader;
+        reloadCards();
+
+        bus.register(this,ActionEventName.LEADER_HAND_CHANGED);
+    }
+
+    private void reloadCards() {
+        cardViews.clear();
         leader.getHand()
                 .forEach(card -> cardViews.add(new CardView(card)));
     }
@@ -59,5 +66,12 @@ public class LeaderHandView {
 
     public void add(Card card) {
         cardViews.add(new CardView(card));
+    }
+
+    @Override
+    public void handle(ActionEvent event) {
+        if (event.getName() == ActionEventName.LEADER_HAND_CHANGED && leader == event.getLeader()) {
+            reloadCards();
+        }
     }
 }
