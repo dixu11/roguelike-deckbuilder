@@ -14,11 +14,13 @@ public class CardFactory {
     public List<Card> createDeck(LeaderType type) {
         List<Card> cards = new ArrayList<>();
         if (type == LeaderType.PLAYER) {
-            cards.addAll(createCards(2, CardType.ATTACK));
-            cards.addAll(createCards(2, CardType.BLOCK));
+            cards.addAll(createCards(3, CardType.ATTACK));
+            cards.addAll(createCards(3, CardType.BLOCK));
         } else if (type == LeaderType.SIMPLE_BOT) {
             cards.addAll(createCards(2, CardType.ATTACK,BETTER_ATTACK_VALUE));
             cards.addAll(createCards(2, CardType.BLOCK,BETTER_BLOCK_VALUE));
+            cards.addAll(createCards(1, CardType.ATTACK));
+            cards.addAll(createCards(1, CardType.BLOCK));
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");
         }

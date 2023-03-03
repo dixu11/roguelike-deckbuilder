@@ -28,11 +28,13 @@ public class Fight implements CoreEventHandler {
     private final BusManager bus = BusManager.instance();
     private final Team firstTeam;
     private final Team secondTeam;
+    private final Leader firstLeader;
     private static boolean delayCardPlay = true;
 
     public Fight(Leader firstLeader, Leader secondLeader) {
         this.firstTeam = firstLeader.getTeam();
         this.secondTeam = secondLeader.getTeam();
+        this.firstLeader = firstLeader;
 
         bus.register(this, CoreEventName.TURN_ENDED);
         bus.register(this, CoreEventName.TURN_STARTED);
@@ -55,6 +57,8 @@ public class Fight implements CoreEventHandler {
         firstTeam.executeStartTurnCardDraws();
         secondTeam.executeStartTurnCardDraws();
         firstTeam.clearBlock();
+        firstLeader.regenerateEnergy();
+
     }
 
     private void onTurnEnd() {

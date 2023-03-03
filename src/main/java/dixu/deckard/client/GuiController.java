@@ -32,6 +32,12 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void selectLeaderCard(GuiEvent event) {
+        //todo refactor
+        if ( !leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_UPGRADE)) {
+            clearSelections();
+            return;
+        }
+
         if (selectedLeaderCardView == event.getCardView() && selectedLeaderCardView.isSelected()) { //duplicates too
             selectedLeaderCardView.setSelected(false);
             selectedLeaderCardView = null;
@@ -56,6 +62,12 @@ public class GuiController implements GuiEventHandler {
         if (selectedLeaderCardView == null || event.getCardView() == null) {
             return;
         }
+        //todo refactor
+        if ( !leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_UPGRADE)) {
+            clearSelections();
+            return;
+        }
+
         Card minionCard = event.getCardView().getCard();
         Card selectedLeaderCard = selectedLeaderCardView.getCard();
         leaderHand.remove(selectedLeaderCard);
@@ -75,6 +87,11 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void stealCardSpecial(GuiEvent event) {
+        if ( !leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_STEAL)) {
+            clearSelections();
+            return;
+        }
+
         CardView newSelected =event.getCardView();
         if (event.getTeamView() != secondTeam) {
             return;
@@ -107,6 +124,12 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void moveMinionHandSpecial(GuiEvent event) {
+        //todo refactor
+        if ( !leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_MOVE_HAND)) {
+            clearSelections();
+            return;
+        }
+
         CardView newSelected =event.getCardView();  //todo figure out how to avoid duplicates
         if (event.getTeamView() != firstTeam) {
             return;
@@ -136,5 +159,22 @@ public class GuiController implements GuiEventHandler {
                 .card(event.getCardView().getCard())
                 .build()
         );
+    }
+
+    private void clearSelections() {
+        if (selectedMinionCardView != null) {
+            selectedMinionCardView.setSelected(false);
+            selectedMinionCardView = null;
+        }
+
+        if (secondTeamCardSelectedView != null) {
+            secondTeamCardSelectedView.setSelected(false);
+            secondTeamCardSelectedView = null;
+        }
+
+        if (selectedLeaderCardView != null) {
+            selectedLeaderCardView.setSelected(false);
+            selectedLeaderCardView = null;
+        }
     }
 }

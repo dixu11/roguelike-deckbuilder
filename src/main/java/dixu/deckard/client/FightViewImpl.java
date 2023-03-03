@@ -30,7 +30,6 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
                 .straightDirection( Direction.BOTTOM)
                 .diagonalShift( Direction.RIGHT)
                 .color(MAIN_COLOR_BRIGHT)
-                .value(firstLeader.getEnergy())
                 .description("⚡: ")
                 .source(firstLeader)
                 .strategy(((oldValue, e) -> e.getValue()))

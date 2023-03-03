@@ -1,10 +1,7 @@
 package dixu.deckard.server;
 
 
-import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventHandler;
-import dixu.deckard.server.event.ActionEventName;
-import dixu.deckard.server.event.BusManager;
+import dixu.deckard.server.event.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +23,8 @@ public class Leader implements ActionEventHandler {
     private Team team;
     private List<Card> hand = new ArrayList<>();
     private Map<ActionEventName,Special> specials = new HashMap<>();
-    private int energy = INITIAL_ENERGY;
+    private int energy = 0;
+    private int startingEnergy = INITIAL_ENERGY;
 
     public Leader(Team team) {
         this.team = team;
@@ -74,5 +72,22 @@ public class Leader implements ActionEventHandler {
         } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
             hand.add(event.getCard());
         }
+    }
+
+    public boolean canAfford(ActionEventName actionEventName) {
+        if (!actionEventName.isSpecial()) {
+            return false;
+        }
+        return energy - specials.get(actionEventName).getCost() >= 0;
+    }
+
+    public void regenerateEnergy() {
+        energy = startingEnergy;
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.LEADER_ENERGY_CHANGED)
+                .leader(this)
+                .value(energy)
+                .build()
+        );
     }
 }

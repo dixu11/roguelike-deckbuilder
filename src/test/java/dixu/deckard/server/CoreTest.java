@@ -127,6 +127,7 @@ class CoreTest extends FunctionalTest{
                 theOnlyOneMinion.getHealth());
     }
 
+    //todo niezdane testy
     @Test
     @DisplayName("After all minion cards were played discard deck is shuffled and put as draw deck")
     public void test10() {
