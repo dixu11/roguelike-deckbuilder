@@ -24,7 +24,6 @@ public class TeamView implements ActionEventHandler {
     private final Team team;
     private final Direction direction;
     private  CounterView blockCounter;
-    private CardView selectedCard;
 
     public TeamView(Team team, Direction direction) {
         this.team = team;
@@ -85,10 +84,6 @@ public class TeamView implements ActionEventHandler {
             Optional<CardView> optionalSelected = minion.reactToClick(x, y);
             if (optionalSelected.isPresent()) {
                 CardView newSelected = optionalSelected.get();
-                if (selectedCard != newSelected && selectedCard != null) {
-                    selectedCard.setSelected(false);
-                }
-                selectedCard = newSelected;
 
                 bus.post(GuiEvent.builder()
                                 .name(GuiEventName.MINION_CARD_SELECTED)
@@ -115,22 +110,7 @@ public class TeamView implements ActionEventHandler {
         }
     }
 
-
-    public Card getSelected() {
-        if (selectedCard == null) {
-            return null;
-        }
-        return selectedCard.getCard();
-    }
-
     public Team getTeam() {
         return team;
-    }
-
-    public void clearSelect() {
-        if (selectedCard != null) {
-            selectedCard.setSelected(false);
-        }
-        selectedCard = null;
     }
 }

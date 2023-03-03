@@ -12,11 +12,13 @@ public class MinionView implements ActionEventHandler {
 
     private final BusManager bus = BusManager.instance();
     private final Minion minion;
-    private final CardView cardView;
+    private final CardView minionCardView;
     private final MinionHandView minionHandView;
     private CounterView drawCounter;
     private CounterView discardCounter;
     private TeamView teamView;
+    private int transX;
+    private int transY;
 
 
     public MinionView(Minion minion, TeamView teamView) {
@@ -24,7 +26,7 @@ public class MinionView implements ActionEventHandler {
         this.teamView = teamView;
 
         minionHandView = new MinionHandView(minion);
-        cardView = new CardView(minion.getMinionCard());
+        minionCardView = new CardView(minion.getMinionCard());
 
         bus.register(this, ActionEventName.MINION_CARD_PLAYED);
         bus.register(this, ActionEventName.MINION_CARD_DRAW);
@@ -43,7 +45,7 @@ public class MinionView implements ActionEventHandler {
                 .build();
 
         bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
-        cardView.addCounter(healthCounter);
+        minionCardView.addCounter(healthCounter);
 
         EventCounterView drawCounter = EventCounterView.builder()
                 .straightDirection(Direction.BOTTOM)
@@ -78,7 +80,9 @@ public class MinionView implements ActionEventHandler {
     }
 
     public void render(Graphics2D g) {
-        cardView.render(g);
+        transX = (int) g.getTransform().getTranslateX();
+        transY = (int) g.getTransform().getTranslateY();
+        minionCardView.render(g);
         minionHandView.render(g,CARD_PADDING-CARD_WIDTH, -CARD_HEIGHT - CARD_PADDING);//todo refactor to calculate center
         Rectangle r = new Rectangle(0, CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
         drawCounter.render(g, r);
@@ -107,6 +111,15 @@ public class MinionView implements ActionEventHandler {
     }
 
     public Optional<CardView> reactToClick(int x, int y) {
+        if (minionCardView.isClicked(x,y,transX,transY,0)) {
+           bus.post(GuiEvent.builder()
+                   .name(GuiEventName.MINION_SELECTED)
+                   .cardView(minionCardView)
+                   .minionView(this)
+                   .teamView(teamView)
+                   .build()
+           );
+        }
         return minionHandView.reactToClickOnScreen(x, y);
     }
 
