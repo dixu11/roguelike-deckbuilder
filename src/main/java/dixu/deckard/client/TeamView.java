@@ -89,10 +89,8 @@ public class TeamView implements ActionEventHandler {
                     selectedCard.setSelected(false);
                 }
                 selectedCard = newSelected;
-                newSelected.toggleSelected();
 
-                bus.post(
-                        GuiEvent.builder()
+                bus.post(GuiEvent.builder()
                                 .name(GuiEventName.MINION_CARD_SELECTED)
                                 .cardView(newSelected)
                                 .minionView(minion)

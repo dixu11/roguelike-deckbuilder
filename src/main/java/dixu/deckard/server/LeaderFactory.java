@@ -6,9 +6,9 @@ public class LeaderFactory {
     private CardFactory cardFactory = new CardFactory();
 
     public Leader create(LeaderType type) {
-        Leader leader = new Leader(teamFactory.create());
+        Leader leader = new Leader(teamFactory.create(type));
         if (type == LeaderType.PLAYER) {
-            leader.addCards(cardFactory.createCards(5,CardType.ATTACK,3));
+            leader.addCards(cardFactory.createCards(4,CardType.ATTACK,2));
         }
         return leader;
     }

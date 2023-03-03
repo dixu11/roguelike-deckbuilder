@@ -1,25 +1,39 @@
 package dixu.deckard.server;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static dixu.deckard.server.GameParams.DEFAULT_ATTACK_VALUE;
-import static dixu.deckard.server.GameParams.DEFAULT_BLOCK_VALUE;
+import static dixu.deckard.server.GameParams.*;
 
 
 public class CardFactory {
 
 
+    public List<Card> createDeck(LeaderType type) {
+        List<Card> cards = new ArrayList<>();
+        if (type == LeaderType.PLAYER) {
+            cards.addAll(createCards(2, CardType.ATTACK));
+            cards.addAll(createCards(2, CardType.BLOCK));
+        } else if (type == LeaderType.SIMPLE_BOT) {
+            cards.addAll(createCards(2, CardType.ATTACK,BETTER_ATTACK_VALUE));
+            cards.addAll(createCards(2, CardType.BLOCK));
+        } else {
+            throw new IllegalStateException("INVALID DECK TYPE");
+        }
+        return cards;
+    }
     public List<Card> createCards(int count, CardType type) {
         return createCards(count, type, null);
     }
+
     public List<Card> createCards(int count, CardType type,Integer value) {
         return IntStream.range(0, count)
                 .boxed()
                 .map(n -> createCard(type,value))
                 .toList();
     }
-
     private Card createCard(CardType type){
         if (CardType.ATTACK == type) {
            return createCard(type, DEFAULT_ATTACK_VALUE);
@@ -29,6 +43,7 @@ public class CardFactory {
             throw new IllegalStateException("USE DEDICATED METHOD FOR THIS TYPE");
         }
     }
+
     private Card createCard(CardType type,Integer value) {
         if (value == null) {
            return createCard(type);

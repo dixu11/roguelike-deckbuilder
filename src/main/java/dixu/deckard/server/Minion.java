@@ -23,12 +23,11 @@ public class Minion implements ActionEventHandler{
     private Team team;
 
 
-    public Minion() {
+    public Minion(LeaderType type) {
         String name = "Minion " + nextId++;
         minionCard = new Card(CardType.MINION, name, hp);
         CardFactory cardFactory = new CardFactory();
-        draw.addAll(cardFactory.createCards(2, CardType.ATTACK));
-        draw.addAll(cardFactory.createCards(2, CardType.BLOCK));
+        draw.addAll(cardFactory.createDeck(type));
         Collections.shuffle(draw);
 
         bus.register(this,ActionEventName.LEADER_SPECIAL_UPGRADE);
