@@ -50,7 +50,10 @@ public class Minion implements ActionEventHandler {
             postShuffleEvent();
 
         }
-        Card card = draw.remove();
+        Card card = draw.poll();
+        if (card == null) {
+            return;
+        }
         hand.add(card);
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_CARD_DRAW)
@@ -144,7 +147,7 @@ public class Minion implements ActionEventHandler {
                 .minion(this)
                 .build()
         );
-        //todo draw?
+        drawCard();
     }
 
     private void onMoveHand(ActionEvent event) {
