@@ -18,7 +18,7 @@ public class CardFactory {
             cards.addAll(createCards(2, CardType.BLOCK));
         } else if (type == LeaderType.SIMPLE_BOT) {
             cards.addAll(createCards(2, CardType.ATTACK,BETTER_ATTACK_VALUE));
-            cards.addAll(createCards(2, CardType.BLOCK));
+            cards.addAll(createCards(2, CardType.BLOCK,BETTER_BLOCK_VALUE));
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");
         }

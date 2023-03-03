@@ -10,6 +10,7 @@ public class GameParams {
     public static int SECOND_TEAM_INITIAL_BLOCK = 3;
     //cards
     public static int DEFAULT_BLOCK_VALUE = 1;
+    public static int BETTER_BLOCK_VALUE = 2;
     public static int DEFAULT_ATTACK_VALUE = 1;
     public static int BETTER_ATTACK_VALUE = 2;
     public static final int INITIAL_ENERGY = 3;
