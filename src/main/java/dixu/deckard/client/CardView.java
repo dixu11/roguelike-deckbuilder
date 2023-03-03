@@ -63,7 +63,7 @@ public class CardView {
     }
 
     public void onClick() {
-        active = true;
+        active = !active;
     }
 
     public void setActive(boolean active) {

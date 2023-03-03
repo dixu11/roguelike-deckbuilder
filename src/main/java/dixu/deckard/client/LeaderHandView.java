@@ -35,10 +35,10 @@ public class LeaderHandView{
         for (int i = 0; i < cardViews.size(); i++) {
             CardView cardView = cardViews.get(i);
             if (cardView.isClicked(x, y, X, Y, i)) {
-                cardView.onClick();
-                if (highlightedCard != null) {
+                if (highlightedCard != cardView && highlightedCard != null  ) {
                     highlightedCard.setActive(false);
                 }
+                cardView.onClick();
                 highlightedCard = cardView;
                 return;
             }

@@ -1,4 +1,7 @@
-package dixu.deckard.server.event;
+package dixu.deckard.client;
+
+import dixu.deckard.server.event.Event;
+import dixu.deckard.server.event.GuiEventName;
 
 public class GuiEvent implements Event<GuiEventName> {
 

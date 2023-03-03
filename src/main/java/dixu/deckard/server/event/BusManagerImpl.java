@@ -1,5 +1,7 @@
 package dixu.deckard.server.event;
 
+import dixu.deckard.client.GuiEvent;
+
 public class BusManagerImpl implements BusManager {
 
     private final static BusManagerImpl manager = new BusManagerImpl();
