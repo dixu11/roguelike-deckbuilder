@@ -5,6 +5,7 @@ public class BusManagerImpl implements BusManager {
     private final static BusManagerImpl manager = new BusManagerImpl();
     private  EventBus<CoreEventName, CoreEvent> structureBus = new EventBus<>();
     private  EventBus<ActionEventName, ActionEvent> effectBus = new EventBus<>();
+    private  EventBus<GuiEventName, GuiEvent> guiBus = new EventBus<>();
 
 
     private BusManagerImpl() {
@@ -26,6 +27,11 @@ public class BusManagerImpl implements BusManager {
     }
 
     @Override
+    public void register(GuiEventHandler handler, GuiEventName name) {
+        guiBus.register(handler,name);
+    }
+
+    @Override
     public void post(CoreEvent event) {
         structureBus.post(event);
     }
@@ -33,6 +39,11 @@ public class BusManagerImpl implements BusManager {
     @Override
     public void post(ActionEvent event) {
         effectBus.post(event);
+    }
+
+    @Override
+    public void post(GuiEvent event) {
+        guiBus.post(event);
     }
 
     public void reset() {
