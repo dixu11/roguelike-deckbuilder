@@ -15,6 +15,8 @@ import static dixu.deckard.server.GameParams.*;
  * {@link Leader} has  {@link Team} of {@link Minion}s fighting for him but not directly controlled.
  * {@link Leader} can decide to spend his {@link Leader#energy} to cast {@link Special} actions to mess
  * with {@link Minion}s {@link Card}s.
+ * <p>
+ * His special abilities are listed in {@link Special} class.
 * */
 
 public class Leader implements ActionEventHandler {
