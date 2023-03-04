@@ -2,6 +2,7 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.*;
 
+import static dixu.deckard.server.GameParams.PLAY_DELAY_SECONDS;
 import static dixu.deckard.server.GameParams.SECOND_TEAM_INITIAL_BLOCK;
 /**
  * {@link Fight} is central gameplay part of a whole game. In {@link Fight}s {@link Leader}s put their {@link Minion}s
@@ -24,11 +25,10 @@ import static dixu.deckard.server.GameParams.SECOND_TEAM_INITIAL_BLOCK;
 
 public class Fight implements CoreEventHandler {
 
-    private final static double PLAY_DELAY_SECONDS = 2;
     private final BusManager bus = BusManager.instance();
+    private final Leader firstLeader;
     private final Team firstTeam;
     private final Team secondTeam;
-    private final Leader firstLeader;
     private static boolean delayCardPlay = true;
 
     public Fight(Leader firstLeader, Leader secondLeader) {
@@ -58,7 +58,6 @@ public class Fight implements CoreEventHandler {
         secondTeam.executeStartTurnCardDraws();
         firstTeam.clearBlock();
         firstLeader.regenerateEnergy();
-
     }
 
     private void onTurnEnd() {
@@ -93,7 +92,8 @@ public class Fight implements CoreEventHandler {
         }
     }
 
-    public static void disableDaley() {
+    //for tests
+    public static void disableDelay() {
         delayCardPlay = false;
     }
 }

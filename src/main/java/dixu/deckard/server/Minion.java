@@ -17,6 +17,7 @@ public class Minion implements ActionEventHandler {
     private final BusManager bus = BusManager.instance();
     private int hp = MINION_INITIAL_HP;
     private final Card minionCard;
+    //deck
     private final LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
     private final List<Card> discarded = new LinkedList<>();
@@ -30,38 +31,34 @@ public class Minion implements ActionEventHandler {
         draw.addAll(cardFactory.createDeck(type));
         Collections.shuffle(draw);
 
-        bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
         bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
+        bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
         bus.register(this, ActionEventName.LEADER_SPECIAL_MOVE_HAND);
     }
 
     //card draw
-    public void drawCards(int count) { //todo simplify context couse we now have reference to team
+    public void drawCards(int count) {
         for (int i = 0; i < count; i++) {
             drawCard();
         }
     }
 
     private void drawCard() {
-        if (draw.isEmpty()) {
-            Collections.shuffle(discarded);
-            draw.addAll(discarded);
-            discarded.clear();
-            postShuffleEvent();
+        shuffleIfEmpty();
 
-        }
         Card card = draw.poll();
-        if (card == null) {
-            return;
-        }
-        hand.add(card);
-        bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_CARD_DRAW)
-                .ownTeam(team)
-                .minion(this)
-                .card(card)
-                .build()
-        );
+        if (card == null) return;
+
+        addCardToHand(card);
+    }
+
+    private void shuffleIfEmpty() {
+        if (!draw.isEmpty()) return;
+
+        Collections.shuffle(discarded);
+        draw.addAll(discarded);
+        discarded.clear();
+        postShuffleEvent();
     }
 
     private void postShuffleEvent() {
@@ -73,7 +70,18 @@ public class Minion implements ActionEventHandler {
         );
     }
 
-    //cards play
+    private void addCardToHand(Card card) {
+        hand.add(card);
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_CARD_DRAW)
+                .ownTeam(team)
+                .minion(this)
+                .card(card)
+                .build()
+        );
+    }
+
+    //play cards
     public void playAllCards(CardContext cardContext) {
         for (Card card : new ArrayList<>(hand)) {
             cardContext.setCard(card);
@@ -93,16 +101,14 @@ public class Minion implements ActionEventHandler {
                 .card(card)
                 .build()
         );
-
     }
 
     //fight
     public void applyDamage(Team team, int value) {
-        bus.post(ActionEvent.builder()   //todo refactor to factory method
+        bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_DAMAGED)
                 .value(hp - value)
                 .minion(this)
-                .source(this) //todo czy na pewno potrzebujemy tego source?
                 .build()
         );
         hp -= value;
@@ -117,6 +123,7 @@ public class Minion implements ActionEventHandler {
         }
     }
 
+    //specials handling
     @Override
     public void handle(ActionEvent event) {
         if (event.getMinion() != this) {
@@ -126,7 +133,7 @@ public class Minion implements ActionEventHandler {
         switch (event.getName()) {
             case LEADER_SPECIAL_UPGRADE -> onUpgradeSpecial(event);
             case LEADER_SPECIAL_STEAL -> onStealSpecial(event);
-            case LEADER_SPECIAL_MOVE_HAND -> onMoveHand(event);
+            case LEADER_SPECIAL_MOVE_HAND -> onMoveHand();
         }
     }
 
@@ -150,13 +157,19 @@ public class Minion implements ActionEventHandler {
         drawCard();
     }
 
-    private void onMoveHand(ActionEvent event) {
+    private void onMoveHand() {
         if (!hand.isEmpty()) {
             discard(hand.remove(0));
             drawCard();
         }
     }
 
+    //for tests
+    public void clearDraw() {
+        draw.clear();
+    }
+
+    //getters / setters
     public int getHealth() {
         return hp;
     }
@@ -183,9 +196,5 @@ public class Minion implements ActionEventHandler {
 
     public void setTeam(Team team) {
         this.team = team;
-    }
-
-    public void clearDraw() {
-        draw.clear();
     }
 }

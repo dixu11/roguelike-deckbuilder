@@ -42,7 +42,7 @@ public abstract class FunctionalTest {
     }
 
     private void loadGame() { //todo refactor copying same code here and in App
-        Fight.disableDaley();
+        Fight.disableDelay();
         bus = BusManager.instance();
         LeaderFactory leaderFactory = new LeaderFactory();
         firstLeader = leaderFactory.create(LeaderType.PLAYER);

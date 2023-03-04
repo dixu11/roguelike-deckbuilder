@@ -107,8 +107,8 @@ public class Team implements ActionEventHandler {
             bus.post(CoreEvent.of(CoreEventName.GAME_OVER));
         }
     }
-    //minion access
 
+    //minion access
     public Optional<Minion> getRandomMinion() {
         return MyRandom.getRandomElement(minions);
     }
@@ -122,6 +122,7 @@ public class Team implements ActionEventHandler {
         return block;
     }
 
+    //for tests
     public void setClearBlockEnabled(boolean clearBlockEnabled) {
         this.clearBlockEnabled = clearBlockEnabled;
     }
