@@ -10,12 +10,26 @@ import java.util.Optional;
 public class Card {
     private final String name;
     private final int value;
+
+    private final String description;
     private final CardType type;
 
     public Card(CardType type, String name, int value) {
         this.type = type;
         this.name = name;
         this.value = value;
+        description = generateSimpleDescription();
+    }
+
+    private String generateSimpleDescription() {
+        if (type == CardType.ATTACK) {
+            return " " + value + "⚔️ to random enemy minion";
+        } else if(type == CardType.BLOCK){
+            return " +" + value + "\uD83D\uDEE1";
+        }else {
+            return "Basic creature with basic cards";
+        }
+
     }
 
     public void play(CardContext context) {
@@ -43,5 +57,9 @@ public class Card {
                 ", value=" + value +
                 ", type=" + type +
                 '}';
+    }
+
+    public String getDescription() {
+        return description;
     }
 }

@@ -12,12 +12,15 @@ public class CardView {
     private final List<CounterView> counters = new ArrayList<>();
     private final Card card;
     private boolean selected = false;
+    private final CustomTextRenderer descriptionRenderer;
 
     public CardView(Card card) {
         this.card = card;
+        descriptionRenderer = new CustomTextRenderer(new Rectangle((int) (CARD_WIDTH*0.05),(int) (CARD_HEIGHT * 0.35),
+                CARD_WIDTH, (int)(CARD_HEIGHT * 0.65)));
     }
 
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         if (card == null) {
             return;
         }
@@ -25,7 +28,10 @@ public class CardView {
         g.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
         g.setColor(MAIN_COLOR_DARK);
+        Font font = g.getFont().deriveFont(12f);
+        g.setFont(font);
         g.drawString(card.getName(), CARD_WIDTH / 10, CARD_HEIGHT / 6);
+        descriptionRenderer.render(g,card.getDescription());
 
         for (CounterView counter : counters) {
             counter.render(g, new Rectangle(0, 0, CARD_WIDTH, CARD_HEIGHT));
@@ -35,13 +41,12 @@ public class CardView {
             return;
         }
         g.setColor(HIGHLIGHT_COLOR);
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setStroke(new BasicStroke(HIGHLIGHT_BORDER));
+        g.setStroke(new BasicStroke(HIGHLIGHT_BORDER));
         g.drawRect(-HIGHLIGHT_BORDER,0,CARD_WIDTH+HIGHLIGHT_BORDER,CARD_HEIGHT+HIGHLIGHT_BORDER);
-        g2d.setStroke(new BasicStroke(1));
+        g.setStroke(new BasicStroke(1));
     }
 
-    public void render(Graphics g, int index) {
+    public void render(Graphics2D g, int index) {
         int translateX = index * (CARD_WIDTH + CARD_PADDING);
         g.translate(translateX, 0);
         render(g);

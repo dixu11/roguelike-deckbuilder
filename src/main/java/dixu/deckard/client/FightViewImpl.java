@@ -40,7 +40,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
     }
 
     private void setupCounters(Leader firstLeader) {
-        EventCounterView energyCounter = EventCounterView.builder()
+        EventCounterView energyCounter = EventCounterView.builder() //todo refactor positions
                 .color(MAIN_COLOR_BRIGHT)
                 .description("⚡: ")
                 .source(firstLeader)
@@ -65,7 +65,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         firstLeaderHand.render(g);
         g.translate(-LEADER_HAND_X,-LEADER_HAND_Y);
         endTurn.render(g);
-        energyCounter.render(g,getWidth(0.34),getHeight(0.7));
+        energyCounter.render(g,getWidth(0.344),getHeight(0.755)); //todo refactor to card size change
     }
 
     private void renderBackground(Graphics g) {

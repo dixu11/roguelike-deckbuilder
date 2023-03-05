@@ -13,8 +13,8 @@ public class GuiParams {
     public static final int WIDTH = DEFAULT_WIDTH;
     public static final int HEIGHT = DEFAULT_HEIGHT;
     //card
-    public static final int CARD_WIDTH = 80;
-    public static final int CARD_HEIGHT = 120;
+    public static final int CARD_WIDTH = 100;
+    public static final int CARD_HEIGHT = 140;
     public static final int CARD_PADDING = 20;
     public static final int HIGHLIGHT_BORDER = 3;
 
