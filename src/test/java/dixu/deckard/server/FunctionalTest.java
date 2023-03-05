@@ -102,19 +102,19 @@ public abstract class FunctionalTest {
     /**
      * @param cards when no elements are passed minion has no cards in hand
      */
-    void giveMinionsCards(Team team, CardType... cards) {
+    void giveMinionsCards(Team team, CardCategory... cards) {
         team.getMinions()
                 .forEach(minion -> composeMinionHand(minion, cards));
     }
 
     void giveAllMinionsBlockCard() {
-        allMinions().forEach(minion -> composeMinionHand(minion, CardType.BLOCK));
+        allMinions().forEach(minion -> composeMinionHand(minion, CardCategory.BLOCK));
     }
 
-     void composeMinionHand(Minion minion, CardType... cards) {
+     void composeMinionHand(Minion minion, CardCategory... cards) {
         CardFactory factory = new CardFactory();
         List<Card> newHand = new ArrayList<>();
-        for (CardType type : cards) {
+        for (CardCategory type : cards) {
             newHand.addAll(factory.createCards(1, type));
         }
         minion.setHand(newHand);

@@ -12,9 +12,9 @@ public class Card {
     private final int value;
 
     private final String description;
-    private final CardType type;
+    private final CardCategory type;
 
-    public Card(CardType type, String name, int value) {
+    public Card(CardCategory type, String name, int value) {
         this.type = type;
         this.name = name;
         this.value = value;
@@ -22,9 +22,9 @@ public class Card {
     }
 
     private String generateSimpleDescription() {
-        if (type == CardType.ATTACK) {
+        if (type == CardCategory.ATTACK) {
             return " " + value + "⚔️ to random enemy minion";
-        } else if(type == CardType.BLOCK){
+        } else if(type == CardCategory.BLOCK){
             return " +" + value + "\uD83D\uDEE1";
         }else {
             return "Basic creature with basic cards";

@@ -1,5 +1,5 @@
 package dixu.deckard.server;
 
-public enum CardType {
+public enum CardCategory {
     ATTACK, MINION, BLOCK
 }

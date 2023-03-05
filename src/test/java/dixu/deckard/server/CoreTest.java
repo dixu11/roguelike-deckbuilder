@@ -69,8 +69,8 @@ class CoreTest extends FunctionalTest {
         DEFAULT_BLOCK_VALUE = 0;
         DEFAULT_ATTACK_VALUE = 3;
         reloadGame();
-        giveMinionsCards(firstTeam, CardType.ATTACK, CardType.ATTACK);
-        giveMinionsCards(secondTeam, CardType.BLOCK);
+        giveMinionsCards(firstTeam, CardCategory.ATTACK, CardCategory.ATTACK);
+        giveMinionsCards(secondTeam, CardCategory.BLOCK);
         AtomicBoolean wasPosted = listenEventPosted(CoreEventName.GAME_OVER);
 
         executeTurn();
@@ -84,7 +84,7 @@ class CoreTest extends FunctionalTest {
     public void test7() {
         DEFAULT_ATTACK_VALUE = 3;
         reloadGame();
-        giveMinionsCards(firstTeam, CardType.ATTACK);
+        giveMinionsCards(firstTeam, CardCategory.ATTACK);
         clearMinionsHand(secondTeam);
         AtomicBoolean wasPosted = listenEventPosted(ActionEventName.MINION_DIED);
 
@@ -102,7 +102,7 @@ class CoreTest extends FunctionalTest {
         SECOND_TEAM_INITIAL_BLOCK = 3;
         reloadGame();
         disableBlockClear();
-        giveMinionsCards(firstTeam, CardType.ATTACK);
+        giveMinionsCards(firstTeam, CardCategory.ATTACK);
         clearMinionsHand(secondTeam);
 
         executeTurn();
@@ -116,7 +116,7 @@ class CoreTest extends FunctionalTest {
         MINION_PER_TEAM = 1;
         DEFAULT_ATTACK_VALUE = 5;
         reloadGame();
-        giveMinionsCards(firstTeam, CardType.ATTACK);
+        giveMinionsCards(firstTeam, CardCategory.ATTACK);
         clearMinionsHand(secondTeam);
 
         executeTurn();
@@ -153,7 +153,7 @@ class CoreTest extends FunctionalTest {
         minionWithTwoCards.clearDraw();
         Minion minionWithOneCard = firstTeam.getMinions().get(0);
         minionWithOneCard.clearDraw();
-        composeMinionHand(minionWithOneCard,CardType.ATTACK);
+        composeMinionHand(minionWithOneCard, CardCategory.ATTACK);
         Minion minionWithNoCards = firstTeam.getMinions().get(1);
         composeMinionHand(minionWithNoCards);
         minionWithNoCards.clearDraw();

@@ -2,7 +2,6 @@ package dixu.deckard.server;
 
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventName;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +47,7 @@ public class LeaderTest extends FunctionalTest {
         List<Card> minionHand = minion.getHand();
         Card minionCardToReplace = minionHand.get(0);
         CardFactory factory = new CardFactory();
-        Card leaderCard = factory.createCard(CardType.ATTACK, DEFAULT_ATTACK_VALUE);
+        Card leaderCard = factory.createCard(CardCategory.ATTACK, DEFAULT_ATTACK_VALUE);
         firstLeader.addCard(leaderCard);
 
         bus.post(ActionEvent.builder()
@@ -93,11 +92,11 @@ public class LeaderTest extends FunctionalTest {
     @DisplayName("Leader has hand size limit")
     public void test5() {
         CardFactory factory = new CardFactory();
-        Card firstCard = factory.createCard(CardType.BLOCK, 1);
+        Card firstCard = factory.createCard(CardCategory.BLOCK, 1);
 
         firstLeader.addCard(firstCard);
         for (int i = 0; i < LEADER_MAX_HAND_SIZE; i++) {
-            firstLeader.addCard(factory.createCard(CardType.ATTACK, 1));
+            firstLeader.addCard(factory.createCard(CardCategory.ATTACK, 1));
         }
 
         assertEquals(LEADER_MAX_HAND_SIZE, firstLeader.getHand().size());

@@ -26,7 +26,7 @@ public class Minion implements ActionEventHandler {
 
     public Minion(LeaderType type) {
         String name = "Minion " + nextId++;
-        minionCard = new Card(CardType.MINION, name, hp);
+        minionCard = new Card(CardCategory.MINION, name, hp);
         CardFactory cardFactory = new CardFactory();
         draw.addAll(cardFactory.createDeck(type));
         Collections.shuffle(draw);
