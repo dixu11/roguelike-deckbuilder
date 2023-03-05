@@ -37,8 +37,8 @@ public abstract class FunctionalTest {
         MINION_DRAW_PER_TURN = 2;
         MINION_INITIAL_HP = 3;
         SECOND_TEAM_INITIAL_BLOCK = 3;
-        DEFAULT_BLOCK_VALUE = 1;
-        DEFAULT_ATTACK_VALUE = 2;
+        BASIC_BLOCK_VALUE = 1;
+        BASIC_ATTACK_VALUE = 2;
     }
 
     private void loadGame() { //todo refactor copying same code here and in App
@@ -102,19 +102,19 @@ public abstract class FunctionalTest {
     /**
      * @param cards when no elements are passed minion has no cards in hand
      */
-    void giveMinionsCards(Team team, CardCategory... cards) {
+    void giveMinionsCards(Team team, CardType... cards) {
         team.getMinions()
                 .forEach(minion -> composeMinionHand(minion, cards));
     }
 
     void giveAllMinionsBlockCard() {
-        allMinions().forEach(minion -> composeMinionHand(minion, CardCategory.BLOCK));
+        allMinions().forEach(minion -> composeMinionHand(minion, CardType.BASIC_BLOCK));
     }
 
-     void composeMinionHand(Minion minion, CardCategory... cards) {
+     void composeMinionHand(Minion minion, CardType... cards) {
         CardFactory factory = new CardFactory();
         List<Card> newHand = new ArrayList<>();
-        for (CardCategory type : cards) {
+        for (CardType type : cards) {
             newHand.addAll(factory.createCards(1, type));
         }
         minion.setHand(newHand);

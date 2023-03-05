@@ -47,7 +47,7 @@ public class LeaderTest extends FunctionalTest {
         List<Card> minionHand = minion.getHand();
         Card minionCardToReplace = minionHand.get(0);
         CardFactory factory = new CardFactory();
-        Card leaderCard = factory.createCard(CardCategory.ATTACK, DEFAULT_ATTACK_VALUE);
+        Card leaderCard = factory.createCard(CardType.BASIC_ATTACK);
         firstLeader.addCard(leaderCard);
 
         bus.post(ActionEvent.builder()
@@ -92,11 +92,11 @@ public class LeaderTest extends FunctionalTest {
     @DisplayName("Leader has hand size limit")
     public void test5() {
         CardFactory factory = new CardFactory();
-        Card firstCard = factory.createCard(CardCategory.BLOCK, 1);
+        Card firstCard = factory.createCard(CardType.BASIC_BLOCK);
 
         firstLeader.addCard(firstCard);
         for (int i = 0; i < LEADER_MAX_HAND_SIZE; i++) {
-            firstLeader.addCard(factory.createCard(CardCategory.ATTACK, 1));
+            firstLeader.addCard(factory.createCard(CardType.BASIC_ATTACK));
         }
 
         assertEquals(LEADER_MAX_HAND_SIZE, firstLeader.getHand().size());

@@ -13,7 +13,6 @@ import static dixu.deckard.server.GameParams.*;
  */
 
 public class Minion implements ActionEventHandler {
-    private static int nextId = 1;
     private final BusManager bus = BusManager.instance();
     private int hp = MINION_INITIAL_HP;
     private final Card minionCard;
@@ -25,8 +24,7 @@ public class Minion implements ActionEventHandler {
 
 
     public Minion(LeaderType type) {
-        String name = "Minion " + nextId++;
-        minionCard = new Card(CardCategory.MINION, name, hp);
+        minionCard = new Card(CardType.BASIC_MINION);
         CardFactory cardFactory = new CardFactory();
         draw.addAll(cardFactory.createDeck(type));
         Collections.shuffle(draw);

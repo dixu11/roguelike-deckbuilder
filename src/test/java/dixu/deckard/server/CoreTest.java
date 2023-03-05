@@ -43,7 +43,7 @@ class CoreTest extends FunctionalTest {
     public void test4() {
         disableBlockClear();
         giveAllMinionsBlockCard();
-        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
+        int blockFromCards = BASIC_BLOCK_VALUE * MINION_PER_TEAM;
 
         executeTurn();
 
@@ -55,7 +55,7 @@ class CoreTest extends FunctionalTest {
     @DisplayName("Block is cleared for every team, first team - after plays, second - before plays")
     public void test5() {
         giveAllMinionsBlockCard();
-        int blockFromCards = DEFAULT_BLOCK_VALUE * MINION_PER_TEAM;
+        int blockFromCards = BASIC_BLOCK_VALUE * MINION_PER_TEAM;
 
         executeTurn();
 
@@ -66,11 +66,11 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("After slaying all minions enemy has empty team and game ends")
     public void test6() {
-        DEFAULT_BLOCK_VALUE = 0;
-        DEFAULT_ATTACK_VALUE = 3;
+        BASIC_BLOCK_VALUE = 0;
+        BASIC_ATTACK_VALUE = 3;
         reloadGame();
-        giveMinionsCards(firstTeam, CardCategory.ATTACK, CardCategory.ATTACK);
-        giveMinionsCards(secondTeam, CardCategory.BLOCK);
+        giveMinionsCards(firstTeam, CardType.BASIC_ATTACK, CardType.BASIC_ATTACK);
+        giveMinionsCards(secondTeam, CardType.BASIC_BLOCK);
         AtomicBoolean wasPosted = listenEventPosted(CoreEventName.GAME_OVER);
 
         executeTurn();
@@ -82,9 +82,9 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("After character died proper event is post and it's no longer in team")
     public void test7() {
-        DEFAULT_ATTACK_VALUE = 3;
+        BASIC_ATTACK_VALUE = 3;
         reloadGame();
-        giveMinionsCards(firstTeam, CardCategory.ATTACK);
+        giveMinionsCards(firstTeam, CardType.BASIC_ATTACK);
         clearMinionsHand(secondTeam);
         AtomicBoolean wasPosted = listenEventPosted(ActionEventName.MINION_DIED);
 
@@ -98,11 +98,11 @@ class CoreTest extends FunctionalTest {
     @DisplayName("Block is reduced after attack")
     public void test8() {
         MINION_PER_TEAM = 1;
-        DEFAULT_ATTACK_VALUE = 2;
+        BASIC_ATTACK_VALUE = 2;
         SECOND_TEAM_INITIAL_BLOCK = 3;
         reloadGame();
         disableBlockClear();
-        giveMinionsCards(firstTeam, CardCategory.ATTACK);
+        giveMinionsCards(firstTeam, CardType.BASIC_ATTACK);
         clearMinionsHand(secondTeam);
 
         executeTurn();
@@ -114,22 +114,22 @@ class CoreTest extends FunctionalTest {
     @DisplayName("Attack over block hit minion")
     public void test9() {
         MINION_PER_TEAM = 1;
-        DEFAULT_ATTACK_VALUE = 5;
+        BASIC_ATTACK_VALUE = 5;
         reloadGame();
-        giveMinionsCards(firstTeam, CardCategory.ATTACK);
+        giveMinionsCards(firstTeam, CardType.BASIC_ATTACK);
         clearMinionsHand(secondTeam);
 
         executeTurn();
 
         Minion theOnlyOneMinion = secondTeam.getRandomMinion().get();
-        assertEquals(MINION_INITIAL_HP + SECOND_TEAM_INITIAL_BLOCK - DEFAULT_ATTACK_VALUE,
+        assertEquals(MINION_INITIAL_HP + SECOND_TEAM_INITIAL_BLOCK - BASIC_ATTACK_VALUE,
                 theOnlyOneMinion.getHealth());
     }
 
     @Test
     @DisplayName("After all minion cards were played discard deck is shuffled and put as draw deck")
     public void test10() {
-        DEFAULT_ATTACK_VALUE = 0;
+        BASIC_ATTACK_VALUE = 0;
         MINION_DRAW_PER_TURN = 1;
         reloadGame();
 
@@ -148,12 +148,12 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("Minions can have small number of cards")
     public void test11() {
-        DEFAULT_ATTACK_VALUE = 0;
+        BASIC_ATTACK_VALUE = 0;
         Minion minionWithTwoCards = secondTeam.getRandomMinion().get();
         minionWithTwoCards.clearDraw();
         Minion minionWithOneCard = firstTeam.getMinions().get(0);
         minionWithOneCard.clearDraw();
-        composeMinionHand(minionWithOneCard, CardCategory.ATTACK);
+        composeMinionHand(minionWithOneCard, CardType.BASIC_ATTACK);
         Minion minionWithNoCards = firstTeam.getMinions().get(1);
         composeMinionHand(minionWithNoCards);
         minionWithNoCards.clearDraw();
