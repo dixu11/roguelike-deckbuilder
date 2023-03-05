@@ -15,8 +15,10 @@ public class EventCounterView implements CounterView, ActionEventHandler {
     private static final Font FONT = new Font(Font.SERIF, Font.PLAIN, 20);
 
     //location on rectangle
-    private Direction straightDirection;
-    private Direction diagonalShift;
+    @Builder.Default
+    private Direction diagonalShift = Direction.LEFT;
+    @Builder.Default
+    private Direction straightDirection = Direction.TOP;
 
     //value
     private int value;
@@ -67,6 +69,10 @@ public class EventCounterView implements CounterView, ActionEventHandler {
         //for debug
 //        g.setColor(Color.CYAN);
 //        g.fillRect(rect.x,rect.y,rect.width,rect.height);
+    }
+
+    public void render(Graphics g,int x,int y) {
+        render(g,new Rectangle(x,y,1,1));
     }
 
     @Override

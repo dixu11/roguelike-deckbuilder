@@ -16,7 +16,7 @@ public class MinionView implements ActionEventHandler {
     private final MinionHandView minionHandView;
     private CounterView drawCounter;
     private CounterView discardCounter;
-    private TeamView teamView;
+    private final TeamView teamView;
     private int transX;
     private int transY;
 

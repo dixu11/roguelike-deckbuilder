@@ -44,8 +44,6 @@ public class TeamView implements ActionEventHandler {
 
     private void setupBlockCounters(Team team) {
         EventCounterView blockCounterEvent = EventCounterView.builder()
-                .straightDirection(Direction.TOP) //todo nie wszystkie countery potrzebują tych głupich boxów
-                .diagonalShift(Direction.LEFT)
                 .color(GuiParams.MAIN_COLOR_BRIGHT)
                 .description("\uD83D\uDEE1️: ")
                 .source(team)
