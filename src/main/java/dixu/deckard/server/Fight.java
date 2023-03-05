@@ -81,12 +81,12 @@ public class Fight implements CoreEventHandler {
                 .build();
     }
 
-    public static void delayForAnimation() {
+    public static void delayForAnimation(double delayTimeSeconds) {
         if (!delayCardPlay) {
             return;
         }
         try {
-            Thread.sleep((long) (PLAY_DELAY_SECONDS * 1000));
+            Thread.sleep((long) (delayTimeSeconds * 1000));
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

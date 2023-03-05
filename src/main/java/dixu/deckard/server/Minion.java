@@ -4,7 +4,7 @@ import dixu.deckard.server.event.*;
 
 import java.util.*;
 
-import static dixu.deckard.server.GameParams.MINION_INITIAL_HP;
+import static dixu.deckard.server.GameParams.*;
 
 /**
  * {@link Minion}s form a {@link Team} to take a part in a {@link Fight} for their {@link Leader}, controlled by player
@@ -48,7 +48,7 @@ public class Minion implements ActionEventHandler {
 
         Card card = draw.poll();
         if (card == null) return;
-
+        Fight.delayForAnimation(DRAW_DELAY_SECONDS);
         addCardToHand(card);
     }
 
@@ -87,7 +87,7 @@ public class Minion implements ActionEventHandler {
             cardContext.setCard(card);
             card.play(cardContext);
             discard(card);
-            Fight.delayForAnimation();
+            Fight.delayForAnimation(PLAY_DELAY_SECONDS);
         }
     }
 

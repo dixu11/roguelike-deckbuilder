@@ -45,7 +45,7 @@ public class App {
         Fight fight = new Fight(firstLeader,secondLeader);
         GuiController guiController = new GuiController(fightViewImpl);
         display.addListener(fightViewImpl);
-        fight.start();
         engine.start();
+        fight.start();
     }
 }

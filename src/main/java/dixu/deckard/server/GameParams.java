@@ -4,6 +4,7 @@ package dixu.deckard.server;
 public class GameParams {
     //fights parameters
     public final static double PLAY_DELAY_SECONDS = 1;
+    public final static double DRAW_DELAY_SECONDS = 0.5;
     public static int MINION_PER_TEAM = 2;
     public static int MINION_DRAW_PER_TURN = 2;
     public static int MINION_INITIAL_HP = 3;
