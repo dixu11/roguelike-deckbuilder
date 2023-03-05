@@ -47,7 +47,5 @@ public class App {
         display.addListener(fightViewImpl);
         engine.start();
         fight.start();
-
-        firstLeader.addCard(new Card(CardType.UNSTABLE_ATTACK));
     }
 }
