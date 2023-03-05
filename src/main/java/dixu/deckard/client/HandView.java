@@ -9,30 +9,23 @@ import java.util.List;
 public abstract class HandView {
     final BusManager bus = BusManager.instance();
     final List<CardView> cardViews = new ArrayList<>();
-    int x;
-    int y;
+    private int translateX;
+    private int translateY;
 
-    public HandView(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
-    public void render(Graphics g) {
-        g.translate(x, y);
-
+    public void render(Graphics2D g) {
+        translateX = (int) g.getTransform().getTranslateX();
+        translateY = (int) g.getTransform().getTranslateY();
         List<CardView> views = new ArrayList<>(cardViews); //for concurrency safety
         for (int i = 0; i < views.size(); i++) {
             CardView cardView = views.get(i);
             cardView.render(g, i);
         }
-
-        g.translate(-x, -y);
     }
 
-    public void reactToClickOnScreen(int windowX, int windowY) {
+    public void reactToClickOnWindow(int windowX, int windowY) {
         for (int i = 0; i < cardViews.size(); i++) {
             CardView cardView = cardViews.get(i);
-            if (cardView.isClicked(windowX, windowY, x, y, i)) {
+            if (cardView.isClicked(windowX, windowY, translateX, translateY, i)) {
                 postEventOnClick(cardView);
                 return;
             }

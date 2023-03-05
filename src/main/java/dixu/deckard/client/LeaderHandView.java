@@ -5,13 +5,9 @@ import dixu.deckard.server.event.*;
 
 public class LeaderHandView extends HandView implements ActionEventHandler{
 
-
-    public static final int X = GuiParams.getWidth(0.37);
-    public static final int Y = GuiParams.getHeight(0.8);
     private final Leader leader;
 
     public LeaderHandView(Leader leader) {
-        super(X,Y);
         this.leader = leader;
         reloadCards();
 

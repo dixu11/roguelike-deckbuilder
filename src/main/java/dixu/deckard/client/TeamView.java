@@ -7,7 +7,6 @@ import dixu.deckard.server.Team;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static dixu.deckard.client.GuiParams.CARD_HEIGHT;
 import static dixu.deckard.client.GuiParams.CARD_WIDTH;
@@ -56,7 +55,7 @@ public class TeamView implements ActionEventHandler {
 
     public void render(Graphics2D g) {
         int xChange = 0;
-        g.translate(getX(), getY());
+        g.translate(getX(), getY()); //todo put transform out of this object to meet central coordinate system rule
         blockCounter.render(g, new Rectangle((int) (PADDING*0.75), CARD_HEIGHT * 2, CARD_WIDTH, CARD_HEIGHT));
 
         for (MinionView minion : new ArrayList<>(minions)) {
@@ -79,19 +78,7 @@ public class TeamView implements ActionEventHandler {
 
     public void reactToClickOnScreen(int x, int y){
         for (MinionView minion : minions) {
-            Optional<CardView> optionalSelected = minion.reactToClick(x, y);
-            if (optionalSelected.isPresent()) {
-                CardView newSelected = optionalSelected.get();
-
-                bus.post(GuiEvent.builder()
-                                .name(GuiEventName.MINION_CARD_SELECTED)
-                                .cardView(newSelected)
-                                .minionView(minion)
-                                .teamView(this)
-                                .build()
-                );
-
-            }
+             minion.reactToClick(x, y);
         }
     }
 

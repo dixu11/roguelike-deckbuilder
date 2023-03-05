@@ -4,7 +4,6 @@ import dixu.deckard.server.*;
 import dixu.deckard.server.event.*;
 
 import java.awt.*;
-import java.util.Optional;
 
 import static dixu.deckard.client.GuiParams.*;
 
@@ -25,7 +24,7 @@ public class MinionView implements ActionEventHandler {
         this.minion = minion;
         this.teamView = teamView;
 
-        minionHandView = new MinionHandView(minion);
+        minionHandView = new MinionHandView(this);
         minionCardView = new CardView(minion.getMinionCard());
 
         bus.register(this, ActionEventName.MINION_CARD_DISCARDED);
@@ -83,7 +82,11 @@ public class MinionView implements ActionEventHandler {
         transX = (int) g.getTransform().getTranslateX();
         transY = (int) g.getTransform().getTranslateY();
         minionCardView.render(g);
-        minionHandView.render(g,CARD_PADDING-CARD_WIDTH, -CARD_HEIGHT - CARD_PADDING);//todo refactor to calculate center
+        int xTran = CARD_PADDING-CARD_WIDTH;
+        int yTran = -CARD_HEIGHT - CARD_PADDING;
+        g.translate(xTran,yTran);
+        minionHandView.render(g);//todo refactor to calculate center
+        g.translate(-xTran,-yTran);
         Rectangle r = new Rectangle(0, CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
         drawCounter.render(g, r);
         discardCounter.render(g, r);
@@ -93,8 +96,8 @@ public class MinionView implements ActionEventHandler {
     @Override
     public void handle(ActionEvent event) {
         switch (event.getName()) {
-            case MINION_CARD_DISCARDED -> onCardPlayed(event);
-            case MINION_CARD_DRAW -> onCardDraw(event);
+            case MINION_CARD_DISCARDED -> onCardPlayed(event); // todo move to hand object
+            case MINION_CARD_DRAW -> onCardDraw(event); // todo move to hand object
         }
     }
 
@@ -110,7 +113,7 @@ public class MinionView implements ActionEventHandler {
         }
     }
 
-    public Optional<CardView> reactToClick(int x, int y) {
+    public void reactToClick(int x, int y) {
         if (minionCardView.isClicked(x,y,transX,transY,0)) {
            bus.post(GuiEvent.builder()
                    .name(GuiEventName.MINION_SELECTED)
@@ -120,10 +123,14 @@ public class MinionView implements ActionEventHandler {
                    .build()
            );
         }
-        return minionHandView.reactToClickOnScreen(x, y);
+        minionHandView.reactToClickOnWindow(x, y);
     }
 
     public Minion getMinion() {
         return minion;
+    }
+
+    public TeamView getTeamView() {
+        return teamView;
     }
 }

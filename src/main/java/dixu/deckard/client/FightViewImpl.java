@@ -11,7 +11,17 @@ import java.awt.event.MouseListener;
 
 import static dixu.deckard.client.GuiParams.*;
 
+/**
+ * Positions:
+ * <p>
+ * Every gui element refers to its coordinates as it's root is x = 0 and y = 0 and translate {@link Graphics2D} to proper
+ * position when render inner elements. Inner elements can dig for its absolute position by getting transform coords
+ * from their {@link Graphics2D} object while rendering.
+* */
+
 public class FightViewImpl implements FightView, MouseListener, CoreEventHandler {
+    public static final int LEADER_HAND_X = GuiParams.getWidth(0.37);
+    public static final int LEADER_HAND_Y = GuiParams.getHeight(0.8);
     private final BusManager bus = BusManager.instance();
     private final TeamView firstTeam;
     private final TeamView secondTeam;
@@ -51,7 +61,9 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         renderBackground(g);
         firstTeam.render(g);
         secondTeam.render(g);
+        g.translate(LEADER_HAND_X,LEADER_HAND_Y); //todo refactor
         firstLeaderHand.render(g);
+        g.translate(-LEADER_HAND_X,-LEADER_HAND_Y);
         endTurn.render(g);
         energyCounter.render(g,getWidth(0.34),getHeight(0.7));
     }
@@ -67,7 +79,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         if (endTurn.isClicked(e.getX(), e.getY())) {
             endTurn.onClick();
         }
-        firstLeaderHand.reactToClickOnScreen(e.getX(), e.getY());
+        firstLeaderHand.reactToClickOnWindow(e.getX(), e.getY());
         firstTeam.reactToClickOnScreen(e.getX(), e.getY());
         secondTeam.reactToClickOnScreen(e.getX(), e.getY());
     }

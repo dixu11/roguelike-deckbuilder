@@ -85,7 +85,7 @@ public class Leader implements ActionEventHandler {
         postHandChangedEvent();
     }
 
-    void addCard(Card card) {
+   public void addCard(Card card) {
         hand.add(card);
         if (hand.size() > LEADER_MAX_HAND_SIZE) {
             hand.remove(0);
