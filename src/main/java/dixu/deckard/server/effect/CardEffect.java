@@ -4,4 +4,6 @@ import dixu.deckard.server.CardContext;
 
 public interface CardEffect {
    void execute(CardContext context);
+
+   String getDescription();
 }

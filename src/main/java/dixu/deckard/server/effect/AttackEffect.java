@@ -6,7 +6,7 @@ import dixu.deckard.server.Minion;
 import java.util.Optional;
 
 public class AttackEffect implements CardEffect {
-    private int value;
+    int value;
 
     public AttackEffect(int value) {
         this.value = value;
@@ -19,5 +19,10 @@ public class AttackEffect implements CardEffect {
 
         context.getEnemyTeam()
                 .applyDmgTo(value, optionalMinion.get());
+    }
+
+    @Override
+    public String getDescription() {
+        return  " " + value + "⚔️ to random enemy minion.";
     }
 }

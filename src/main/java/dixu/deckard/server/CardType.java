@@ -5,7 +5,7 @@ public enum CardType {
     UPGRADED_ATTACK(CardCategory.ATTACK, "Attack " + GameParams.UPGRADED_ATTACK_VALUE),
     BASIC_BLOCK(CardCategory.BLOCK, "Block " + GameParams.BASIC_BLOCK_VALUE),
     UPGRADED_BLOCK(CardCategory.BLOCK, "Block " + GameParams.UPGRADED_BLOCK_VALUE),
-    BASIC_MINION(CardCategory.MINION,"Minion");
+    BASIC_MINION(CardCategory.MINION,"Minion"), UNSTABLE_ATTACK(CardCategory.ATTACK,"Unstable attack" );
 
     private final CardCategory category;
     private final String name;

@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import static dixu.deckard.server.GameParams.*;
-
-
 public class CardFactory {
 
     public List<Card> createDeck(LeaderType type) {

@@ -3,9 +3,11 @@ package dixu.deckard.server;
 import dixu.deckard.server.effect.AttackEffect;
 import dixu.deckard.server.effect.BlockEffect;
 import dixu.deckard.server.effect.CardEffect;
+import dixu.deckard.server.effect.ChangeValueEffect;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 import static dixu.deckard.server.CardType.*;
 import static dixu.deckard.server.GameParams.*;
@@ -17,7 +19,6 @@ import static dixu.deckard.server.GameParams.*;
  */
 public class Card {
     private String name;
-    private String description = "";
     private CardCategory category;
     private CardType type;
     private final List<CardEffect> effects = new ArrayList<>();
@@ -31,35 +32,43 @@ public class Card {
         this.name = this.type.getName();
         category = this.type.getCategory();
 
-        switch (category){
+        switch (category) {
             case ATTACK -> setupAttackCard();
             case BLOCK -> setupBlockCard();
         }
     }
 
     private void setupAttackCard() {
+        AttackEffect attackEffect;
         int attackValue = 0;
         if (type == BASIC_ATTACK) {
             attackValue = BASIC_ATTACK_VALUE;
-        }else if (type == UPGRADED_ATTACK){
+        } else if (type == UPGRADED_ATTACK) {
             attackValue = UPGRADED_ATTACK_VALUE;
         }
-        AttackEffect attackEffect = new AttackEffect(attackValue);
+        if (type == UNSTABLE_ATTACK) {
+            attackValue = 3;
+        }
+
+        final AttackEffect baseAttack = new AttackEffect(attackValue);
+        attackEffect = baseAttack;
+        if (type == UNSTABLE_ATTACK) {
+            attackEffect = new ChangeValueEffect(baseAttack, -1);
+        }
+
         effects.add(attackEffect);
-        description = " " + attackValue + "⚔️ to random enemy minion";
     }
 
     private void setupBlockCard() {
         int blockValue = 0;
         if (type == BASIC_BLOCK) {
             blockValue = BASIC_BLOCK_VALUE;
-        }else if (type == UPGRADED_BLOCK){
+        } else if (type == UPGRADED_BLOCK) {
             blockValue = UPGRADED_BLOCK_VALUE;
         }
 
         BlockEffect blockEffect = new BlockEffect(blockValue);
         effects.add(blockEffect);
-        description = " +" + blockValue + "\uD83D\uDEE1";
     }
 
     public void play(CardContext context) {
@@ -81,6 +90,10 @@ public class Card {
     }
 
     public String getDescription() {
-        return description;
+        StringBuilder desc = new StringBuilder();
+        for (CardEffect effect : effects) {
+            desc.append(effect.getDescription()).append(" ");
+        }
+        return desc.toString();
     }
 }

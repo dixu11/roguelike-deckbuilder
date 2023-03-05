@@ -13,4 +13,9 @@ public class BlockEffect implements CardEffect {
     public void execute(CardContext context) {
         context.getOwnTeam().addBlock(value);
     }
+
+    @Override
+    public String getDescription() {
+        return  " +" + value + "\uD83D\uDEE1";
+    }
 }
