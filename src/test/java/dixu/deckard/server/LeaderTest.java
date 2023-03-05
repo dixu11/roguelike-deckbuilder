@@ -22,7 +22,7 @@ public class LeaderTest extends FunctionalTest {
     @Test
     @DisplayName("When leader use steal special - spends energy and steal a card, minion draws new one")
     public void test2() {
-        Minion minion = secondTeam.getMinions().get(0);
+        Minion minion = firstMinion(firstTeam);
         List<Card> minionHand = minion.getHand();
         Card cardToSteal = minionHand.get(0);
 
@@ -43,7 +43,7 @@ public class LeaderTest extends FunctionalTest {
     @Test
     @DisplayName("When leader use upgrade special he spends energy, and change minion card to new one")
     public void test3() {
-        Minion minion = firstTeam.getMinions().get(0);
+        Minion minion = firstMinion(firstTeam);
         List<Card> minionHand = minion.getHand();
         Card minionCardToReplace = minionHand.get(0);
         CardFactory factory = new CardFactory();
@@ -69,7 +69,7 @@ public class LeaderTest extends FunctionalTest {
     @Test
     @DisplayName("When leader uses move minion hand special, spends energy, and make minion draw card and discard card")
     public void test4() {
-        Minion minion = firstTeam.getMinions().get(0);
+        Minion minion = firstMinion(firstTeam);
         List<Card> minionHand = minion.getHand();
         Card minionFirstCard = minionHand.get(0);
 

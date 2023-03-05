@@ -17,6 +17,9 @@ public class ChangeValueEffect extends AttackEffect {
     public void execute(CardContext context) {
         attackEffect.execute(context);
         attackEffect.value += valueModification;
+        if (attackEffect.value < 0) {
+            attackEffect.value = 0;
+        }
     }
 
     @Override

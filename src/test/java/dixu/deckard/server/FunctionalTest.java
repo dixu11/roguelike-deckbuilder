@@ -90,8 +90,23 @@ public abstract class FunctionalTest {
         }
     }
 
+    void clearAllCards() {
+        for (Minion minion : allMinions()) {
+            clearMinionHand(minion);
+            clearMinionDraw(minion);
+        }
+    }
+
     void clearMinionsHand(Team team) {
         giveMinionsCards(team);
+    }
+
+    void clearMinionHand(Minion minion) {
+        composeMinionHand(minion);
+    }
+
+    void clearMinionDraw(Minion minion) {
+        minion.clearDraw();
     }
 
     void disableBlockClear() {
@@ -123,4 +138,13 @@ public abstract class FunctionalTest {
     public int initialMinionDeckSize() {
         return new Minion(LeaderType.SIMPLE_BOT).getDraw().size();
     }
+
+    public Minion firstMinion(Team team) {
+        return team.getMinions().get(0);
+    }
+
+     Card minionHandFirstCard(Minion minion) {
+        return minion.getHand().get(0);
+    }
+
 }
