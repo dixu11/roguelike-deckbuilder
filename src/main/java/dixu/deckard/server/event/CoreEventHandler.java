@@ -1,4 +1,5 @@
 package dixu.deckard.server.event;
 
-public interface CoreEventHandler extends EventHandler<CoreEvent>{
+public interface CoreEventHandler{
+    void handle(CoreEvent event);
 }

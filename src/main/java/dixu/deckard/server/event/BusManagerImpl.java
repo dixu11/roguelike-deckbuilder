@@ -5,9 +5,9 @@ import dixu.deckard.client.GuiEvent;
 public class BusManagerImpl implements BusManager {
 
     private final static BusManagerImpl manager = new BusManagerImpl();
-    private  EventBus<CoreEventName, CoreEvent> structureBus = new EventBus<>();
-    private  EventBus<ActionEventName, ActionEvent> effectBus = new EventBus<>();
-    private  EventBus<GuiEventName, GuiEvent> guiBus = new EventBus<>();
+    private CoreEventBus structureBus = new CoreEventBus();
+    private ActionEventBus effectBus = new ActionEventBus();
+    private GuiEventBus guiBus = new GuiEventBus();
 
 
     private BusManagerImpl() {
@@ -49,7 +49,8 @@ public class BusManagerImpl implements BusManager {
     }
 
     public void reset() {
-        structureBus = new EventBus<>();
-        effectBus = new EventBus<>();
+        structureBus = new CoreEventBus();
+        effectBus = new ActionEventBus();
+        guiBus = new GuiEventBus();
     }
 }

@@ -1,4 +1,5 @@
 package dixu.deckard.server.event;
 
-public interface ActionEventHandler extends EventHandler<ActionEvent>{
+public interface ActionEventHandler{
+    void handle(ActionEvent event);
 }
