@@ -6,4 +6,8 @@ public interface CardEffect {
    void execute(CardContext context);
 
    String getDescription();
+
+    int getAttack();
+
+    int getBlock();
 }

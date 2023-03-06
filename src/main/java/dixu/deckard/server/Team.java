@@ -1,5 +1,6 @@
 package dixu.deckard.server;
 
+import dixu.deckard.server.effect.DmgType;
 import dixu.deckard.server.event.*;
 
 import java.util.ArrayList;
@@ -45,11 +46,12 @@ public class Team implements ActionEventHandler {
 
     //damage / block
 
-    public void applyDmgTo(int dmg, Minion minion) {
-        int dmgLeft = applyDmgToBlock(dmg);
-        if (dmgLeft <= 0) return;
-
-        minion.applyDamage(this, dmgLeft);
+    public void applyDmgTo(int dmg, DmgType type, Minion minion) {
+        if (type != DmgType.PIERCING) {
+            dmg = applyDmgToBlock(dmg);
+            if (dmg <= 0) return;
+        }
+        minion.applyDamage(this, dmg);
     }
 
     private int applyDmgToBlock(int dmg) {

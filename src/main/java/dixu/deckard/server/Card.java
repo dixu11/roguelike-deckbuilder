@@ -1,13 +1,9 @@
 package dixu.deckard.server;
 
-import dixu.deckard.server.effect.AttackEffect;
-import dixu.deckard.server.effect.BlockEffect;
-import dixu.deckard.server.effect.CardEffect;
-import dixu.deckard.server.effect.ChangeValueEffect;
+import dixu.deckard.server.effect.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 import static dixu.deckard.server.CardType.*;
 import static dixu.deckard.server.GameParams.*;
@@ -40,6 +36,7 @@ public class Card {
 
     private void setupAttackCard() {
         AttackEffect attackEffect;
+        DmgType dmgType = DmgType.RANDOM;
         int attackValue = 0;
         if (type == BASIC_ATTACK) {
             attackValue = BASIC_ATTACK_VALUE;
@@ -49,8 +46,12 @@ public class Card {
         if (type == UNSTABLE_ATTACK) {
             attackValue = 3;
         }
+        if (type == PIERCING_ATTACK) {
+            dmgType = DmgType.PIERCING;
+            attackValue = 1;
+        }
 
-        final AttackEffect baseAttack = new AttackEffect(attackValue);
+        final AttackEffect baseAttack = new AttackEffect(attackValue,dmgType);
         attackEffect = baseAttack;
         if (type == UNSTABLE_ATTACK) {
             attackEffect = new ChangeValueEffect(baseAttack, -1);
@@ -96,4 +97,21 @@ public class Card {
         }
         return desc.toString();
     }
+
+    int getApproximateDamage() {
+        int attack = 0;
+        for (CardEffect effect : effects) {
+            attack += effect.getAttack();
+        }
+        return attack;
+    }
+
+    int getApproximateBlock() {
+        int block = 0;
+        for (CardEffect effect : effects) {
+            block += effect.getBlock();
+        }
+        return block;
+    }
+
 }

@@ -8,7 +8,7 @@ public class ChangeValueEffect extends AttackEffect {
     private int valueModification;
 
     public ChangeValueEffect(AttackEffect attackEffect, int valueModification) {
-        super(0);
+        super(0,null); //todo how to avoid this? replace extends with interface?
         this.attackEffect = attackEffect;
         this.valueModification = valueModification;
     }

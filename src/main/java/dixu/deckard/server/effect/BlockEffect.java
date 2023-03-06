@@ -18,4 +18,14 @@ public class BlockEffect implements CardEffect {
     public String getDescription() {
         return  " +" + value + "\uD83D\uDEE1";
     }
+
+    @Override
+    public int getAttack() {
+        return 0;
+    }
+
+    @Override
+    public int getBlock() {
+        return value;
+    }
 }
