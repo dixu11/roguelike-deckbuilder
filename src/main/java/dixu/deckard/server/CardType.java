@@ -17,7 +17,8 @@ public enum CardType {
     UNSTABLE_ATTACK(ATTACK, COMMON, "Unstable Attack",3),
     PIERCING_ATTACK(ATTACK,COMMON , "Piercing Attack" ,1),
     AREA_ATTACK(ATTACK,COMMON ,"Area Attack",1 ),
-    GIFT_ATTACK(ATTACK, COMMON, "Gift Attack", 1);
+    GIFT_ATTACK(ATTACK, COMMON, "Gift Attack", 1),
+    COMBO_ATTACK(ATTACK,COMMON ,"Combo Attack" , 1);
 
     private final CardCategory category;
     private final CardRarity rarity;

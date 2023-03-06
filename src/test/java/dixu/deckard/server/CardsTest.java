@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
@@ -71,7 +72,7 @@ public class CardsTest extends FunctionalTest {
     public void test4() {
         clearAllCards();
         Minion minion = firstMinion(secondTeam);
-        composeMinionHand(minion,CardType.GIFT_ATTACK);
+        composeMinionHand(minion, CardType.GIFT_ATTACK);
         Card giftAttack = minionHandFirstCard(minion);
 
         bus.post(ActionEvent.builder()
@@ -83,6 +84,20 @@ public class CardsTest extends FunctionalTest {
         );
 
         assertEquals(2, firstLeader.getHand().size());
-        assertSame(giftAttack,firstLeader.getHand().get(0));
+        assertSame(giftAttack, firstLeader.getHand().get(0));
+    }
+
+    @Test
+    @DisplayName("Combo Attack gets +1 bonus after every attack played this turn")
+    public void test5() {
+        disableBlockClear();
+        clearAllCards();
+        secondTeam.setBlock(10);
+        composeMinionHand(firstMinion(firstTeam), CardType.BASIC_ATTACK, CardType.BASIC_BLOCK);
+        composeMinionHand(secondMinion(firstTeam), CardType.COMBO_ATTACK, CardType.BASIC_ATTACK);
+
+        executeTurn();
+
+        assertEquals(7 - CardType.COMBO_ATTACK.getValue(), secondTeam.getBlock());
     }
 }

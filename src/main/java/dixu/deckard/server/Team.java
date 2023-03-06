@@ -1,6 +1,6 @@
 package dixu.deckard.server;
 
-import dixu.deckard.server.effect.AttackEffect;
+import dixu.deckard.server.effect.BasicAttackEffect;
 import dixu.deckard.server.effect.EnemySelection;
 import dixu.deckard.server.event.*;
 
@@ -47,7 +47,7 @@ public class Team implements ActionEventHandler {
 
     //damage / block
 
-    public void applyDmgTo(int dmg, AttackEffect effect) {
+    public void applyDmgTo(int dmg, BasicAttackEffect effect) {
         EnemySelection type = effect.getType();
 
         if (!effect.isPiercing()) {

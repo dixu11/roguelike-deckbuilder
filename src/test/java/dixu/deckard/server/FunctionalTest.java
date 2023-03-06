@@ -154,6 +154,10 @@ public abstract class FunctionalTest {
         return team.getMinions().get(0);
     }
 
+    public Minion secondMinion(Team team) {
+        return team.getMinions().get(1);
+    }
+
      Card minionHandFirstCard(Minion minion) {
         return minion.getHand().get(0);
     }

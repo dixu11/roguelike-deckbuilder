@@ -1,6 +1,9 @@
 package dixu.deckard.server;
 
 import dixu.deckard.server.effect.*;
+import dixu.deckard.server.event.ActionEvent;
+import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.BusManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +16,7 @@ import static dixu.deckard.server.CardType.*;
  * {@link Card}'s effect is determined by its {@link Card#category}.
  */
 public class Card {
+    private final BusManager bus = BusManager.instance();
     private String name;
     private CardCategory category;
     private CardType type;
@@ -38,13 +42,11 @@ public class Card {
         EnemySelection enemySelection = EnemySelection.RANDOM;
         int attackValue = type.getValue();
 
-
-
         if (type == AREA_ATTACK) {
             enemySelection = EnemySelection.AREA;
         }
 
-        final AttackEffect baseAttack = new AttackEffect(attackValue, enemySelection);
+        final AttackEffect baseAttack = new BasicAttackEffect(attackValue, enemySelection);
         attackEffect = baseAttack;
 
         if (type == PIERCING_ATTACK) {
@@ -77,18 +79,13 @@ public class Card {
         for (CardEffect effect : effects) {
             effect.execute(context);
         }
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public String toString() {
-        return "Card{" +
-                "name='" + name + '\'' +
-                ", type=" + category +
-                '}';
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_CARD_PLAYED)
+                .card(context.getCard())
+                .minion(context.getMinion())
+                .ownTeam(context.getOwnTeam())
+                .enemyTeam(context.getEnemyTeam())
+                .build());
     }
 
     public String getDescription() {
@@ -113,6 +110,18 @@ public class Card {
             block += effect.getBlock();
         }
         return block;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
+        return "Card{" +
+                "name='" + name + '\'' +
+                ", type=" + category +
+                '}';
     }
 
 }
