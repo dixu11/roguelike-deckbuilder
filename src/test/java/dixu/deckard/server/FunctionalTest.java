@@ -146,10 +146,6 @@ public abstract class FunctionalTest {
         minion.setHand(newHand);
     }
 
-    public int initialMinionDeckSize() {
-        return new Minion(LeaderType.SIMPLE_BOT).getDraw().size();
-    }
-
     public Minion firstMinion(Team team) {
         return team.getMinions().get(0);
     }

@@ -25,8 +25,10 @@ public class Minion implements ActionEventHandler {
 
     public Minion(LeaderType type) {
         minionCard = new Card(CardType.BASIC_MINION);
+        minionCard.setOwner(this);
         CardFactory cardFactory = new CardFactory();
         draw.addAll(cardFactory.createDeck(type));
+        draw.forEach(card -> card.setOwner(this));
         Collections.shuffle(draw);
 
         bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
@@ -69,6 +71,7 @@ public class Minion implements ActionEventHandler {
     }
 
     private void addCardToHand(Card card) {
+        card.setOwner(this);
         hand.add(card);
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_CARD_DRAW)
@@ -136,8 +139,12 @@ public class Minion implements ActionEventHandler {
     }
 
     private void onUpgradeSpecial(ActionEvent event) {
-        int index = hand.indexOf(event.getOldCard());
-        hand.set(index, event.getCard());
+        Card oldCard = event.getOldCard();
+        oldCard.setOwner(null);
+        int index = hand.indexOf(oldCard);
+        Card newCard = event.getCard();
+        newCard.setOwner(this);
+        hand.set(index, newCard);
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_HAND_CHANGED)
                 .minion(this)
@@ -146,7 +153,9 @@ public class Minion implements ActionEventHandler {
     }
 
     private void onStealSpecial(ActionEvent event) {
-        hand.remove(event.getCard());
+        Card card = event.getCard();
+        card.setOwner(null);  // todo because cards have to have their owners for their effects i have to update this every time card changes owner... can i avoid this??
+        hand.remove(card);
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_HAND_CHANGED)
                 .minion(this)
@@ -189,10 +198,15 @@ public class Minion implements ActionEventHandler {
     }
 
     public void setHand(List<Card> newHand) {
+        newHand.forEach(card -> card.setOwner(this));
         hand = newHand;
     }
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public Team getTeam() {
+        return team;
     }
 }

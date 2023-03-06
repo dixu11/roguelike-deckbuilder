@@ -9,7 +9,7 @@ import static dixu.deckard.server.GameParams.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 //tests for core game functionalities
-class CoreTest extends FunctionalTest {
+public class CoreTest extends FunctionalTest {
 
 
     @Test
@@ -24,7 +24,7 @@ class CoreTest extends FunctionalTest {
     public void test2() {
         for (Minion minion : allMinions()) {
             assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
-            assertEquals(initialMinionDeckSize() - MINION_DRAW_PER_TURN,
+            assertEquals(CardFactory.INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
                     minion.getDraw().size());
             assertEquals(0, minion.getDiscarded().size());
         }
@@ -133,13 +133,13 @@ class CoreTest extends FunctionalTest {
         MINION_DRAW_PER_TURN = 1;
         reloadGame();
 
-        for (int i = 0; i < initialMinionDeckSize(); i++) {
+        for (int i = 0; i < CardFactory.INITIAL_MINION_DECK_SIZE; i++) {
             executeTurn();
         }
 
         for (Minion minion : allMinions()) {
             assertEquals(MINION_DRAW_PER_TURN, minion.getHand().size());
-            assertEquals(initialMinionDeckSize() - MINION_DRAW_PER_TURN,
+            assertEquals(CardFactory.INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN,
                     minion.getDraw().size());
             assertEquals(0, minion.getDiscarded().size());
         }

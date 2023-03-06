@@ -83,7 +83,7 @@ public class LeaderTest extends FunctionalTest {
         assertFalse(minionHand.contains(minionFirstCard));
         assertSame(minion.getDiscarded().get(0), minionFirstCard);
         assertEquals(
-                initialMinionDeckSize() - MINION_DRAW_PER_TURN - 1,
+                CardFactory.INITIAL_MINION_DECK_SIZE - MINION_DRAW_PER_TURN - 1,
                 minion.getDraw().size());
         assertEquals(INITIAL_ENERGY - MOVE_SPECIAL_COST, firstLeader.getEnergy());
     }

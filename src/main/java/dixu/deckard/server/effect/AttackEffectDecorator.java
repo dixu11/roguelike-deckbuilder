@@ -1,5 +1,6 @@
 package dixu.deckard.server.effect;
 
+import dixu.deckard.server.Card;
 import dixu.deckard.server.CardContext;
 import dixu.deckard.server.event.BusManager;
 
@@ -39,5 +40,20 @@ public class AttackEffectDecorator implements AttackEffect {
     @Override
     public void setValue(int value) {
         decorated.setValue(value);
+    }
+
+    @Override
+    public int getInitialValue() {
+        return decorated.getInitialValue();
+    }
+
+    @Override
+    public void modifyValueBy(int value) {
+        decorated.modifyValueBy(value);
+    }
+
+    @Override
+    public Card getCard() {
+        return decorated.getCard();
     }
 }

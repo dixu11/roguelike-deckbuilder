@@ -21,7 +21,7 @@ public class CoreEventBus {
     public void post(CoreEvent event) {
         List<CoreEventHandler> eventHandlers = allHandlers.get(event.getName());
         if (eventHandlers != null) {
-            for (CoreEventHandler handler : eventHandlers) {
+            for (CoreEventHandler handler :new ArrayList<>(eventHandlers)) {
                 handler.handle(event);
             }
         }

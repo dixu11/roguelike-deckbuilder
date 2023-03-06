@@ -27,7 +27,6 @@ public class Team implements ActionEventHandler {
         for (Minion minion : minions) {
             minion.setTeam(this);
         }
-
         bus.register(this, ActionEventName.MINION_DIED);
     }
 
@@ -61,7 +60,7 @@ public class Team implements ActionEventHandler {
         }
 
         if (type == EnemySelection.AREA) {
-            for (Minion minion : minions) {
+            for (Minion minion : new ArrayList<>(minions)) {
                 minion.applyDamage(dmg);
             }
         }

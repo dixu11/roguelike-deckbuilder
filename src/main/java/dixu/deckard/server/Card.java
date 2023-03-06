@@ -21,6 +21,7 @@ public class Card {
     private CardCategory category;
     private CardType type;
     private final List<CardEffect> effects = new ArrayList<>();
+    private Minion owner;
 
     public Card(CardType type) {
         setupCard(type);
@@ -46,7 +47,7 @@ public class Card {
             enemySelection = EnemySelection.AREA;
         }
 
-        final AttackEffect baseAttack = new BasicAttackEffect(attackValue, enemySelection);
+        final AttackEffect baseAttack = new BasicAttackEffect(attackValue, enemySelection,this);
         attackEffect = baseAttack;
 
         if (type == PIERCING_ATTACK) {
@@ -55,12 +56,16 @@ public class Card {
         if (type == UNSTABLE_ATTACK) {
             attackEffect = new ChangeValueEffect(baseAttack, -1);
         }
+        if (type == COMBO_ATTACK) {
+            attackEffect = new ComboAttackEffect(baseAttack);
+        }
 
         effects.add(attackEffect);
 
         if (type == GIFT_ATTACK) {
             effects.add(new GiftCardEffect(this));
         }
+
     }
 
     private void setupBlockCard() {
@@ -116,6 +121,18 @@ public class Card {
         return name;
     }
 
+    public CardCategory getCategory() {
+        return category;
+    }
+
+    public Minion getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Minion owner) {
+        this.owner = owner;
+    }
+
     @Override
     public String toString() {
         return "Card{" +
@@ -123,5 +140,4 @@ public class Card {
                 ", type=" + category +
                 '}';
     }
-
 }

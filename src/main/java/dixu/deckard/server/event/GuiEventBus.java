@@ -21,7 +21,7 @@ public class GuiEventBus {
     public void post(GuiEvent event) {
         List<GuiEventHandler> eventHandlers = allHandlers.get(event.getName());
         if (eventHandlers != null) {
-            for (GuiEventHandler handler : eventHandlers) {
+            for (GuiEventHandler handler : new ArrayList<>(eventHandlers)) {
                 handler.handle(event);
             }
         }

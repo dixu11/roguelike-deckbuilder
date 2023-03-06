@@ -20,7 +20,7 @@ public class ActionEventBus {
     public void post(ActionEvent event) {
         List<ActionEventHandler> eventHandlers = allHandlers.get(event.getName());
         if (eventHandlers != null) {
-            for (ActionEventHandler handler : eventHandlers) {
+            for (ActionEventHandler handler : new ArrayList<>(eventHandlers)) {
                 handler.handle(event);
             }
         }
