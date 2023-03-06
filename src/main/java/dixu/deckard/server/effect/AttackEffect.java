@@ -1,36 +1,31 @@
 package dixu.deckard.server.effect;
 
 import dixu.deckard.server.CardContext;
-import dixu.deckard.server.Minion;
-
-import java.util.Optional;
 
 public class AttackEffect implements CardEffect {
     int value;
-    DmgType type;
+    EnemySelection type;
+    boolean isPiercing = false;
 
-    public AttackEffect(int value,DmgType type) {
+    public AttackEffect(int value, EnemySelection type) {
         this.value = value;
         this.type = type;
     }
 
     @Override
     public void execute(CardContext context) {
-        Optional<Minion> optionalMinion = context.getEnemyTeam().getRandomMinion();
-        if (optionalMinion.isEmpty()) return;
-
         context.getEnemyTeam()
-                .applyDmgTo(value,type, optionalMinion.get());
+                .applyDmgTo(value,this);
     }
 
     @Override
     public String getDescription() {
         String modifiers = "";
-        if (type == DmgType.PIERCING) {
+        if (type == EnemySelection.PIERCING) {
             modifiers += " Attack ignores block.";
         }
 
-        return " " + value + "⚔️ to random enemy minion." + modifiers;
+        return " " + value + "⚔️" + modifiers;
     }
 
     @Override
@@ -41,5 +36,17 @@ public class AttackEffect implements CardEffect {
     @Override
     public int getBlock() {
         return 0;
+    }
+
+    public EnemySelection getType() {
+        return type;
+    }
+
+    public void setPiercing(boolean piercing) {
+        isPiercing = piercing;
+    }
+
+    public boolean isPiercing() {
+        return isPiercing;
     }
 }

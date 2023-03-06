@@ -5,27 +5,29 @@ import dixu.deckard.server.event.CardRarity;
 import java.util.Arrays;
 
 import static dixu.deckard.server.CardCategory.*;
-import static dixu.deckard.server.GameParams.*;
 import static dixu.deckard.server.event.CardRarity.BASIC;
 import static dixu.deckard.server.event.CardRarity.COMMON;
 
 public enum CardType {
-    BASIC_ATTACK(ATTACK, BASIC, "Attack " + BASIC_ATTACK_VALUE),
-    UPGRADED_ATTACK(ATTACK, COMMON, "Attack " + UPGRADED_ATTACK_VALUE),
-    BASIC_BLOCK(BLOCK, BASIC, "Block " + BASIC_BLOCK_VALUE),
-    UPGRADED_BLOCK(BLOCK, COMMON, "Block " + UPGRADED_BLOCK_VALUE),
-    BASIC_MINION(MINION, BASIC, "Minion"),
-    UNSTABLE_ATTACK(ATTACK, COMMON, "Unstable attack"),
-    PIERCING_ATTACK(ATTACK,COMMON , "Piercing attack" );
+    BASIC_ATTACK(ATTACK, BASIC, "Basic Attack ",1),
+    UPGRADED_ATTACK(ATTACK, COMMON, "Better Attack",2),
+    BASIC_BLOCK(BLOCK, BASIC, "Basic Block",1),
+    UPGRADED_BLOCK(BLOCK, COMMON, "Better Block",2),
+    BASIC_MINION(MINION, BASIC, "Minion",3),
+    UNSTABLE_ATTACK(ATTACK, COMMON, "Unstable Attack",3),
+    PIERCING_ATTACK(ATTACK,COMMON , "Piercing Attack" ,1),
+    AREA_ATTACK(ATTACK,COMMON ,"Area Attack",1 );
 
     private final CardCategory category;
     private final CardRarity rarity;
     private final String name;
+    private  int baseValue;
 
-    CardType(CardCategory category, CardRarity rarity, String name) {
+    CardType(CardCategory category, CardRarity rarity, String name, int baseValue) {
         this.category = category;
         this.rarity = rarity;
         this.name = name;
+        this.baseValue = baseValue;
     }
 
     public static CardType getRandom(CardRarity rarity) {
@@ -46,5 +48,13 @@ public enum CardType {
 
     public CardRarity getRarity() {
         return rarity;
+    }
+
+    public int getValue() {
+        return baseValue;
+    }
+
+    public void setBaseValue(int baseValue) {
+        this.baseValue = baseValue;
     }
 }

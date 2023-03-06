@@ -14,7 +14,7 @@ import static dixu.deckard.server.GameParams.*;
 
 public class Minion implements ActionEventHandler {
     private final BusManager bus = BusManager.instance();
-    private int hp = MINION_INITIAL_HP;
+    private int hp = CardType.BASIC_MINION.getValue();
     private final Card minionCard;
     //deck
     private final LinkedList<Card> draw = new LinkedList<>();
@@ -102,7 +102,7 @@ public class Minion implements ActionEventHandler {
     }
 
     //fight
-    public void applyDamage(Team team, int value) {
+    public void applyDamage(int value) {
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_DAMAGED)
                 .value(hp - value)

@@ -1,13 +1,9 @@
 package dixu.deckard.server;
 
-import dixu.deckard.client.GuiParams;
-import dixu.deckard.server.event.ActionEventName;
 import jdk.jfr.Description;
 import org.junit.jupiter.api.Test;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
-import static dixu.deckard.server.GameParams.MINION_INITIAL_HP;
+import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class CardsTest extends FunctionalTest {
@@ -18,7 +14,7 @@ public class CardsTest extends FunctionalTest {
         GameParams.SECOND_TEAM_INITIAL_BLOCK = 0;
         GameParams.MINION_PER_TEAM = 1;
         int initialHp = 100;
-        MINION_INITIAL_HP = initialHp;
+        changeCardBaseValueTo(CardType.BASIC_MINION,initialHp);
         reloadGame();
         int expectedDmgDealt = 3 + 2 + 1;
 
@@ -47,6 +43,23 @@ public class CardsTest extends FunctionalTest {
 
         executeTurn();
 
-        assertEquals(MINION_INITIAL_HP - firstMinion(secondTeam).getHealth(), piercingAttack.getApproximateDamage());
+        assertEquals(minionInitialHp() - firstMinion(secondTeam).getHealth(), piercingAttack.getApproximateDamage());
+    }
+
+    @Test
+    @Description("Area attack deal dmg to all enemy minions and can be blocked")
+    public void test3() {
+        secondTeam.setBlock(1);
+        clearAllCards();
+        Minion attacker = firstMinion(firstTeam);
+        composeMinionHand(attacker,CardType.AREA_ATTACK,CardType.AREA_ATTACK );
+        Card areaAttack = minionHandFirstCard(attacker);
+
+        executeTurn();
+
+        List<Minion> minions = secondTeam.getMinions();
+        for (Minion enemy : minions) {
+            assertEquals(minionInitialHp() - areaAttack.getApproximateDamage(), enemy.getHealth());
+        }
     }
 }

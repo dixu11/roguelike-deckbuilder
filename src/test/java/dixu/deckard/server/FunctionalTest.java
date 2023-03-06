@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static dixu.deckard.server.CardType.*;
 import static dixu.deckard.server.GameParams.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -35,10 +36,20 @@ public abstract class FunctionalTest {
     private void setClassicParams() {
         MINION_PER_TEAM = 2;
         MINION_DRAW_PER_TURN = 2;
-        MINION_INITIAL_HP = 3;
         SECOND_TEAM_INITIAL_BLOCK = 3;
-        BASIC_BLOCK_VALUE = 1;
-        BASIC_ATTACK_VALUE = 2;
+        changeCardBaseValueTo(BASIC_MINION,3);
+        changeCardBaseValueTo(BASIC_ATTACK,1);
+        changeCardBaseValueTo(UPGRADED_ATTACK,2);
+        changeCardBaseValueTo(BASIC_BLOCK,1);
+        changeCardBaseValueTo(UPGRADED_BLOCK,2);
+    }
+
+    void changeCardBaseValueTo(CardType type,int value){
+        type.setBaseValue(value);
+    }
+
+    int minionInitialHp() {
+        return BASIC_MINION.getValue();
     }
 
     private void loadGame() { //todo refactor copying same code here and in App
@@ -147,4 +158,11 @@ public abstract class FunctionalTest {
         return minion.getHand().get(0);
     }
 
+    void disableBasicAttack() {
+        changeCardBaseValueTo(BASIC_ATTACK, 0);
+    }
+
+    void disableBasicBlock() {
+        changeCardBaseValueTo(CardType.BASIC_BLOCK, 0);
+    }
 }

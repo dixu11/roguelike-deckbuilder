@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static dixu.deckard.server.CardType.*;
-import static dixu.deckard.server.GameParams.*;
 
 /**
  * {@link Card} is an action that {@link Minion}s can store in their decks and play every turn if it's drawn.
@@ -36,23 +35,21 @@ public class Card {
 
     private void setupAttackCard() {
         AttackEffect attackEffect;
-        DmgType dmgType = DmgType.RANDOM;
-        int attackValue = 0;
-        if (type == BASIC_ATTACK) {
-            attackValue = BASIC_ATTACK_VALUE;
-        } else if (type == UPGRADED_ATTACK) {
-            attackValue = UPGRADED_ATTACK_VALUE;
-        }
-        if (type == UNSTABLE_ATTACK) {
-            attackValue = 3;
-        }
-        if (type == PIERCING_ATTACK) {
-            dmgType = DmgType.PIERCING;
-            attackValue = 1;
+        EnemySelection enemySelection = EnemySelection.RANDOM;
+        int attackValue = type.getValue();
+
+
+
+        if (type == AREA_ATTACK) {
+            enemySelection = EnemySelection.AREA;
         }
 
-        final AttackEffect baseAttack = new AttackEffect(attackValue,dmgType);
+        final AttackEffect baseAttack = new AttackEffect(attackValue, enemySelection);
         attackEffect = baseAttack;
+
+        if (type == PIERCING_ATTACK) {
+            attackEffect.setPiercing(true);
+        }
         if (type == UNSTABLE_ATTACK) {
             attackEffect = new ChangeValueEffect(baseAttack, -1);
         }
@@ -63,9 +60,9 @@ public class Card {
     private void setupBlockCard() {
         int blockValue = 0;
         if (type == BASIC_BLOCK) {
-            blockValue = BASIC_BLOCK_VALUE;
+            blockValue = BASIC_BLOCK.getValue();
         } else if (type == UPGRADED_BLOCK) {
-            blockValue = UPGRADED_BLOCK_VALUE;
+            blockValue = UPGRADED_BLOCK.getValue();
         }
 
         BlockEffect blockEffect = new BlockEffect(blockValue);

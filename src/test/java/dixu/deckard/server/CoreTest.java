@@ -15,7 +15,7 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("On start teams have correct block")
     public void test1() {
-        assertEquals(0, firstTeam.getBlock());
+      disableBasicBlock();
         assertEquals(SECOND_TEAM_INITIAL_BLOCK, secondTeam.getBlock());
     }
 
@@ -34,7 +34,7 @@ class CoreTest extends FunctionalTest {
     @DisplayName("On start all minions have correct hp")
     public void test3() {
         for (Minion minion : allMinions()) {
-            assertEquals(MINION_INITIAL_HP, minion.getHealth());
+            assertEquals(minionInitialHp(), minion.getHealth());
         }
     }
 
@@ -43,7 +43,7 @@ class CoreTest extends FunctionalTest {
     public void test4() {
         disableBlockClear();
         giveAllMinionsBlockCard();
-        int blockFromCards = BASIC_BLOCK_VALUE * MINION_PER_TEAM;
+        int blockFromCards = CardType.BASIC_BLOCK.getValue() * MINION_PER_TEAM;
 
         executeTurn();
 
@@ -55,7 +55,7 @@ class CoreTest extends FunctionalTest {
     @DisplayName("Block is cleared for every team, first team - after plays, second - before plays")
     public void test5() {
         giveAllMinionsBlockCard();
-        int blockFromCards = BASIC_BLOCK_VALUE * MINION_PER_TEAM;
+        int blockFromCards = CardType.BASIC_BLOCK.getValue() * MINION_PER_TEAM;
 
         executeTurn();
 
@@ -66,8 +66,8 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("After slaying all minions enemy has empty team and game ends")
     public void test6() {
-        BASIC_BLOCK_VALUE = 0;
-        BASIC_ATTACK_VALUE = 3;
+        disableBasicBlock();
+        changeCardBaseValueTo(CardType.BASIC_ATTACK, 3);
         reloadGame();
         giveMinionsCards(firstTeam, CardType.BASIC_ATTACK, CardType.BASIC_ATTACK);
         giveMinionsCards(secondTeam, CardType.BASIC_BLOCK);
@@ -82,7 +82,7 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("After character died proper event is post and it's no longer in team")
     public void test7() {
-        BASIC_ATTACK_VALUE = 3;
+        changeCardBaseValueTo(CardType.BASIC_ATTACK, 3);
         reloadGame();
         giveMinionsCards(firstTeam, CardType.BASIC_ATTACK);
         clearMinionsHand(secondTeam);
@@ -98,7 +98,7 @@ class CoreTest extends FunctionalTest {
     @DisplayName("Block is reduced after attack")
     public void test8() {
         MINION_PER_TEAM = 1;
-        BASIC_ATTACK_VALUE = 2;
+        changeCardBaseValueTo(CardType.BASIC_ATTACK, 2);
         SECOND_TEAM_INITIAL_BLOCK = 3;
         reloadGame();
         disableBlockClear();
@@ -114,7 +114,7 @@ class CoreTest extends FunctionalTest {
     @DisplayName("Attack over block hit minion")
     public void test9() {
         MINION_PER_TEAM = 1;
-        BASIC_ATTACK_VALUE = 5;
+        changeCardBaseValueTo(CardType.BASIC_ATTACK, 5);
         reloadGame();
         giveMinionsCards(firstTeam, CardType.BASIC_ATTACK);
         clearMinionsHand(secondTeam);
@@ -122,14 +122,14 @@ class CoreTest extends FunctionalTest {
         executeTurn();
 
         Minion theOnlyOneMinion = secondTeam.getRandomMinion().get();
-        assertEquals(MINION_INITIAL_HP + SECOND_TEAM_INITIAL_BLOCK - BASIC_ATTACK_VALUE,
+        assertEquals(minionInitialHp() + SECOND_TEAM_INITIAL_BLOCK - CardType.BASIC_ATTACK.getValue(),
                 theOnlyOneMinion.getHealth());
     }
 
     @Test
     @DisplayName("After all minion cards were played discard deck is shuffled and put as draw deck")
     public void test10() {
-        BASIC_ATTACK_VALUE = 0;
+        disableBasicAttack();
         MINION_DRAW_PER_TURN = 1;
         reloadGame();
 
@@ -148,7 +148,7 @@ class CoreTest extends FunctionalTest {
     @Test
     @DisplayName("Minions can have small number of cards")
     public void test11() {
-        BASIC_ATTACK_VALUE = 0;
+      disableBasicAttack();
         Minion minionWithTwoCards = secondTeam.getRandomMinion().get();
         minionWithTwoCards.clearDraw();
         Minion minionWithOneCard = firstTeam.getMinions().get(0);

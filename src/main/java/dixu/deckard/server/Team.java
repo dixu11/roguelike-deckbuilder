@@ -1,6 +1,7 @@
 package dixu.deckard.server;
 
-import dixu.deckard.server.effect.DmgType;
+import dixu.deckard.server.effect.AttackEffect;
+import dixu.deckard.server.effect.EnemySelection;
 import dixu.deckard.server.event.*;
 
 import java.util.ArrayList;
@@ -46,12 +47,25 @@ public class Team implements ActionEventHandler {
 
     //damage / block
 
-    public void applyDmgTo(int dmg, DmgType type, Minion minion) {
-        if (type != DmgType.PIERCING) {
+    public void applyDmgTo(int dmg, AttackEffect effect) {
+        EnemySelection type = effect.getType();
+
+        if (!effect.isPiercing()) {
             dmg = applyDmgToBlock(dmg);
             if (dmg <= 0) return;
         }
-        minion.applyDamage(this, dmg);
+        if (type == EnemySelection.RANDOM) {
+            Optional<Minion> optionalMinion = getRandomMinion();
+            if (optionalMinion.isEmpty()) return;
+            optionalMinion.get().applyDamage( dmg);
+        }
+
+        if (type == EnemySelection.AREA) {
+            for (Minion minion : minions) {
+                minion.applyDamage(dmg);
+            }
+        }
+
     }
 
     private int applyDmgToBlock(int dmg) {
@@ -127,5 +141,9 @@ public class Team implements ActionEventHandler {
     //for tests
     public void setClearBlockEnabled(boolean clearBlockEnabled) {
         this.clearBlockEnabled = clearBlockEnabled;
+    }
+
+    public void setBlock(int block) {
+        this.block = block;
     }
 }
