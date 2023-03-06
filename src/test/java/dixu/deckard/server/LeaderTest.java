@@ -22,7 +22,7 @@ public class LeaderTest extends FunctionalTest {
     @Test
     @DisplayName("When leader use steal special - spends energy and steal a card, minion draws new one")
     public void test2() {
-        Minion minion = firstMinion(firstTeam);
+        Minion minion = firstMinion(secondTeam);
         List<Card> minionHand = minion.getHand();
         Card cardToSteal = minionHand.get(0);
 

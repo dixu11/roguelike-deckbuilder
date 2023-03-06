@@ -55,6 +55,10 @@ public class Card {
         }
 
         effects.add(attackEffect);
+
+        if (type == GIFT_ATTACK) {
+            effects.add(new GiftCardEffect(this));
+        }
     }
 
     private void setupBlockCard() {

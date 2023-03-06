@@ -18,9 +18,9 @@ public class CardFactory {
             cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
             cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
         } else if (type == LeaderType.SIMPLE_BOT) {
-//            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
-//            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
-            cards.addAll(createRandomCards(4, CardRarity.COMMON));
+            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
+            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
+            cards.addAll(createRandomCards(2, CardRarity.COMMON));
             cards.addAll(createCards(1, CardType.BASIC_ATTACK));
             cards.addAll(createCards(1, CardType.BASIC_BLOCK));
         } else {
@@ -41,6 +41,10 @@ public class CardFactory {
                 .boxed()
                 .map(num -> new Card(CardType.getRandom(rarity)))
                 .toList();
+    }
+
+    public Card createRandomCard() {
+        return new Card(CardType.getRandom());
     }
 
     public Card createCard(CardType type) {
