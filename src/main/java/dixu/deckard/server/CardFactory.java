@@ -22,7 +22,7 @@ public class CardFactory {
         } else if (type == LeaderType.SIMPLE_BOT) {
             cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
             cards.addAll(createRandomCards(3, CardRarity.COMMON));
-            cards.addAll(createCards(1, CardType.BASIC_ATTACK));
+            cards.addAll(createCards(1, CardType.PIERCING_ATTACK));
             cards.addAll(createCards(1, CardType.BASIC_BLOCK));
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");

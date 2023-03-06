@@ -26,7 +26,7 @@ public class BasicAttackEffect implements AttackEffect {
     @Override
     public String getDescription() {
         String modifiers = "";
-        if (type == EnemySelection.PIERCING) {
+        if (isPiercing) {
             modifiers += " Attack ignores block.";
         }
 
