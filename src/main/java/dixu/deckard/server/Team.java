@@ -145,4 +145,10 @@ public class Team implements ActionEventHandler {
     public void setBlock(int block) {
         this.block = block;
     }
+
+    public List<Card> getMinionsHands() {
+       return minions.stream()
+                .flatMap(minion -> minion.getHand().stream())
+                .toList();
+    }
 }

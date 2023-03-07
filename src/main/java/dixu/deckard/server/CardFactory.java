@@ -20,9 +20,9 @@ public class CardFactory {
             cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
             cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
         } else if (type == LeaderType.SIMPLE_BOT) {
-            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
-            cards.addAll(createRandomCards(3, CardRarity.COMMON));
-            cards.addAll(createCards(1, CardType.PIERCING_ATTACK));
+            cards.addAll(createCards(2, CardType.UPGRADED_BLOCK));
+            cards.addAll(createRandomCards(2, CardRarity.COMMON));
+            cards.addAll(createCards(1, CardType.SOLO_ATTACK));
             cards.addAll(createCards(1, CardType.BASIC_BLOCK));
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");

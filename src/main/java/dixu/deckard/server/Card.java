@@ -59,6 +59,9 @@ public class Card {
         if (type == COMBO_ATTACK) {
             attackEffect = new ComboAttackEffect(baseAttack);
         }
+        if (type == SOLO_ATTACK) {
+            attackEffect = new SoloAttack(baseAttack);
+        }
 
         effects.add(attackEffect);
 

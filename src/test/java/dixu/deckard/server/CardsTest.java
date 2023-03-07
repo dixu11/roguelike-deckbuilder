@@ -100,4 +100,25 @@ public class CardsTest extends FunctionalTest {
 
         assertEquals(7 - CardType.COMBO_ATTACK.getValue(), secondTeam.getBlock());
     }
+
+    @Test
+    @DisplayName("Solo Attack have bonus if it's only attack played this turn")
+    public void test6() {
+        changeCardBaseValueTo(CardType.BASIC_BLOCK,0);
+        clearAllCards();
+        disableBlockClear();
+        firstTeam.setBlock(10);
+        secondTeam.setBlock(10);
+        composeMinionHand(firstMinion(firstTeam),CardType.SOLO_ATTACK);
+        composeMinionHand(secondMinion(firstTeam), CardType.BASIC_ATTACK);
+//        composeMinionHand(firstMinion(secondTeam), CardType.BASIC_BLOCK);
+//        composeMinionHand(secondMinion(secondTeam), CardType.SOLO_ATTACK);
+
+        executeTurn();
+
+       // assertEquals( 10 - CardType.SOLO_ATTACK.getValue(),firstTeam.getBlock());
+        assertEquals( 10 - (CardType.SOLO_ATTACK.getValue()-2 +CardType.BASIC_ATTACK.getValue()),secondTeam.getBlock());
+
+
+    }
 }

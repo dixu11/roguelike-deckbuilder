@@ -20,7 +20,7 @@ public class Minion implements ActionEventHandler {
     private final LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
     private final List<Card> discarded = new LinkedList<>();
-    private Team team;
+    private volatile Team team;
 
 
     public Minion(LeaderType type) {
@@ -80,6 +80,7 @@ public class Minion implements ActionEventHandler {
                 .card(card)
                 .build()
         );
+        postMinionHandChanged();
     }
 
     //play cards
@@ -102,6 +103,7 @@ public class Minion implements ActionEventHandler {
                 .card(card)
                 .build()
         );
+        postMinionHandChanged();
     }
 
     //fight
@@ -145,22 +147,14 @@ public class Minion implements ActionEventHandler {
         Card newCard = event.getCard();
         newCard.setOwner(this);
         hand.set(index, newCard);
-        bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_HAND_CHANGED)
-                .minion(this)
-                .build()
-        );
+        postMinionHandChanged();
     }
 
     private void onStealSpecial(ActionEvent event) {
         Card card = event.getCard();
         card.setOwner(null);  // todo because cards have to have their owners for their effects i have to update this every time card changes owner... can i avoid this??
         hand.remove(card);
-        bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_HAND_CHANGED)
-                .minion(this)
-                .build()
-        );
+        postMinionHandChanged(); //todo make hand separate object to post hand change every time?
         drawCard();
     }
 
@@ -200,6 +194,7 @@ public class Minion implements ActionEventHandler {
     public void setHand(List<Card> newHand) {
         newHand.forEach(card -> card.setOwner(this));
         hand = newHand;
+        postMinionHandChanged();
     }
 
     public void setTeam(Team team) {
@@ -208,5 +203,14 @@ public class Minion implements ActionEventHandler {
 
     public Team getTeam() {
         return team;
+    }
+
+    public void postMinionHandChanged() {
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_HAND_CHANGED)
+                .minion(this)
+                .ownTeam(team)
+                .build()
+        );
     }
 }
