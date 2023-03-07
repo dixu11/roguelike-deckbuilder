@@ -123,20 +123,21 @@ public class CardsTest extends FunctionalTest {
     @Test
     @DisplayName("Block Collector has block equals to number of block card in minions deck")
     public void test7() {
+        disableBasicAttack();
+        reloadGame();
         clearAllCards();
         disableBlockClear();
         firstTeam.setBlock(0);
         secondTeam.setBlock(0);
-        composeMinionHand(firstMinion(firstTeam),CardType.BLOCK_COLLECTOR);
-        composeMinionHand(secondMinion(firstTeam),CardType.BLOCK_COLLECTOR, CardType.BASIC_BLOCK);
-        composeMinionHand(firstMinion(secondTeam),CardType.BLOCK_COLLECTOR);
+        composeMinionHand(firstMinion(firstTeam),CardType.DECK_SHIELD);
+        composeMinionHand(secondMinion(firstTeam),CardType.DECK_SHIELD, CardType.BASIC_BLOCK);
+        composeMinionHand(firstMinion(secondTeam),CardType.DECK_SHIELD);
         composeMinionDiscard(firstMinion(secondTeam),CardType.BASIC_ATTACK,CardType.UPGRADED_BLOCK);
-        composeMinionHand(secondMinion(secondTeam),CardType.BLOCK_COLLECTOR);
+        composeMinionHand(secondMinion(secondTeam),CardType.DECK_SHIELD);
         composeMinionDraw(secondMinion(secondTeam),CardType.BASIC_BLOCK,CardType.BASIC_ATTACK,CardType.BASIC_BLOCK);
-
         executeTurn();
 
-        assertEquals(3,firstTeam.getBlock());
-        assertEquals(5,secondTeam.getBlock());
+        assertEquals(2,firstTeam.getBlock());
+        assertEquals(3,secondTeam.getBlock());
     }
 }

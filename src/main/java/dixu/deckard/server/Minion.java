@@ -3,6 +3,7 @@ package dixu.deckard.server;
 import dixu.deckard.server.event.*;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 import static dixu.deckard.server.GameParams.*;
 
@@ -225,5 +226,11 @@ public class Minion implements ActionEventHandler {
                 .ownTeam(team)
                 .build()
         );
+    }
+
+    public List<Card> getAllCards() {
+        return Stream.of(hand, discarded, draw)
+                .flatMap(Collection::stream)
+                .toList();
     }
 }

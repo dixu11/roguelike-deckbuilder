@@ -72,14 +72,11 @@ public class Card {
     }
 
     private void setupBlockCard() {
-        int blockValue = 0;
-        if (type == BASIC_BLOCK) {
-            blockValue = BASIC_BLOCK.getValue();
-        } else if (type == UPGRADED_BLOCK) {
-            blockValue = UPGRADED_BLOCK.getValue();
+        int blockValue = type.getValue();
+        BlockEffect blockEffect = new BasicBlockEffect(blockValue,this);
+        if(type == DECK_SHIELD){
+            blockEffect = new DeckShieldEffect(blockEffect);
         }
-
-        BlockEffect blockEffect = new BlockEffect(blockValue,this);
         effects.add(blockEffect);
     }
 
