@@ -19,7 +19,8 @@ public enum CardType {
     AREA_ATTACK(ATTACK, COMMON, "Area Attack", 1),
     GIFT_ATTACK(ATTACK, COMMON, "Gift Attack", 1),
     COMBO_ATTACK(ATTACK, COMMON, "Combo Attack", 1),
-    SOLO_ATTACK(ATTACK, COMMON, "Solo Attack", 3);
+    SOLO_ATTACK(ATTACK, COMMON, "Solo Attack", 3),
+    BLOCK_COLLECTOR(BLOCK,COMMON ,"Deck Shield", 0);
 
     private final CardCategory category;
     private final CardRarity rarity;

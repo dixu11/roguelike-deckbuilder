@@ -57,10 +57,10 @@ public class Card {
             attackEffect = new ChangeValueEffect(baseAttack, -1);
         }
         if (type == COMBO_ATTACK) {
-            attackEffect = new ComboAttackEffect(baseAttack);
+            attackEffect = new ComboEffect(baseAttack);
         }
         if (type == SOLO_ATTACK) {
-            attackEffect = new SoloAttack(baseAttack);
+            attackEffect = new Solo(baseAttack);
         }
 
         effects.add(attackEffect);
@@ -79,7 +79,7 @@ public class Card {
             blockValue = UPGRADED_BLOCK.getValue();
         }
 
-        BlockEffect blockEffect = new BlockEffect(blockValue);
+        BlockEffect blockEffect = new BlockEffect(blockValue,this);
         effects.add(blockEffect);
     }
 

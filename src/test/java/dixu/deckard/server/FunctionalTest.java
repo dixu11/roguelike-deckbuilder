@@ -137,13 +137,25 @@ public abstract class FunctionalTest {
         allMinions().forEach(minion -> composeMinionHand(minion, CardType.BASIC_BLOCK));
     }
 
-     void composeMinionHand(Minion minion, CardType... cards) {
+     void composeMinionHand(Minion minion, CardType... types) {
+        minion.setHand(createCards(types));
+    }
+
+    void composeMinionDiscard(Minion minion, CardType... types) {
+        minion.setDiscard(createCards(types));
+    }
+
+    void composeMinionDraw(Minion minion, CardType... types) {
+        minion.setDraw(createCards(types));
+    }
+
+    private List<Card> createCards(CardType... types){
         CardFactory factory = new CardFactory();
-        List<Card> newHand = new ArrayList<>();
-        for (CardType type : cards) {
-            newHand.addAll(factory.createCards(1, type));
+        List<Card> cards = new ArrayList<>();
+        for (CardType type : types) {
+            cards.addAll(factory.createCards(1, type));
         }
-        minion.setHand(newHand);
+        return cards;
     }
 
     public Minion firstMinion(Team team) {

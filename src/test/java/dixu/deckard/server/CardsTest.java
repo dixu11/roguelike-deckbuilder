@@ -111,14 +111,32 @@ public class CardsTest extends FunctionalTest {
         secondTeam.setBlock(10);
         composeMinionHand(firstMinion(firstTeam),CardType.SOLO_ATTACK);
         composeMinionHand(secondMinion(firstTeam), CardType.BASIC_ATTACK);
-//        composeMinionHand(firstMinion(secondTeam), CardType.BASIC_BLOCK);
-//        composeMinionHand(secondMinion(secondTeam), CardType.SOLO_ATTACK);
+        composeMinionHand(firstMinion(secondTeam), CardType.BASIC_BLOCK);
+        composeMinionHand(secondMinion(secondTeam), CardType.SOLO_ATTACK);
 
         executeTurn();
 
-       // assertEquals( 10 - CardType.SOLO_ATTACK.getValue(),firstTeam.getBlock());
+        assertEquals( 10 - CardType.SOLO_ATTACK.getValue(),firstTeam.getBlock());
         assertEquals( 10 - (CardType.SOLO_ATTACK.getValue()-2 +CardType.BASIC_ATTACK.getValue()),secondTeam.getBlock());
+    }
 
+    @Test
+    @DisplayName("Block Collector has block equals to number of block card in minions deck")
+    public void test7() {
+        clearAllCards();
+        disableBlockClear();
+        firstTeam.setBlock(0);
+        secondTeam.setBlock(0);
+        composeMinionHand(firstMinion(firstTeam),CardType.BLOCK_COLLECTOR);
+        composeMinionHand(secondMinion(firstTeam),CardType.BLOCK_COLLECTOR, CardType.BASIC_BLOCK);
+        composeMinionHand(firstMinion(secondTeam),CardType.BLOCK_COLLECTOR);
+        composeMinionDiscard(firstMinion(secondTeam),CardType.BASIC_ATTACK,CardType.UPGRADED_BLOCK);
+        composeMinionHand(secondMinion(secondTeam),CardType.BLOCK_COLLECTOR);
+        composeMinionDraw(secondMinion(secondTeam),CardType.BASIC_BLOCK,CardType.BASIC_ATTACK,CardType.BASIC_BLOCK);
 
+        executeTurn();
+
+        assertEquals(3,firstTeam.getBlock());
+        assertEquals(5,secondTeam.getBlock());
     }
 }

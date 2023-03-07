@@ -8,12 +8,13 @@ import dixu.deckard.server.event.ActionEventHandler;
 import dixu.deckard.server.event.ActionEventName;
 import dixu.deckard.server.event.BusManager;
 
-public class GiftCardEffect implements CardEffect, ActionEventHandler {
+public class GiftCardEffect extends BasicEffect implements CardEffect, ActionEventHandler {
     private BusManager bus = BusManager.instance();
     private Card card;
 
 
     public GiftCardEffect(Card card) {
+        super(0,card);
         this.card = card;
         bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
     }

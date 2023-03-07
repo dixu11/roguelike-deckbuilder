@@ -17,9 +17,9 @@ public class Minion implements ActionEventHandler {
     private int hp = CardType.BASIC_MINION.getValue();
     private final Card minionCard;
     //deck
-    private final LinkedList<Card> draw = new LinkedList<>();
+    private LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
-    private final List<Card> discarded = new LinkedList<>();
+    private List<Card> discarded = new LinkedList<>();
     private volatile Team team;
 
 
@@ -195,6 +195,19 @@ public class Minion implements ActionEventHandler {
         newHand.forEach(card -> card.setOwner(this));
         hand = newHand;
         postMinionHandChanged();
+    }
+
+    public void setDiscard(List<Card> cards) {
+        cards.forEach(card -> card.setOwner(this));
+        discarded = cards;
+        //todo post discard changed?
+        //todo move it to new "deck" entity for all this complexity?
+    }
+
+    public void setDraw(List<Card> cards) {
+        cards.forEach(card -> card.setOwner(this));
+        draw =new LinkedList<>(cards);
+        //todo post discard changed?
     }
 
     public void setTeam(Team team) {

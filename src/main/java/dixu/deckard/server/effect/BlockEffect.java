@@ -1,11 +1,13 @@
 package dixu.deckard.server.effect;
 
+import dixu.deckard.server.Card;
 import dixu.deckard.server.CardContext;
 
-public class BlockEffect implements CardEffect {
+public class BlockEffect extends BasicEffect implements CardEffect {
     private int value;
 
-    public BlockEffect(int value) {
+    public BlockEffect(int value, Card card) {
+        super(value,card);
         this.value = value;
     }
 

@@ -4,9 +4,9 @@ import dixu.deckard.server.CardCategory;
 import dixu.deckard.server.Minion;
 import dixu.deckard.server.event.*;
 
-public class ComboAttackEffect extends AttackEffectDecorator implements ActionEventHandler, CoreEventHandler {
+public class ComboEffect extends AttackEffectDecorator implements ActionEventHandler, CoreEventHandler {
 
-    public ComboAttackEffect(AttackEffect decorated) {
+    public ComboEffect(AttackEffect decorated) {
         super(decorated);
         bus.register(this,ActionEventName.MINION_CARD_PLAYED);
         bus.register(this, CoreEventName.TURN_STARTED);

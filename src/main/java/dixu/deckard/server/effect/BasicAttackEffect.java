@@ -3,20 +3,14 @@ package dixu.deckard.server.effect;
 import dixu.deckard.server.Card;
 import dixu.deckard.server.CardContext;
 
-public class BasicAttackEffect implements AttackEffect {
-    final int initialValue;
-    int value;
+public class BasicAttackEffect extends BasicEffect implements AttackEffect{
+
     EnemySelection type;
     boolean isPiercing = false;
-    Card card;
-
-    public BasicAttackEffect(int value, EnemySelection type, Card card) {
-        this.value = value;
+    public BasicAttackEffect(int value,EnemySelection type, Card card) {
+        super(value, card);
         this.type = type;
-        initialValue = value;
-        this.card = card;
     }
-
     @Override
     public void execute(CardContext context) {
         context.getEnemyTeam()
@@ -47,30 +41,12 @@ public class BasicAttackEffect implements AttackEffect {
         return type;
     }
 
+    @Override
     public void setPiercing(boolean piercing) {
         isPiercing = piercing;
     }
 
-    @Override
-    public void setValue(int value) {
-        this.value = value;
-    }
-
-    @Override
-    public int getInitialValue() {
-        return initialValue;
-    }
-
-    @Override
-    public void modifyValueBy(int value) {
-        this.value += value;
-    }
-
     public boolean isPiercing() {
         return isPiercing;
-    }
-
-    public Card getCard() {
-        return card;
     }
 }
