@@ -144,7 +144,7 @@ public class CardsTest extends FunctionalTest {
     @Test
     @DisplayName("Block Booster card doubles current block of a team")
     public void test8(){
-        clearAllCards();
+        clearAllCards(); //todo make this settings one of test scenarios - no cards, no block, disabled effects
         disableBlockClear();
         firstTeam.setBlock(0);
         secondTeam.setBlock(0);
@@ -157,5 +157,25 @@ public class CardsTest extends FunctionalTest {
 
         assertEquals(5, firstTeam.getBlock());
         assertEquals(4, secondTeam.getBlock());
+    }
+
+    @Test
+    @DisplayName("Life Lust gives minion hp equal to damage dealt")
+    public void test9() {
+        GameParams.MINION_PER_TEAM = 1;
+        reloadGame();
+        clearAllCards();
+        disableBlockClear();
+        firstTeam.setBlock(1);
+        secondTeam.setBlock(0);
+        Minion firstTeamMinion = firstMinion(firstTeam);
+        Minion secondTeamMinion = firstMinion(secondTeam);
+        composeMinionHand(firstTeamMinion,CardType.BASIC_ATTACK);
+        composeMinionHand(secondTeamMinion,CardType.LIFE_LUST,CardType.LIFE_LUST,CardType.LIFE_LUST);
+
+        executeTurn();
+
+        assertEquals(1,firstTeamMinion.getHealth());
+        assertEquals(3,secondTeamMinion.getHealth());
     }
 }
