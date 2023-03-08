@@ -20,9 +20,10 @@ public enum CardType {
     GIFT_ATTACK(ATTACK, COMMON, "Gift Attack", 1),
     COMBO_ATTACK(ATTACK, COMMON, "Combo Attack", 1),
     SOLO_ATTACK(ATTACK, COMMON, "Solo Attack", 3),
-    DECK_SHIELD(BLOCK,COMMON ,"Deck Shield", 0),
-    BLOCK_BOOSTER(BLOCK,COMMON ,"Block Booster" ,0 ),
-    LIFE_LUST(ATTACK,COMMON ,"Life Lust", 1);
+    DECK_SHIELD(BLOCK, COMMON, "Deck Shield", 0),
+    BLOCK_BOOSTER(BLOCK, COMMON, "Block Booster", 0),
+    LIFE_LUST(ATTACK, COMMON, "Life Lust", 1),
+    HEAL(SKILL, COMMON, "Heal", 1);
 
     private final CardCategory category;
     private final CardRarity rarity;

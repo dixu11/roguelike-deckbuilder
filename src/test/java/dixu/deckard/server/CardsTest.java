@@ -143,7 +143,7 @@ public class CardsTest extends FunctionalTest {
 
     @Test
     @DisplayName("Block Booster card doubles current block of a team")
-    public void test8(){
+    public void test8() {
         clearAllCards(); //todo make this settings one of test scenarios - no cards, no block, disabled effects
         disableBlockClear();
         firstTeam.setBlock(0);
@@ -170,12 +170,39 @@ public class CardsTest extends FunctionalTest {
         secondTeam.setBlock(0);
         Minion firstTeamMinion = firstMinion(firstTeam);
         Minion secondTeamMinion = firstMinion(secondTeam);
-        composeMinionHand(firstTeamMinion,CardType.BASIC_ATTACK);
-        composeMinionHand(secondTeamMinion,CardType.LIFE_LUST,CardType.LIFE_LUST,CardType.LIFE_LUST);
+        composeMinionHand(firstTeamMinion, CardType.BASIC_ATTACK);
+        composeMinionHand(secondTeamMinion, CardType.LIFE_LUST, CardType.LIFE_LUST, CardType.LIFE_LUST);
 
         executeTurn();
 
-        assertEquals(1,firstTeamMinion.getHealth());
-        assertEquals(3,secondTeamMinion.getHealth());
+        assertEquals(1, firstTeamMinion.getHealth());
+        assertEquals(3, secondTeamMinion.getHealth());
+    }
+
+    @Test
+    @DisplayName("Heal card regenerate random minion for 1 hp")
+    public void test10() {
+        clearAllCards();
+        disableBlockClear();
+        firstTeam.setBlock(0);
+        secondTeam.setBlock(0);
+        Minion firstTeamMinion = firstMinion(firstTeam);
+        Minion secondTeamMinion = firstMinion(secondTeam);
+        composeMinionHand(firstTeamMinion, CardType.UPGRADED_ATTACK);
+        composeMinionHand(secondTeamMinion, CardType.HEAL);
+
+        executeTurn();
+
+        int secondTeamHealthSum = countTeamHealth(secondTeam);
+        assertEquals(5, secondTeamHealthSum);
+    }
+
+    private int countTeamHealth(Team team) {
+        int health = 0;
+        List<Minion> minions = team.getMinions();
+        for (Minion minion : minions) {
+            health += minion.getHealth();
+        }
+        return health;
     }
 }
