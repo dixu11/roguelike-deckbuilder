@@ -34,7 +34,7 @@ public class MinionHandView extends HandView  implements ActionEventHandler{
     }
 
     public void add(Card card) {
-        cardViews.add(0, new CardView(card));
+        cardViews.add( new CardView(card));
     }
 
     public void remove(Card card) {

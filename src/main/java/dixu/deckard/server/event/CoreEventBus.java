@@ -15,7 +15,8 @@ public class CoreEventBus {
 
     public void register(CoreEventHandler handler, CoreEventName name) {
         List<CoreEventHandler> handlersByClass = allHandlers.computeIfAbsent(name, handlers -> new ArrayList<>());
-        handlersByClass.add(handler);
+        handlersByClass.add(0,handler);
+        //todo fast fix for problem registering handlers after Fight object. It makes them react to TurnStart before TurnEnd... Making it concurrency fix problem but introduces a loooot more bugs
     }
 
     public void post(CoreEvent event) {

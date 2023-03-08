@@ -13,7 +13,7 @@ public enum CardType {
     UPGRADED_ATTACK(ATTACK, COMMON, "Better Attack", 2),
     BASIC_BLOCK(BLOCK, BASIC, "Basic Block", 1),
     UPGRADED_BLOCK(BLOCK, COMMON, "Better Block", 2),
-    BASIC_MINION(MINION, BASIC, "Minion", 5),
+    BASIC_MINION(MINION, BASIC, "Minion", 10),
     UNSTABLE_ATTACK(ATTACK, COMMON, "Unstable Attack", 3),
     PIERCING_ATTACK(ATTACK, COMMON, "Piercing Attack", 1),
     AREA_ATTACK(ATTACK, COMMON, "Area Attack", 1),

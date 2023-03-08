@@ -10,19 +10,35 @@ import java.util.stream.IntStream;
 
 public class CardFactory {
 
-    public static int INITIAL_MINION_DECK_SIZE = 6;
+    public static int INITIAL_MINION_DECK_SIZE = 8;
 
     public List<Card> createDeck(LeaderType type) {
         List<Card> cards = new ArrayList<>();
         if (type == LeaderType.PLAYER) {
-            cards.addAll(createCards(2, CardType.BASIC_ATTACK));
-            cards.addAll(createCards(2, CardType.BASIC_BLOCK));
+            cards.addAll(createCards(3, CardType.BASIC_ATTACK));
+            cards.addAll(createCards(3, CardType.BASIC_BLOCK));
             cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
             cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
         } else if (type == LeaderType.SIMPLE_BOT) {
-//            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
-//            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
+          /*  cards.addAll(createCards(1, CardType.BASIC_ATTACK));
+            cards.addAll(createCards(1, CardType.BASIC_BLOCK));
+            cards.addAll(createCards(1, CardType.AREA_ATTACK));
+            cards.addAll(createCards(1, CardType.COMBO_ATTACK));
+            cards.addAll(createCards(1, CardType.PIERCING_ATTACK));
+            cards.addAll(createCards(1, CardType.UNSTABLE_ATTACK));
+            cards.addAll(createCards(1, CardType.SOLO_ATTACK));
+            cards.addAll(createCards(1, CardType.GIFT_ATTACK));
+            cards.addAll(createCards(1, CardType.DECK_SHIELD));
+            cards.addAll(createCards(1, CardType.BLOCK_BOOSTER));
+            cards.addAll(createCards(1, CardType.LIFE_LUST));
+            cards.addAll(createCards(1, CardType.HEAL));
+            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));*/
+
+            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
+            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
             cards.addAll(createRandomCards(4, CardRarity.COMMON));
+//            cards.addAll(createCards(3, CardType.GIFT_ATTACK));
+            //cards.addAll(createCards(1, CardType.SOLO_ATTACK));
             cards.addAll(createCards(1, CardType.BASIC_BLOCK));
             cards.addAll(createCards(1, CardType.BASIC_ATTACK));
         } else {

@@ -61,7 +61,7 @@ public class Card {
             attackEffect = new ComboEffect(baseAttack);
         }
         if (type == SOLO_ATTACK) {
-            attackEffect = new Solo(baseAttack);
+            attackEffect = new SoloEffect(baseAttack);
         }
         if (type == LIFE_LUST) {
             attackEffect = new LifeLustEffect(baseAttack);
@@ -72,7 +72,6 @@ public class Card {
         if (type == GIFT_ATTACK) {
             effects.add(new GiftCardEffect(this));
         }
-
     }
 
     private void setupBlockCard() {

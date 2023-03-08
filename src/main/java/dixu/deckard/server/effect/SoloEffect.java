@@ -7,15 +7,15 @@ import dixu.deckard.server.event.*;
 
 import java.util.List;
 
-public class Solo extends AttackEffectDecorator implements ActionEventHandler, CoreEventHandler {
+public class SoloEffect extends AttackEffectDecorator implements ActionEventHandler, CoreEventHandler {
     private static final int ATTACK_NEGATIVE_MODIFIER = -2;
     private boolean active = true;
 
-    public Solo(AttackEffect decorated) {
+    public SoloEffect(AttackEffect decorated) {
         super(decorated);
         bus.register(this, ActionEventName.MINION_HAND_CHANGED);
-        bus.register(this, CoreEventName.TURN_ENDED);
         bus.register(this, CoreEventName.TURN_STARTED);
+        bus.register(this, CoreEventName.TURN_ENDED);
     }
 
     @Override
