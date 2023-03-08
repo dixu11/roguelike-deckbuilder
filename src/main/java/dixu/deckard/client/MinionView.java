@@ -44,6 +44,7 @@ public class MinionView implements ActionEventHandler {
                 .build();
 
         bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
+        bus.register(healthCounter, ActionEventName.MINION_REGENERATED);
         minionCardView.addCounter(healthCounter);
 
         EventCounterView drawCounter = EventCounterView.builder()

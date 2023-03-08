@@ -17,6 +17,7 @@ public class ActionEvent implements Event<ActionEventName> {
     private Card card;
     private Card oldCard;
     private int value;
+    private int oldValue;
     private Leader leader;
 
     public static ActionEvent of(ActionEventName name, CardContext context) {
@@ -46,7 +47,7 @@ public class ActionEvent implements Event<ActionEventName> {
 
         public ActionEvent build() {
             ActionEvent actionEvent = new ActionEvent(this.name, this.source, this.ownTeam,
-                    this.enemyTeam, this.minion, this.card,this.oldCard, this.value,this.leader);
+                    this.enemyTeam, this.minion, this.card,this.oldCard, this.value,this.oldValue,this.leader);
             actionEvent.source = ActionEventName.determineSourceFromEventName(actionEvent);
 
             return actionEvent;

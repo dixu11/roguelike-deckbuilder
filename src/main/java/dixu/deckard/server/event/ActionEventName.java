@@ -16,7 +16,8 @@ public enum ActionEventName implements EventName {
     LEADER_SPECIAL_MOVE_HAND,
     LEADER_ENERGY_CHANGED,
     LEADER_HAND_CHANGED,
-    MINION_CARD_PLAYED;
+    MINION_CARD_PLAYED,
+    MINION_REGENERATED;
 
     public static Object determineSourceFromEventName(ActionEvent actionEvent) {
         if (actionEvent.getName().name().startsWith("MINION")) {

@@ -62,6 +62,9 @@ public class Card {
         if (type == SOLO_ATTACK) {
             attackEffect = new Solo(baseAttack);
         }
+        if (type == LIFE_LUST) {
+            attackEffect = new LifeLustEffect(baseAttack);
+        }
 
         effects.add(attackEffect);
 

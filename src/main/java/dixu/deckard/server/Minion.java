@@ -15,7 +15,8 @@ import static dixu.deckard.server.GameParams.*;
 
 public class Minion implements ActionEventHandler {
     private final BusManager bus = BusManager.instance();
-    private int hp = CardType.BASIC_MINION.getValue();
+    private int maxHp =CardType.BASIC_MINION.getValue();
+    private int hp = maxHp;
     private final Card minionCard;
     //deck
     private LinkedList<Card> draw = new LinkedList<>();
@@ -108,26 +109,54 @@ public class Minion implements ActionEventHandler {
     }
 
     //fight
+    public void applyRegen(int value) {
+        if (hp == maxHp) {
+            return;
+        }
+        int oldValue = hp;
+        if (hp < maxHp) {
+            hp += value;
+        }
+        if (hp > maxHp) {
+            hp = maxHp;
+        }
+        bus.post(ActionEvent.builder()
+                .name(ActionEventName.MINION_REGENERATED)
+                .value(hp)
+                .oldValue(oldValue)
+                .minion(this)
+                .ownTeam(team)
+                .build()
+        );
+    }
+
     public void applyDamage(int value) {
+        if (value <= 0) {
+            return;
+        }
+        int oldValue = hp;
+        hp -= value;
+        if (hp < 0) {
+            hp = 0;
+        }
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.MINION_DAMAGED)
-                .value(hp - value)
+                .oldValue(oldValue)
+                .value(hp)
                 .minion(this)
                 .build()
         );
-        hp -= value;
         if (hp <= 0) {
             bus.post(ActionEvent.builder()
                     .name(ActionEventName.MINION_DIED)
                     .minion(this)
                     .ownTeam(team)
-                    .source(this)
                     .build()
             );
         }
     }
-
     //specials handling
+
     @Override
     public void handle(ActionEvent event) {
         if (event.getMinion() != this) {
@@ -165,13 +194,13 @@ public class Minion implements ActionEventHandler {
             drawCard();
         }
     }
-
     //for tests
+
     public void clearDraw() {
         draw.clear();
     }
-
     //getters / setters
+
     public int getHealth() {
         return hp;
     }

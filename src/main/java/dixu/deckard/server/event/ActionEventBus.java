@@ -25,4 +25,8 @@ public class ActionEventBus {
             }
         }
     }
+
+    public void unregister(ActionEventHandler handler, ActionEventName name) {
+        allHandlers.get(name).remove(handler);
+    }
 }

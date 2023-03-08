@@ -24,6 +24,11 @@ public class BusManagerImpl implements BusManager {
     }
 
     @Override
+    public void unregister(ActionEventHandler handler, ActionEventName name) {
+        effectBus.unregister(handler, name);
+    }
+
+    @Override
     public void register(CoreEventHandler handler, CoreEventName name) {
         structureBus.register(handler, name);
     }
