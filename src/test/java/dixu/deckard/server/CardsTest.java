@@ -104,20 +104,20 @@ public class CardsTest extends FunctionalTest {
     @Test
     @DisplayName("Solo Attack have bonus if it's only attack played this turn")
     public void test6() {
-        changeCardBaseValueTo(CardType.BASIC_BLOCK,0);
+        changeCardBaseValueTo(CardType.BASIC_BLOCK, 0);
         clearAllCards();
         disableBlockClear();
         firstTeam.setBlock(10);
         secondTeam.setBlock(10);
-        composeMinionHand(firstMinion(firstTeam),CardType.SOLO_ATTACK);
+        composeMinionHand(firstMinion(firstTeam), CardType.SOLO_ATTACK);
         composeMinionHand(secondMinion(firstTeam), CardType.BASIC_ATTACK);
         composeMinionHand(firstMinion(secondTeam), CardType.BASIC_BLOCK);
         composeMinionHand(secondMinion(secondTeam), CardType.SOLO_ATTACK);
 
         executeTurn();
 
-        assertEquals( 10 - CardType.SOLO_ATTACK.getValue(),firstTeam.getBlock());
-        assertEquals( 10 - (CardType.SOLO_ATTACK.getValue()-2 +CardType.BASIC_ATTACK.getValue()),secondTeam.getBlock());
+        assertEquals(10 - CardType.SOLO_ATTACK.getValue(), firstTeam.getBlock());
+        assertEquals(10 - (CardType.SOLO_ATTACK.getValue() - 2 + CardType.BASIC_ATTACK.getValue()), secondTeam.getBlock());
     }
 
     @Test
@@ -129,15 +129,33 @@ public class CardsTest extends FunctionalTest {
         disableBlockClear();
         firstTeam.setBlock(0);
         secondTeam.setBlock(0);
-        composeMinionHand(firstMinion(firstTeam),CardType.DECK_SHIELD);
-        composeMinionHand(secondMinion(firstTeam),CardType.DECK_SHIELD, CardType.BASIC_BLOCK);
-        composeMinionHand(firstMinion(secondTeam),CardType.DECK_SHIELD);
-        composeMinionDiscard(firstMinion(secondTeam),CardType.BASIC_ATTACK,CardType.UPGRADED_BLOCK);
-        composeMinionHand(secondMinion(secondTeam),CardType.DECK_SHIELD);
-        composeMinionDraw(secondMinion(secondTeam),CardType.BASIC_BLOCK,CardType.BASIC_ATTACK,CardType.BASIC_BLOCK);
+        composeMinionHand(firstMinion(firstTeam), CardType.DECK_SHIELD);
+        composeMinionHand(secondMinion(firstTeam), CardType.DECK_SHIELD, CardType.BASIC_BLOCK);
+        composeMinionHand(firstMinion(secondTeam), CardType.DECK_SHIELD);
+        composeMinionDiscard(firstMinion(secondTeam), CardType.BASIC_ATTACK, CardType.UPGRADED_BLOCK);
+        composeMinionHand(secondMinion(secondTeam), CardType.DECK_SHIELD);
+        composeMinionDraw(secondMinion(secondTeam), CardType.BASIC_BLOCK, CardType.BASIC_ATTACK, CardType.BASIC_BLOCK);
         executeTurn();
 
-        assertEquals(2,firstTeam.getBlock());
-        assertEquals(3,secondTeam.getBlock());
+        assertEquals(2, firstTeam.getBlock());
+        assertEquals(3, secondTeam.getBlock());
+    }
+
+    @Test
+    @DisplayName("Block Booster card doubles current block of a team")
+    public void test8(){
+        clearAllCards();
+        disableBlockClear();
+        firstTeam.setBlock(0);
+        secondTeam.setBlock(0);
+        composeMinionHand(firstMinion(firstTeam), CardType.BASIC_BLOCK, CardType.BASIC_BLOCK);
+        composeMinionHand(secondMinion(firstTeam), CardType.BLOCK_BOOSTER, CardType.BASIC_BLOCK);
+        composeMinionHand(firstMinion(secondTeam), CardType.BLOCK_BOOSTER);
+        composeMinionHand(secondMinion(secondTeam), CardType.UPGRADED_BLOCK, CardType.BLOCK_BOOSTER);
+
+        executeTurn();
+
+        assertEquals(5, firstTeam.getBlock());
+        assertEquals(4, secondTeam.getBlock());
     }
 }

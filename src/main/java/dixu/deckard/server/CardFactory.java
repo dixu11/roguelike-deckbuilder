@@ -23,7 +23,7 @@ public class CardFactory {
             cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
             cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
             cards.addAll(createRandomCards(2, CardRarity.COMMON));
-            cards.addAll(createCards(1, CardType.DECK_SHIELD));
+            cards.addAll(createCards(1, CardType.BLOCK_BOOSTER));
             cards.addAll(createCards(1, CardType.BASIC_ATTACK));
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");

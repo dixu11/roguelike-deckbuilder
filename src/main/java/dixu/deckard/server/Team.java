@@ -85,13 +85,13 @@ public class Team implements ActionEventHandler {
         if (!clearBlockEnabled) {
             return;
         }
-        postBlockChangedEvent(0);
         block = 0;
+        postBlockChangedEvent(0);
     }
 
     public void addBlock(int value) {
-        postBlockChangedEvent(value + block);
         block += value;
+        postBlockChangedEvent(block);
     }
 
     private void postBlockChangedEvent(int newValue) {

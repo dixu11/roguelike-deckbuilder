@@ -77,6 +77,9 @@ public class Card {
         if(type == DECK_SHIELD){
             blockEffect = new DeckShieldEffect(blockEffect);
         }
+        if (type == BLOCK_BOOSTER) {
+            blockEffect = new BlockBoosterEffect(blockEffect);
+        }
         effects.add(blockEffect);
     }
 
