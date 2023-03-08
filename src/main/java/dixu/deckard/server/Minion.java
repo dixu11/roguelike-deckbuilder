@@ -262,4 +262,8 @@ public class Minion implements ActionEventHandler {
                 .flatMap(Collection::stream)
                 .toList();
     }
+
+    public boolean isWounded() {
+        return hp != maxHp;
+    }
 }

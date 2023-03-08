@@ -20,10 +20,10 @@ public class CardFactory {
             cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
             cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
         } else if (type == LeaderType.SIMPLE_BOT) {
-            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
-            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
-            cards.addAll(createRandomCards(2, CardRarity.COMMON));
-            cards.addAll(createCards(1, CardType.LIFE_LUST));
+//            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
+//            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
+            cards.addAll(createRandomCards(4, CardRarity.COMMON));
+            cards.addAll(createCards(1, CardType.BASIC_BLOCK));
             cards.addAll(createCards(1, CardType.BASIC_ATTACK));
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");

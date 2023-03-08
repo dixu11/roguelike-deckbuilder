@@ -35,6 +35,7 @@ public class Card {
         switch (category) {
             case ATTACK -> setupAttackCard();
             case BLOCK -> setupBlockCard();
+            case SKILL -> setupSkillCard();
         }
     }
 
@@ -84,6 +85,12 @@ public class Card {
             blockEffect = new BlockBoosterEffect(blockEffect);
         }
         effects.add(blockEffect);
+    }
+
+    private void setupSkillCard() {
+        if (type == HEAL) {
+            effects.add(new HealEffect(HEAL.getValue(),this));
+        }
     }
 
     public void play(CardContext context) {
