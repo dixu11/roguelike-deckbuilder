@@ -1,8 +1,7 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Card;
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.Team;
+import dixu.deckard.server.team.Team;
 
 import java.awt.*;
 import java.util.ArrayList;

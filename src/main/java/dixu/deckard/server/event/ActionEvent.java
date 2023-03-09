@@ -1,6 +1,10 @@
 package dixu.deckard.server.event;
 
-import dixu.deckard.server.*;
+import dixu.deckard.server.card.Card;
+import dixu.deckard.server.card.CardContext;
+import dixu.deckard.server.minion.Minion;
+import dixu.deckard.server.leader.Leader;
+import dixu.deckard.server.team.Team;
 import lombok.Builder;
 import lombok.Getter;
 

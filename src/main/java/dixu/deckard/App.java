@@ -1,7 +1,13 @@
 package dixu.deckard;
 
 import dixu.deckard.client.*;
-import dixu.deckard.server.*;
+import dixu.deckard.server.card.Card;
+import dixu.deckard.server.leader.Special;
+import dixu.deckard.server.minion.Minion;
+import dixu.deckard.server.fight.Fight;
+import dixu.deckard.server.leader.Leader;
+import dixu.deckard.server.leader.LeaderFactory;
+import dixu.deckard.server.leader.LeaderType;
 
 /**
  * If you want to learn about the rules of the game and central elements of the system start from {@link Fight} class :)

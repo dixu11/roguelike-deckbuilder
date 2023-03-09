@@ -1,6 +1,6 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.*;
+import dixu.deckard.server.card.Card;
 import dixu.deckard.server.event.*;
 
 public class MinionHandView extends HandView  implements ActionEventHandler{

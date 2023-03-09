@@ -1,7 +1,7 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.*;
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.minion.Minion;
 
 import java.awt.*;
 

@@ -1,7 +1,6 @@
 package dixu.deckard.server.event;
 
 import dixu.deckard.client.GuiEvent;
-import dixu.deckard.server.effect.LifeLustEffect;
 
 public interface BusManager {
     void register(CoreEventHandler handler, CoreEventName name);

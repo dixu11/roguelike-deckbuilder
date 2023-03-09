@@ -1,6 +1,6 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Leader;
+import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.event.*;
 
 public class LeaderHandView extends HandView implements ActionEventHandler{

@@ -1,6 +1,6 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Card;
+import dixu.deckard.server.card.Card;
 
 import java.awt.*;
 import java.util.ArrayList;

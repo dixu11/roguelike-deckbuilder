@@ -1,6 +1,6 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.Card;
+import dixu.deckard.server.card.Card;
 import dixu.deckard.server.event.*;
 
 public class GuiController implements GuiEventHandler {

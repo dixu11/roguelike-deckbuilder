@@ -1,9 +1,18 @@
 package dixu.deckard.server;
 
+import dixu.deckard.server.card.Card;
+import dixu.deckard.server.card.CardFactory;
+import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.ActionEventName;
 import dixu.deckard.server.event.BusManager;
 import dixu.deckard.server.event.CoreEvent;
 import dixu.deckard.server.event.CoreEventName;
+import dixu.deckard.server.fight.Fight;
+import dixu.deckard.server.leader.Leader;
+import dixu.deckard.server.leader.LeaderFactory;
+import dixu.deckard.server.leader.LeaderType;
+import dixu.deckard.server.minion.Minion;
+import dixu.deckard.server.team.*;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 
@@ -11,22 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static dixu.deckard.server.CardType.*;
-import static dixu.deckard.server.GameParams.*;
+import static dixu.deckard.server.card.CardType.*;
+import static dixu.deckard.server.game.GameParams.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
 public abstract class FunctionalTest {
-    Team firstTeam;
-    Team secondTeam;
-    Leader firstLeader;
-    Leader secondLeader;
-     BusManager bus;
+    protected Team firstTeam;
+    protected Team secondTeam;
+    protected Leader firstLeader;
+    protected Leader secondLeader;
+    protected BusManager bus;
 
     @BeforeEach
     public void before() {
         setClassicParams();
         loadGame(); //remove if performance get worse because tests with custom params load engine twice
     }
+
     @AfterEach
     public void after() {
         //Buses are singleton and also needs to be re-initialized after each test
@@ -37,18 +47,18 @@ public abstract class FunctionalTest {
         MINION_PER_TEAM = 2;
         MINION_DRAW_PER_TURN = 2;
         SECOND_TEAM_INITIAL_BLOCK = 3;
-        changeCardBaseValueTo(BASIC_MINION,3);
-        changeCardBaseValueTo(BASIC_ATTACK,1);
-        changeCardBaseValueTo(UPGRADED_ATTACK,2);
-        changeCardBaseValueTo(BASIC_BLOCK,1);
-        changeCardBaseValueTo(UPGRADED_BLOCK,2);
+        changeCardBaseValueTo(BASIC_MINION, 3);
+        changeCardBaseValueTo(BASIC_ATTACK, 1);
+        changeCardBaseValueTo(UPGRADED_ATTACK, 2);
+        changeCardBaseValueTo(BASIC_BLOCK, 1);
+        changeCardBaseValueTo(UPGRADED_BLOCK, 2);
     }
 
-    void changeCardBaseValueTo(CardType type,int value){
+    protected void changeCardBaseValueTo(CardType type, int value) {
         type.setBaseValue(value);
     }
 
-    int minionInitialHp() {
+    protected int minionInitialHp() {
         return BASIC_MINION.getValue();
     }
 
@@ -60,20 +70,20 @@ public abstract class FunctionalTest {
         secondLeader = leaderFactory.create(LeaderType.SIMPLE_BOT);
         firstTeam = firstLeader.getTeam();
         secondTeam = secondLeader.getTeam();
-        Fight fight = new Fight(firstLeader,secondLeader);
+        Fight fight = new Fight(firstLeader, secondLeader);
         fight.start();
     }
 
-    void reloadGame() {
+    protected void reloadGame() {
         after(); //reset bus
         loadGame();
     }
 
-    void executeTurn() {
+    protected void executeTurn() {
         bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
     }
 
-    List<Minion> allMinions() {
+    protected List<Minion> allMinions() {
         List<Minion> all = new ArrayList<>();
         all.addAll(firstTeam.getMinions());
         all.addAll(secondTeam.getMinions());
@@ -82,45 +92,45 @@ public abstract class FunctionalTest {
     //todo could not find way to avoid repetition - my try was EventName interface but i can't figure out how to
 
     //put it back to overloaded  bus.register() call - it makes compile error -> 'suspicious call'
-    <T> AtomicBoolean listenEventPosted(CoreEventName eventName) {
+    protected <T> AtomicBoolean listenEventPosted(CoreEventName eventName) {
         //  T elem = eventName.getObject();
         AtomicBoolean wasPosted = new AtomicBoolean(false);
         bus.register(event -> wasPosted.set(true), eventName); // if i pass elem here - there's a problem
         return wasPosted;
     }
 
-    AtomicBoolean listenEventPosted(ActionEventName eventName) {
+    protected AtomicBoolean listenEventPosted(ActionEventName eventName) {
         AtomicBoolean wasPosted = new AtomicBoolean(false);
         bus.register(event -> wasPosted.set(true), eventName);
         return wasPosted;
     }
 
-    void failIfWasNotPosted(AtomicBoolean wasPosted) {
+    protected void failIfWasNotPosted(AtomicBoolean wasPosted) {
         if (!wasPosted.get()) {
             fail();
         }
     }
 
-    void clearAllCards() {
+    protected void clearAllCards() {
         for (Minion minion : allMinions()) {
             clearMinionHand(minion);
             clearMinionDraw(minion);
         }
     }
 
-    void clearMinionsHand(Team team) {
+    protected void clearMinionsHand(Team team) {
         giveMinionsCards(team);
     }
 
-    void clearMinionHand(Minion minion) {
+    protected void clearMinionHand(Minion minion) {
         composeMinionHand(minion);
     }
 
-    void clearMinionDraw(Minion minion) {
+    protected void clearMinionDraw(Minion minion) {
         minion.clearDraw();
     }
 
-    void disableBlockClear() {
+    protected void disableBlockClear() {
         firstTeam.setClearBlockEnabled(false);
         secondTeam.setClearBlockEnabled(false);
     }
@@ -128,28 +138,28 @@ public abstract class FunctionalTest {
     /**
      * @param cards when no elements are passed minion has no cards in hand
      */
-    void giveMinionsCards(Team team, CardType... cards) {
+    protected void giveMinionsCards(Team team, CardType... cards) {
         team.getMinions()
                 .forEach(minion -> composeMinionHand(minion, cards));
     }
 
-    void giveAllMinionsBlockCard() {
+    protected void giveAllMinionsBlockCard() {
         allMinions().forEach(minion -> composeMinionHand(minion, CardType.BASIC_BLOCK));
     }
 
-     void composeMinionHand(Minion minion, CardType... types) {
+    protected void composeMinionHand(Minion minion, CardType... types) {
         minion.setHand(createCards(types));
     }
 
-    void composeMinionDiscard(Minion minion, CardType... types) {
+    protected void composeMinionDiscard(Minion minion, CardType... types) {
         minion.setDiscard(createCards(types));
     }
 
-    void composeMinionDraw(Minion minion, CardType... types) {
+    protected void composeMinionDraw(Minion minion, CardType... types) {
         minion.setDraw(createCards(types));
     }
 
-    private List<Card> createCards(CardType... types){
+    private List<Card> createCards(CardType... types) {
         CardFactory factory = new CardFactory();
         List<Card> cards = new ArrayList<>();
         for (CardType type : types) {
@@ -166,15 +176,15 @@ public abstract class FunctionalTest {
         return team.getMinions().get(1);
     }
 
-     Card minionHandFirstCard(Minion minion) {
+    protected Card minionHandFirstCard(Minion minion) {
         return minion.getHand().get(0);
     }
 
-    void disableBasicAttack() {
+    protected void disableBasicAttack() {
         changeCardBaseValueTo(BASIC_ATTACK, 0);
     }
 
-    void disableBasicBlock() {
+    protected void disableBasicBlock() {
         changeCardBaseValueTo(CardType.BASIC_BLOCK, 0);
     }
 }
