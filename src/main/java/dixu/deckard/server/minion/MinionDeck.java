@@ -3,7 +3,7 @@ package dixu.deckard.server.minion;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.event.BusManager;
 import dixu.deckard.server.fight.Fight;
 
@@ -14,7 +14,11 @@ import static dixu.deckard.server.game.GameParams.DRAW_DELAY_SECONDS;
 import static dixu.deckard.server.game.GameParams.PLAY_DELAY_SECONDS;
 
 /**
- * All {@link Minion}'s cards.
+ * All {@link Minion}'s cards. This class hold rules about how {@link Minion}s {@link Card}s should behave. When card is
+ * drawn goes to the hand. When card is played goes to the discard. When draw is empty discard is shuffled and put to
+ * draw.
+ * <p>
+ * On every deck change proper event should be posted.
  */
 public class MinionDeck {
     private final BusManager bus = BusManager.instance();
@@ -44,7 +48,7 @@ public class MinionDeck {
         card.setOwner(minion);
         hand.add(card);
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_CARD_DRAW)
+                .type(ActionEventType.MINION_CARD_DRAW)
                 .ownTeam(minion.getTeam())
                 .minion(minion)
                 .card(card)
@@ -63,7 +67,7 @@ public class MinionDeck {
 
     private void postShuffleEvent() {
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_SHUFFLE)
+                .type(ActionEventType.MINION_SHUFFLE)
                 .minion(minion)
                 .source(this)
                 .build()
@@ -72,7 +76,7 @@ public class MinionDeck {
 
     void postMinionHandChanged() {
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_HAND_CHANGED)
+                .type(ActionEventType.MINION_HAND_CHANGED)
                 .minion(minion)
                 .ownTeam(minion.getTeam())
                 .build()
@@ -113,7 +117,7 @@ public class MinionDeck {
         hand.remove(card);
         discarded.add(card);
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_CARD_DISCARDED)
+                .type(ActionEventType.MINION_CARD_DISCARDED)
                 .minion(minion)
                 .ownTeam(minion.getTeam())
                 .card(card)

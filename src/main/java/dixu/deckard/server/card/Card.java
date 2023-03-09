@@ -4,7 +4,7 @@ import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.card.effect.*;
 import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.event.BusManager;
 
 import java.util.ArrayList;
@@ -99,7 +99,7 @@ public class Card {
             effect.execute(context);
         }
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_CARD_PLAYED)
+                .type(ActionEventType.MINION_CARD_PLAYED)
                 .card(context.getCard())
                 .minion(context.getMinion())
                 .ownTeam(context.getOwnTeam())

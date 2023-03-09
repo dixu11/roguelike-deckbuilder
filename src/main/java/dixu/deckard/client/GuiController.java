@@ -17,14 +17,14 @@ public class GuiController implements GuiEventHandler {
         this.firstTeam = fightView.getFirstTeam();
         this.secondTeam = fightView.getSecondTeam();
 
-        bus.register(this, GuiEventName.MINION_CARD_SELECTED);
-        bus.register(this, GuiEventName.MINION_SELECTED);
-        bus.register(this, GuiEventName.LEADER_CARD_SELECTED);
+        bus.register(this, GuiEventType.MINION_CARD_SELECTED);
+        bus.register(this, GuiEventType.MINION_SELECTED);
+        bus.register(this, GuiEventType.LEADER_CARD_SELECTED);
     }
 
     @Override
     public void handle(GuiEvent event) {
-        switch (event.getName()) {
+        switch (event.getType()) {
             case LEADER_CARD_SELECTED -> selectLeaderCard(event);
             case MINION_CARD_SELECTED -> onMinionCardSelected(event);
             case MINION_SELECTED -> moveMinionHandSpecial(event);
@@ -32,7 +32,7 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void selectLeaderCard(GuiEvent event) {
-        if (!leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_UPGRADE)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_UPGRADE)) {
             clearSelections();
             return;
         }
@@ -55,7 +55,7 @@ public class GuiController implements GuiEventHandler {
         if (leaderCardSelect.getSelected() == null || event.getCardView() == null) {
             return;
         }
-        if (!leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_UPGRADE)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_UPGRADE)) {
             clearSelections();
             return;
         }
@@ -65,7 +65,7 @@ public class GuiController implements GuiEventHandler {
         leaderCardSelect.clearSelection();
 
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_SPECIAL_UPGRADE)
+                .type(ActionEventType.LEADER_SPECIAL_UPGRADE)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
                 .enemyTeam(secondTeam.getTeam())
@@ -77,7 +77,7 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void stealCardSpecial(GuiEvent event) {
-        if (!leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_STEAL)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_STEAL)) {
             clearSelections();
             return;
         }
@@ -87,7 +87,7 @@ public class GuiController implements GuiEventHandler {
         if (!secondTeamSelect.isDoubleClick()) return;
 
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_SPECIAL_STEAL)
+                .type(ActionEventType.LEADER_SPECIAL_STEAL)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
                 .enemyTeam(secondTeam.getTeam())
@@ -98,7 +98,7 @@ public class GuiController implements GuiEventHandler {
     }
 
     private void moveMinionHandSpecial(GuiEvent event) {
-        if (!leaderHand.getLeader().canAfford(ActionEventName.LEADER_SPECIAL_MOVE_HAND)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_MOVE_HAND)) {
             clearSelections();
             return;
         }
@@ -112,7 +112,7 @@ public class GuiController implements GuiEventHandler {
         if (!firstTeamMinionSelect.isDoubleClick()) return;
 
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_SPECIAL_MOVE_HAND)
+                .type(ActionEventType.LEADER_SPECIAL_MOVE_HAND)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
                 .enemyTeam(secondTeam.getTeam())

@@ -3,10 +3,10 @@ package dixu.deckard.server;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardFactory;
 import dixu.deckard.server.card.CardType;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.event.BusManager;
 import dixu.deckard.server.event.CoreEvent;
-import dixu.deckard.server.event.CoreEventName;
+import dixu.deckard.server.event.CoreEventType;
 import dixu.deckard.server.fight.Fight;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.leader.LeaderFactory;
@@ -80,7 +80,7 @@ public abstract class FunctionalTest {
     }
 
     protected void executeTurn() {
-        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
+        bus.post(CoreEvent.of(CoreEventType.TURN_ENDED));
     }
 
     protected List<Minion> allMinions() {
@@ -92,14 +92,14 @@ public abstract class FunctionalTest {
     //todo could not find way to avoid repetition - my try was EventName interface but i can't figure out how to
 
     //put it back to overloaded  bus.register() call - it makes compile error -> 'suspicious call'
-    protected <T> AtomicBoolean listenEventPosted(CoreEventName eventName) {
+    protected <T> AtomicBoolean listenEventPosted(CoreEventType eventName) {
         //  T elem = eventName.getObject();
         AtomicBoolean wasPosted = new AtomicBoolean(false);
         bus.register(event -> wasPosted.set(true), eventName); // if i pass elem here - there's a problem
         return wasPosted;
     }
 
-    protected AtomicBoolean listenEventPosted(ActionEventName eventName) {
+    protected AtomicBoolean listenEventPosted(ActionEventType eventName) {
         AtomicBoolean wasPosted = new AtomicBoolean(false);
         bus.register(event -> wasPosted.set(true), eventName);
         return wasPosted;

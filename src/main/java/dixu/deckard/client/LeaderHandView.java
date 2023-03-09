@@ -11,7 +11,7 @@ public class LeaderHandView extends HandView implements ActionEventHandler{
         this.leader = leader;
         reloadCards();
 
-        bus.register(this,ActionEventName.LEADER_HAND_CHANGED);
+        bus.register(this, ActionEventType.LEADER_HAND_CHANGED);
     }
 
     private void reloadCards() {
@@ -24,7 +24,7 @@ public class LeaderHandView extends HandView implements ActionEventHandler{
 
     @Override
     public void handle(ActionEvent event) {
-        if (event.getName() == ActionEventName.LEADER_HAND_CHANGED && leader == event.getLeader()) {
+        if (event.getType() == ActionEventType.LEADER_HAND_CHANGED && leader == event.getLeader()) {
             reloadCards();
         }
     }
@@ -36,7 +36,7 @@ public class LeaderHandView extends HandView implements ActionEventHandler{
     @Override
     void postEventOnClick(CardView clickedCard) {
         bus.post(GuiEvent.builder()
-                .name(GuiEventName.LEADER_CARD_SELECTED)
+                .name(GuiEventType.LEADER_CARD_SELECTED)
                 .cardView(clickedCard)
                 .build()
         );

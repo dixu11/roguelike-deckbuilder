@@ -1,10 +1,8 @@
 package dixu.deckard.server.card;
 
 import dixu.deckard.server.FunctionalTest;
-import dixu.deckard.server.card.Card;
-import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.game.GameParams;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.team.Team;
@@ -82,7 +80,7 @@ public class CardsTest extends FunctionalTest {
         Card giftAttack = minionHandFirstCard(minion);
 
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_SPECIAL_STEAL)
+                .type(ActionEventType.LEADER_SPECIAL_STEAL)
                 .leader(firstLeader)
                 .minion(minion)
                 .card(giftAttack)

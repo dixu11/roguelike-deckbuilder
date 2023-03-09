@@ -10,15 +10,15 @@ public class ActionEventBus {
    ActionEventBus() {
     }
 
-    private final Map<ActionEventName, List<ActionEventHandler>> allHandlers = new HashMap<>();
+    private final Map<ActionEventType, List<ActionEventHandler>> allHandlers = new HashMap<>();
 
-    public void register(ActionEventHandler handler, ActionEventName name) {
-        List<ActionEventHandler> handlersByClass = allHandlers.computeIfAbsent(name, handlers -> new ArrayList<>());
+    public void register(ActionEventHandler handler, ActionEventType type) {
+        List<ActionEventHandler> handlersByClass = allHandlers.computeIfAbsent(type, handlers -> new ArrayList<>());
         handlersByClass.add(handler);
     }
 
     public void post(ActionEvent event) {
-        List<ActionEventHandler> eventHandlers = allHandlers.get(event.getName());
+        List<ActionEventHandler> eventHandlers = allHandlers.get(event.getType());
         if (eventHandlers != null) {
             for (ActionEventHandler handler : new ArrayList<>(eventHandlers)) {
                 handler.handle(event);
@@ -26,7 +26,7 @@ public class ActionEventBus {
         }
     }
 
-    public void unregister(ActionEventHandler handler, ActionEventName name) {
+    public void unregister(ActionEventHandler handler, ActionEventType name) {
         allHandlers.get(name).remove(handler);
     }
 }

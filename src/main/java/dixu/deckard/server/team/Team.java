@@ -33,7 +33,7 @@ public class Team implements ActionEventHandler {
         for (Minion minion : minions) {
             minion.setTeam(this);
         }
-        bus.register(this, ActionEventName.MINION_DIED);
+        bus.register(this, ActionEventType.MINION_DIED);
     }
 
     //draws
@@ -101,7 +101,7 @@ public class Team implements ActionEventHandler {
 
     private void postBlockChangedEvent(int newValue) {
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.TEAM_BLOCK_CHANGED)
+                .type(ActionEventType.TEAM_BLOCK_CHANGED)
                 .value(newValue)
                 .ownTeam(this)
                 .build()
@@ -111,7 +111,7 @@ public class Team implements ActionEventHandler {
     //character death
     @Override
     public void handle(ActionEvent event) {
-        if (event.getName() == ActionEventName.MINION_DIED) {
+        if (event.getType() == ActionEventType.MINION_DIED) {
             onMinionDied(event);
         }
     }
@@ -125,7 +125,7 @@ public class Team implements ActionEventHandler {
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            bus.post(CoreEvent.of(CoreEventName.GAME_OVER));
+            bus.post(CoreEvent.of(CoreEventType.GAME_OVER));
         }
     }
 

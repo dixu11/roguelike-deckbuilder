@@ -3,7 +3,7 @@ package dixu.deckard.server.card.effect;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventHandler;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 
 public class LifeLustEffect extends AttackEffectDecorator implements ActionEventHandler {
     public LifeLustEffect(AttackEffect decorated) {
@@ -12,9 +12,9 @@ public class LifeLustEffect extends AttackEffectDecorator implements ActionEvent
 
     @Override
     public void execute(CardContext context) {
-        bus.register(this, ActionEventName.MINION_DAMAGED);
+        bus.register(this, ActionEventType.MINION_DAMAGED);
         super.execute(context);
-        bus.unregister(this, ActionEventName.MINION_DAMAGED);
+        bus.unregister(this, ActionEventType.MINION_DAMAGED);
     }
 
     @Override

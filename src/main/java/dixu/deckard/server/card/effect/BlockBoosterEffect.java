@@ -2,12 +2,12 @@ package dixu.deckard.server.card.effect;
 
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventHandler;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 
 public class BlockBoosterEffect extends BlockEffectDecorator implements ActionEventHandler {
     public BlockBoosterEffect(BlockEffect decorated) {
         super(decorated);
-        bus.register(this, ActionEventName.TEAM_BLOCK_CHANGED);
+        bus.register(this, ActionEventType.TEAM_BLOCK_CHANGED);
     }
 
     @Override

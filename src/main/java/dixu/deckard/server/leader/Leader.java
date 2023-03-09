@@ -27,36 +27,36 @@ public class Leader implements ActionEventHandler {
     private final BusManager bus = BusManager.instance();
     private final Team team;
     private final List<Card> hand = new ArrayList<>();
-    private final Map<ActionEventName,Special> specials = new HashMap<>();
+    private final Map<ActionEventType,Special> specials = new HashMap<>();
     private int energy = 0;
 
     public Leader(Team team) {
         this.team = team;
 
-        specials.put(ActionEventName.LEADER_SPECIAL_STEAL, new Special(STEAL_SPECIAL_COST));
-        specials.put(ActionEventName.LEADER_SPECIAL_UPGRADE, new Special(UPGRADE_SPECIAL_COST));
-        specials.put(ActionEventName.LEADER_SPECIAL_MOVE_HAND, new Special(MOVE_SPECIAL_COST));
+        specials.put(ActionEventType.LEADER_SPECIAL_STEAL, new Special(STEAL_SPECIAL_COST));
+        specials.put(ActionEventType.LEADER_SPECIAL_UPGRADE, new Special(UPGRADE_SPECIAL_COST));
+        specials.put(ActionEventType.LEADER_SPECIAL_MOVE_HAND, new Special(MOVE_SPECIAL_COST));
 
-        bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
-        bus.register(this, ActionEventName.LEADER_SPECIAL_MOVE_HAND);
-        bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
+        bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
+        bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
+        bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
     }
 
     //SKILLS
     public void regenerateEnergy() {
         energy = INITIAL_ENERGY;
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_ENERGY_CHANGED)
+                .type(ActionEventType.LEADER_ENERGY_CHANGED)
                 .leader(this)
                 .value(energy)
                 .build()
         );
     }
 
-    public boolean canAfford(ActionEventName actionEventName) {
-        if (!actionEventName.isSpecial()) return false;
+    public boolean canAfford(ActionEventType actionEventType) {
+        if (!actionEventType.isSpecial()) return false;
 
-        return energy - specials.get(actionEventName).getCost() >= 0;
+        return energy - specials.get(actionEventType).getCost() >= 0;
     }
 
     @Override
@@ -65,19 +65,19 @@ public class Leader implements ActionEventHandler {
 
         spendEnergy(event);
 
-        if (event.getName() == ActionEventName.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
+        if (event.getType() == ActionEventType.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
            removeCard(event.getCard());
-        } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
+        } else if (event.getType() == ActionEventType.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
             addCard(event.getCard());
         }
         //when special hand move is played leader spends energy but has nothing else to do
     }
 
     private void spendEnergy(ActionEvent event) {
-        int cost = specials.get(event.getName()).getCost();
+        int cost = specials.get(event.getType()).getCost();
         energy -= cost;
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_ENERGY_CHANGED)
+                .type(ActionEventType.LEADER_ENERGY_CHANGED)
                 .leader(this)
                 .value(energy)
                 .build()
@@ -100,7 +100,7 @@ public class Leader implements ActionEventHandler {
 
     private void postHandChangedEvent() {
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.LEADER_HAND_CHANGED)
+                .type(ActionEventType.LEADER_HAND_CHANGED)
                 .leader(this)
                 .build()
         );

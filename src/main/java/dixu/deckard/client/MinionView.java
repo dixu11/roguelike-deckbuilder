@@ -27,8 +27,8 @@ public class MinionView implements ActionEventHandler {
         minionHandView = new MinionHandView(this);
         minionCardView = new CardView(minion.getMinionCard());
 
-        bus.register(this, ActionEventName.MINION_CARD_DISCARDED);
-        bus.register(this, ActionEventName.MINION_CARD_DRAW);
+        bus.register(this, ActionEventType.MINION_CARD_DISCARDED);
+        bus.register(this, ActionEventType.MINION_CARD_DRAW);
 
         setupCounters();
     }
@@ -43,8 +43,8 @@ public class MinionView implements ActionEventHandler {
                 .strategy(((oldValue, e) -> e.getValue()))
                 .build();
 
-        bus.register(healthCounter, ActionEventName.MINION_DAMAGED);
-        bus.register(healthCounter, ActionEventName.MINION_REGENERATED);
+        bus.register(healthCounter, ActionEventType.MINION_DAMAGED);
+        bus.register(healthCounter, ActionEventType.MINION_REGENERATED);
         minionCardView.addCounter(healthCounter);
 
         EventCounterView drawCounter = EventCounterView.builder()
@@ -55,13 +55,13 @@ public class MinionView implements ActionEventHandler {
                 .value(minion.getDraw().size())
                 .source(minion)
                 .strategy(
-                        ((oldValue, e) -> e.getName() == ActionEventName.MINION_SHUFFLE ?
+                        ((oldValue, e) -> e.getType() == ActionEventType.MINION_SHUFFLE ?
                                 e.getMinion().getDraw().size() : oldValue - 1)
                 )
                 .build();
 
-        bus.register(drawCounter, ActionEventName.MINION_CARD_DRAW);
-        bus.register(drawCounter, ActionEventName.MINION_SHUFFLE);
+        bus.register(drawCounter, ActionEventType.MINION_CARD_DRAW);
+        bus.register(drawCounter, ActionEventType.MINION_SHUFFLE);
         this.drawCounter = drawCounter;
 
         EventCounterView discardCounter = EventCounterView.builder()
@@ -71,11 +71,11 @@ public class MinionView implements ActionEventHandler {
                 .blinking(false)
                 .description("\uD83C\uDCC1: ")
                 .source(minion)
-                .strategy(((oldValue, e) -> e.getName() == ActionEventName.MINION_SHUFFLE ? 0 : oldValue + 1))
+                .strategy(((oldValue, e) -> e.getType() == ActionEventType.MINION_SHUFFLE ? 0 : oldValue + 1))
                 .build();
 
-        bus.register(discardCounter, ActionEventName.MINION_CARD_DISCARDED);
-        bus.register(discardCounter, ActionEventName.MINION_SHUFFLE);
+        bus.register(discardCounter, ActionEventType.MINION_CARD_DISCARDED);
+        bus.register(discardCounter, ActionEventType.MINION_SHUFFLE);
         this.discardCounter = discardCounter;
     }
 
@@ -96,7 +96,7 @@ public class MinionView implements ActionEventHandler {
 
     @Override
     public void handle(ActionEvent event) {
-        switch (event.getName()) {
+        switch (event.getType()) {
             case MINION_CARD_DISCARDED -> onCardPlayed(event); // todo move to hand object
             case MINION_CARD_DRAW -> onCardDraw(event); // todo move to hand object
         }
@@ -117,7 +117,7 @@ public class MinionView implements ActionEventHandler {
     public void reactToClick(int x, int y) {
         if (minionCardView.isClicked(x,y,transX,transY,0)) {
            bus.post(GuiEvent.builder()
-                   .name(GuiEventName.MINION_SELECTED)
+                   .name(GuiEventType.MINION_SELECTED)
                    .cardView(minionCardView)
                    .minionView(this)
                    .teamView(teamView)

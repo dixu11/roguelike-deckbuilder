@@ -1,6 +1,7 @@
 package dixu.deckard.server.leader;
 
 import dixu.deckard.server.card.Card;
+import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.minion.Minion;
 
 /**
@@ -8,14 +9,14 @@ import dixu.deckard.server.minion.Minion;
  * <p>
  * These {@link Special}s are currently available:
  * <p>
- *     - {@link dixu.deckard.server.event.ActionEventName#LEADER_SPECIAL_STEAL} let {@link Leader} steal cards from enemy
+ *     - {@link ActionEventType#LEADER_SPECIAL_STEAL} let {@link Leader} steal cards from enemy
  *     {@link Minion}s and put them to his hand.
  *      <p>
- *       - {@link dixu.deckard.server.event.ActionEventName#LEADER_SPECIAL_UPGRADE} let {@link Leader} give stolen card
+ *       - {@link ActionEventType#LEADER_SPECIAL_UPGRADE} let {@link Leader} give stolen card
  *       to his {@link Minion} replacing chosen {@link Card} with new one - effectively upgrading his deck for the rest
  *       of the game.
  *       <p>
- *         - {@link dixu.deckard.server.event.ActionEventName#LEADER_SPECIAL_MOVE_HAND} let {@link Leader} made {@link Minion}
+ *         - {@link ActionEventType#LEADER_SPECIAL_MOVE_HAND} let {@link Leader} made {@link Minion}
  *         draw new {@link Card} and discard one from their hand, changing {@link Minion}'s strategy for the turn if needed.
 * */
 public class Special {

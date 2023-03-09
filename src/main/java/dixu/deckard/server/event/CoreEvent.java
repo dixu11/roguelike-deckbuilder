@@ -3,18 +3,18 @@ package dixu.deckard.server.event;
 import lombok.Builder;
 
 @Builder
-public class CoreEvent implements Event<CoreEventName> {
+public class CoreEvent implements Event<CoreEventType> {
 
-    private CoreEventName name;
+    private CoreEventType type;
 
     @Override
-    public CoreEventName getName() {
-        return name;
+    public CoreEventType getType() {
+        return type;
     }
 
-    public static CoreEvent of(CoreEventName name) {
+    public static CoreEvent of(CoreEventType type) {
         return builder()
-                .name(name)
+                .type(type)
                 .build();
     }
 }

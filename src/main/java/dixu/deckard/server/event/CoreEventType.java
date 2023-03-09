@@ -1,10 +1,10 @@
 package dixu.deckard.server.event;
 
-public enum CoreEventName implements EventName {
+public enum CoreEventType implements EventType {
     GAME_OVER, TURN_ENDED, TURN_STARTED;
 
     @Override
-    public String getName() {
+    public String getType() {
         return name();
     }
 }

@@ -34,7 +34,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         this.secondTeam = new TeamView(secondLeader.getTeam(),Direction.RIGHT);
         firstLeaderHand = new LeaderHandView(firstLeader);
 
-        bus.register(this, CoreEventName.GAME_OVER);
+        bus.register(this, CoreEventType.GAME_OVER);
 
         setupCounters(firstLeader);
     }
@@ -47,7 +47,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
                 .strategy(((oldValue, e) -> e.getValue()))
                 .build();
 
-        bus.register(energyCounter, ActionEventName.LEADER_ENERGY_CHANGED);
+        bus.register(energyCounter, ActionEventType.LEADER_ENERGY_CHANGED);
         this.energyCounter = energyCounter;
     }
 
@@ -86,7 +86,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
 
     @Override
     public void handle(CoreEvent event) {
-        if (event.getName() == CoreEventName.GAME_OVER) {
+        if (event.getType() == CoreEventType.GAME_OVER) {
             onGameOver();
         }
     }

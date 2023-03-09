@@ -41,18 +41,18 @@ public class Fight implements CoreEventHandler {
         this.secondTeam = secondLeader.getTeam();
         this.firstLeader = firstLeader;
 
-        bus.register(this, CoreEventName.TURN_ENDED);
-        bus.register(this, CoreEventName.TURN_STARTED);
+        bus.register(this, CoreEventType.TURN_ENDED);
+        bus.register(this, CoreEventType.TURN_STARTED);
     }
 
     public void start() {
         secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK);
-        bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
+        bus.post(CoreEvent.of(CoreEventType.TURN_STARTED));
     }
 
     @Override
     public void handle(CoreEvent event) {
-        switch (event.getName()) {
+        switch (event.getType()) {
             case TURN_STARTED -> onTurnStart();
             case TURN_ENDED -> onTurnEnd();
         }
@@ -69,7 +69,7 @@ public class Fight implements CoreEventHandler {
         firstTeam.playAllCards(createContextForFirstTeam());
         secondTeam.clearBlock();
         secondTeam.playAllCards(createContextForSecondTeam());
-        bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
+        bus.post(CoreEvent.of(CoreEventType.TURN_STARTED));
     }
 
     private CardContext createContextForFirstTeam() {

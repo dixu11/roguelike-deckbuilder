@@ -3,12 +3,12 @@ package dixu.deckard.server.event;
 import dixu.deckard.client.GuiEvent;
 
 public interface BusManager {
-    void register(CoreEventHandler handler, CoreEventName name);
+    void register(CoreEventHandler handler, CoreEventType type);
 
-    void register(ActionEventHandler handler, ActionEventName name);
-    void unregister(ActionEventHandler handler, ActionEventName name);
+    void register(ActionEventHandler handler, ActionEventType type);
+    void unregister(ActionEventHandler handler, ActionEventType type);
 
-    void register(GuiEventHandler handler, GuiEventName name);
+    void register(GuiEventHandler handler, GuiEventType type);
 
     void post(CoreEvent event);
     void post(ActionEvent event);

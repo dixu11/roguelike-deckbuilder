@@ -75,7 +75,7 @@ public class CoreTest extends FunctionalTest {
         reloadGame();
         giveMinionsCards(firstTeam, CardType.BASIC_ATTACK, CardType.BASIC_ATTACK);
         giveMinionsCards(secondTeam, CardType.BASIC_BLOCK);
-        AtomicBoolean wasPosted = listenEventPosted(CoreEventName.GAME_OVER);
+        AtomicBoolean wasPosted = listenEventPosted(CoreEventType.GAME_OVER);
 
         executeTurn();
 
@@ -90,7 +90,7 @@ public class CoreTest extends FunctionalTest {
         reloadGame();
         giveMinionsCards(firstTeam, CardType.BASIC_ATTACK);
         clearMinionsHand(secondTeam);
-        AtomicBoolean wasPosted = listenEventPosted(ActionEventName.MINION_DIED);
+        AtomicBoolean wasPosted = listenEventPosted(ActionEventType.MINION_DIED);
 
         executeTurn();
 

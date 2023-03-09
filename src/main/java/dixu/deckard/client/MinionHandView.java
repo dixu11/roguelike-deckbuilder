@@ -9,13 +9,13 @@ public class MinionHandView extends HandView  implements ActionEventHandler{
     public MinionHandView(MinionView minionView) {
         super();
         this.minionView = minionView;
-        bus.register(this,ActionEventName.MINION_HAND_CHANGED);
+        bus.register(this, ActionEventType.MINION_HAND_CHANGED);
     }
 
     @Override
     void postEventOnClick(CardView clickedCard) {
         bus.post(GuiEvent.builder()
-                .name(GuiEventName.MINION_CARD_SELECTED)
+                .name(GuiEventType.MINION_CARD_SELECTED)
                 .cardView(clickedCard)
                 .minionView(minionView)
                 .teamView(minionView.getTeamView())
@@ -25,7 +25,7 @@ public class MinionHandView extends HandView  implements ActionEventHandler{
 
     @Override
     public void handle(ActionEvent event) {
-        if (event.getName() == ActionEventName.MINION_HAND_CHANGED && event.getMinion() == minionView.getMinion()) {
+        if (event.getType() == ActionEventType.MINION_HAND_CHANGED && event.getMinion() == minionView.getMinion()) {
             cardViews.clear();
             for (Card card : minionView.getMinion().getHand()) {
                 add(card);

@@ -2,19 +2,14 @@ package dixu.deckard.server.minion;
 
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
-import dixu.deckard.server.card.CardFactory;
 import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.fight.Fight;
 import dixu.deckard.server.game.GameParams;
 import dixu.deckard.server.leader.Leader;
-import dixu.deckard.server.leader.LeaderType;
 import dixu.deckard.server.team.Team;
 
 import java.util.*;
-import java.util.stream.Stream;
-
-import static dixu.deckard.server.game.GameParams.*;
 
 /**
  * {@link Minion}s form a {@link Team} to take a part in a {@link Fight} for their {@link Leader}, controlled by player
@@ -40,9 +35,9 @@ public class Minion implements ActionEventHandler {
         this.deck = deck;
         deck.setMinion(this);
 
-        bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
-        bus.register(this, ActionEventName.LEADER_SPECIAL_UPGRADE);
-        bus.register(this, ActionEventName.LEADER_SPECIAL_MOVE_HAND);
+        bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
+        bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
+        bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
     }
 
     //card draw
@@ -67,11 +62,7 @@ public class Minion implements ActionEventHandler {
        deck.clearDraw();
     }
 
-    public List<Card> getAllCards() {
-        return deck.getAllCards();
-    }
     //play cards
-
     void discard(Card card) {
      deck.discard(card);
     }
@@ -79,6 +70,7 @@ public class Minion implements ActionEventHandler {
     public void playAllCards(CardContext cardContext) {
      deck.playAllCards(cardContext);
     }
+
     //fight
     public void applyRegen(int value) {
         if (hp == maxHp) {
@@ -92,7 +84,7 @@ public class Minion implements ActionEventHandler {
             hp = maxHp;
         }
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_REGENERATED)
+                .type(ActionEventType.MINION_REGENERATED)
                 .value(hp)
                 .oldValue(oldValue)
                 .minion(this)
@@ -100,7 +92,6 @@ public class Minion implements ActionEventHandler {
                 .build()
         );
     }
-
     public void applyDamage(int value) {
         if (value <= 0) {
             return;
@@ -111,7 +102,7 @@ public class Minion implements ActionEventHandler {
             hp = 0;
         }
         bus.post(ActionEvent.builder()
-                .name(ActionEventName.MINION_DAMAGED)
+                .type(ActionEventType.MINION_DAMAGED)
                 .oldValue(oldValue)
                 .value(hp)
                 .minion(this)
@@ -119,22 +110,22 @@ public class Minion implements ActionEventHandler {
         );
         if (hp <= 0) {
             bus.post(ActionEvent.builder()
-                    .name(ActionEventName.MINION_DIED)
+                    .type(ActionEventType.MINION_DIED)
                     .minion(this)
                     .ownTeam(team)
                     .build()
             );
         }
     }
-    //specials handling
 
+    //specials handling
     @Override
     public void handle(ActionEvent event) {
         if (event.getMinion() != this) {
             return;
         }
 
-        switch (event.getName()) {
+        switch (event.getType()) {
             case LEADER_SPECIAL_UPGRADE -> deck.onUpgradeSpecial(event);
             case LEADER_SPECIAL_STEAL -> deck.onStealSpecial(event);
             case LEADER_SPECIAL_MOVE_HAND -> deck.onMoveHand();
@@ -143,26 +134,30 @@ public class Minion implements ActionEventHandler {
 
 
     //for tests
-    public boolean isWounded() {
-        return hp != maxHp;
-    }
 
     //getters / setters
-
-    public int getHealth() {
-        return hp;
-    }
 
     public List<Card> getHand() {
         return deck.getHand();
     }
-
     public List<Card> getDraw() {
         return deck.getDraw();
     }
 
     public List<Card> getDiscarded() {
         return deck.getDiscarded();
+    }
+
+    public List<Card> getAllCards() {
+        return deck.getAllCards();
+    }
+
+    public boolean isWounded() {
+        return hp != maxHp;
+    }
+
+    public int getHealth() {
+        return hp;
     }
 
     public Card getMinionCard() {

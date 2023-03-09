@@ -11,15 +11,15 @@ public class GuiEventBus {
     GuiEventBus() {
     }
 
-    private final Map<GuiEventName, List<GuiEventHandler>> allHandlers = new HashMap<>();
+    private final Map<GuiEventType, List<GuiEventHandler>> allHandlers = new HashMap<>();
 
-    public void register(GuiEventHandler handler, GuiEventName name) {
-        List<GuiEventHandler> handlersByClass = allHandlers.computeIfAbsent(name, handlers -> new ArrayList<>());
+    public void register(GuiEventHandler handler, GuiEventType type) {
+        List<GuiEventHandler> handlersByClass = allHandlers.computeIfAbsent(type, handlers -> new ArrayList<>());
         handlersByClass.add(handler);
     }
 
     public void post(GuiEvent event) {
-        List<GuiEventHandler> eventHandlers = allHandlers.get(event.getName());
+        List<GuiEventHandler> eventHandlers = allHandlers.get(event.getType());
         if (eventHandlers != null) {
             for (GuiEventHandler handler : new ArrayList<>(eventHandlers)) {
                 handler.handle(event);

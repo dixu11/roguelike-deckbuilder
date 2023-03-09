@@ -19,23 +19,23 @@ public class BusManagerImpl implements BusManager {
     }
 
     @Override
-    public void register(ActionEventHandler handler, ActionEventName name) {
-        effectBus.register(handler, name);
+    public void register(ActionEventHandler handler, ActionEventType type) {
+        effectBus.register(handler, type);
     }
 
     @Override
-    public void unregister(ActionEventHandler handler, ActionEventName name) {
-        effectBus.unregister(handler, name);
+    public void unregister(ActionEventHandler handler, ActionEventType type) {
+        effectBus.unregister(handler, type);
     }
 
     @Override
-    public void register(CoreEventHandler handler, CoreEventName name) {
-        structureBus.register(handler, name);
+    public void register(CoreEventHandler handler, CoreEventType type) {
+        structureBus.register(handler, type);
     }
 
     @Override
-    public void register(GuiEventHandler handler, GuiEventName name) {
-        guiBus.register(handler,name);
+    public void register(GuiEventHandler handler, GuiEventType type) {
+        guiBus.register(handler,type);
     }
 
     @Override

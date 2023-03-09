@@ -17,7 +17,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
         bounds = new Rectangle(GuiParams.getWidth(0.7), GuiParams.getHeight(0.9),
                 GuiParams.getWidth(0.05), GuiParams.getHeight(0.03));
 
-        bus.register(this, CoreEventName.TURN_STARTED);
+        bus.register(this, CoreEventType.TURN_STARTED);
     }
 
     //render
@@ -40,7 +40,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
             return;
         }
         visible = false;
-        bus.post(CoreEvent.of(CoreEventName.TURN_ENDED));
+        bus.post(CoreEvent.of(CoreEventType.TURN_ENDED));
     }
 
     @Override
@@ -51,7 +51,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
     //animation button lock
     @Override
     public void handle(CoreEvent event) {
-        switch (event.getName()) {
+        switch (event.getType()) {
             case TURN_STARTED -> onTurnStart();
         }
     }

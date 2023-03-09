@@ -10,10 +10,10 @@ import lombok.Getter;
 
 @Builder
 @Getter
-public class ActionEvent implements Event<ActionEventName> {
+public class ActionEvent implements Event<ActionEventType> {
 
     //when adding field update lombok builder on bottom!
-    private ActionEventName name;
+    private ActionEventType type;
     private Object source;
     private Team ownTeam;
     private Team enemyTeam;
@@ -24,8 +24,8 @@ public class ActionEvent implements Event<ActionEventName> {
     private int oldValue;
     private Leader leader;
 
-    public static ActionEvent of(ActionEventName name, CardContext context) {
-        return ofName(name)
+    public static ActionEvent of(ActionEventType type, CardContext context) {
+        return ofType(type)
                 .ownTeam(context.getOwnTeam())
                 .enemyTeam(context.getEnemyTeam())
                 .minion(context.getMinion())
@@ -33,26 +33,25 @@ public class ActionEvent implements Event<ActionEventName> {
                 .build();
     }
 
-    private static ActionEventBuilder ofName(ActionEventName name) {
+    private static ActionEventBuilder ofType(ActionEventType type) {
         return builder()
-                .name(name);
+                .type(type);
     }
 
     public boolean isSpecial() {
-        return name.isSpecial();
+        return type.isSpecial();
     }
 
-    @Override
-    public ActionEventName getName() {
-        return name;
+    public ActionEventType getType() {
+        return type;
     }
 
     public static class ActionEventBuilder {
 
         public ActionEvent build() {
-            ActionEvent actionEvent = new ActionEvent(this.name, this.source, this.ownTeam,
+            ActionEvent actionEvent = new ActionEvent(this.type, this.source, this.ownTeam,
                     this.enemyTeam, this.minion, this.card,this.oldCard, this.value,this.oldValue,this.leader);
-            actionEvent.source = ActionEventName.determineSourceFromEventName(actionEvent);
+            actionEvent.source = ActionEventType.determineSourceFromEventName(actionEvent);
 
             return actionEvent;
         }

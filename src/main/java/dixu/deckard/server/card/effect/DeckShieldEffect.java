@@ -6,14 +6,14 @@ import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventHandler;
-import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.event.ActionEventType;
 
 import java.util.List;
 
 public class DeckShieldEffect extends BlockEffectDecorator implements ActionEventHandler {
     public DeckShieldEffect(BlockEffect decorated) {
         super(decorated);
-        bus.register(this, ActionEventName.MINION_HAND_CHANGED);
+        bus.register(this, ActionEventType.MINION_HAND_CHANGED);
         //todo refactor to be better targeted by actions. like on minion owner change or on deck change
     }
 

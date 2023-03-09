@@ -13,9 +13,9 @@ public class SoloEffect extends AttackEffectDecorator implements ActionEventHand
 
     public SoloEffect(AttackEffect decorated) {
         super(decorated);
-        bus.register(this, ActionEventName.MINION_HAND_CHANGED);
-        bus.register(this, CoreEventName.TURN_STARTED);
-        bus.register(this, CoreEventName.TURN_ENDED);
+        bus.register(this, ActionEventType.MINION_HAND_CHANGED);
+        bus.register(this, CoreEventType.TURN_STARTED);
+        bus.register(this, CoreEventType.TURN_ENDED);
     }
 
     @Override
@@ -57,10 +57,10 @@ public class SoloEffect extends AttackEffectDecorator implements ActionEventHand
 
     @Override
     public void handle(CoreEvent event) {
-        if (event.getName() == CoreEventName.TURN_ENDED) {
+        if (event.getType() == CoreEventType.TURN_ENDED) {
             active = false;
         }
-        if (event.getName() == CoreEventName.TURN_STARTED) {
+        if (event.getType() == CoreEventType.TURN_STARTED) {
             active = true;
             setValue(getInitialValue());
         }

@@ -30,7 +30,7 @@ public class TeamView implements ActionEventHandler {
         setupMinions(team);
         setupBlockCounters(team);
 
-        bus.register(this, ActionEventName.MINION_DIED);
+        bus.register(this, ActionEventType.MINION_DIED);
     }
 
     private void setupMinions(Team team) {
@@ -48,7 +48,7 @@ public class TeamView implements ActionEventHandler {
                 .strategy((oldVal, e) -> e.getValue())
                 .build();
 
-        bus.register(blockCounterEvent, ActionEventName.TEAM_BLOCK_CHANGED);
+        bus.register(blockCounterEvent, ActionEventType.TEAM_BLOCK_CHANGED);
         blockCounter = blockCounterEvent;
     }
 
@@ -83,7 +83,7 @@ public class TeamView implements ActionEventHandler {
 
     @Override
     public void handle(ActionEvent event) {
-        switch (event.getName()) {
+        switch (event.getType()) {
             case MINION_DIED -> onMinionDied(event);
         }
     }
