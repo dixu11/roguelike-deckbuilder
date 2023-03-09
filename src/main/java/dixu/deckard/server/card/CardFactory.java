@@ -31,7 +31,7 @@ public class CardFactory {
         return cards;
     }
 
-    public List<Card> createDeck(LeaderType type) {
+    public List<Card> createDeckCards(LeaderType type) {
         List<Card> cards = new ArrayList<>();
         if (testMode) {
             return testScenario(type);
