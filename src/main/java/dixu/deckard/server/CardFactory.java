@@ -11,9 +11,32 @@ import java.util.stream.IntStream;
 public class CardFactory {
 
     public static int INITIAL_MINION_DECK_SIZE = 8;
+    private final boolean testMode = true;  //for easier changing from test scenario to normal game
+
+    private List<Card> testScenario(LeaderType type){
+        List<Card> cards = new ArrayList<>();
+        if (type == LeaderType.PLAYER) {
+            cards.addAll(createCards(3, CardType.BASIC_ATTACK));
+            cards.addAll(createCards(3, CardType.BASIC_BLOCK));
+            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
+            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
+        } else if (type == LeaderType.SIMPLE_BOT) {
+            cards.addAll(createCards(1, CardType.UPGRADED_BLOCK));
+            cards.addAll(createCards(1, CardType.UPGRADED_ATTACK));
+            cards.addAll(createRandomCards(4, CardRarity.COMMON));
+            cards.addAll(createCards(1, CardType.BASIC_BLOCK));
+            cards.addAll(createCards(1, CardType.BASIC_ATTACK));
+        } else {
+            throw new IllegalStateException("INVALID DECK TYPE");
+        }
+        return cards;
+    }
 
     public List<Card> createDeck(LeaderType type) {
         List<Card> cards = new ArrayList<>();
+        if (testMode) {
+            return testScenario(type);
+        }
         if (type == LeaderType.PLAYER) {
             cards.addAll(createCards(3, CardType.BASIC_ATTACK));
             cards.addAll(createCards(3, CardType.BASIC_BLOCK));
@@ -44,6 +67,7 @@ public class CardFactory {
         } else {
             throw new IllegalStateException("INVALID DECK TYPE");
         }
+
         return cards;
     }
 
