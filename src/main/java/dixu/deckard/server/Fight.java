@@ -41,8 +41,8 @@ public class Fight implements CoreEventHandler {
     }
 
     public void start() {
-        bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
         secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK);
+        bus.post(CoreEvent.of(CoreEventName.TURN_STARTED));
     }
 
     @Override

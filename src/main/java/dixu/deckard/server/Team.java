@@ -129,27 +129,26 @@ public class Team implements ActionEventHandler {
         return MyRandom.getRandomElement(minions);
     }
 
+    public List<Card> getMinionsHands() {
+        return minions.stream()
+                .flatMap(minion -> minion.getHand().stream())
+                .toList();
+    }
+
     public List<Minion> getMinions() {
         return minions;
     }
-
     //getters setters n stuff
+
     public int getBlock() {
         return block;
     }
 
-    //for tests
     public void setClearBlockEnabled(boolean clearBlockEnabled) {
         this.clearBlockEnabled = clearBlockEnabled;
     }
 
     public void setBlock(int block) {
         this.block = block;
-    }
-
-    public List<Card> getMinionsHands() {
-       return minions.stream()
-                .flatMap(minion -> minion.getHand().stream())
-                .toList();
     }
 }

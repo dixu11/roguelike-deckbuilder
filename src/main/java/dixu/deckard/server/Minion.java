@@ -15,19 +15,19 @@ import static dixu.deckard.server.GameParams.*;
 
 public class Minion implements ActionEventHandler {
     private final BusManager bus = BusManager.instance();
-    private int maxHp =CardType.BASIC_MINION.getValue();
+    private final int maxHp =CardType.BASIC_MINION.getValue();
     private int hp = maxHp;
     private final Card minionCard;
     //deck
     private LinkedList<Card> draw = new LinkedList<>();
     private List<Card> hand = new LinkedList<>();
     private List<Card> discarded = new LinkedList<>();
-    private volatile Team team;
-
+    private Team team;
 
     public Minion(LeaderType type) {
         minionCard = new Card(CardType.BASIC_MINION);
         minionCard.setOwner(this);
+
         CardFactory cardFactory = new CardFactory();
         draw.addAll(cardFactory.createDeck(type));
         draw.forEach(card -> card.setOwner(this));

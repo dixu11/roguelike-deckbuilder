@@ -1,9 +1,7 @@
 package dixu.deckard.server;
 
 public class LeaderFactory {
-
-    private TeamFactory teamFactory = new TeamFactory();
-    private CardFactory cardFactory = new CardFactory();
+    private final TeamFactory teamFactory = new TeamFactory();
 
     public Leader create(LeaderType type) {
         return new Leader(teamFactory.create(type));

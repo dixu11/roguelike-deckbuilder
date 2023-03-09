@@ -22,7 +22,6 @@ import static dixu.deckard.server.GameParams.*;
 public class Leader implements ActionEventHandler {
 
     private final BusManager bus = BusManager.instance();
-    private final int startingEnergy = INITIAL_ENERGY;
     private final Team team;
     private final List<Card> hand = new ArrayList<>();
     private final Map<ActionEventName,Special> specials = new HashMap<>();
@@ -40,8 +39,9 @@ public class Leader implements ActionEventHandler {
         bus.register(this, ActionEventName.LEADER_SPECIAL_STEAL);
     }
 
+    //SKILLS
     public void regenerateEnergy() {
-        energy = startingEnergy;
+        energy = INITIAL_ENERGY;
         bus.post(ActionEvent.builder()
                 .name(ActionEventName.LEADER_ENERGY_CHANGED)
                 .leader(this)
@@ -67,6 +67,7 @@ public class Leader implements ActionEventHandler {
         } else if (event.getName() == ActionEventName.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
             addCard(event.getCard());
         }
+        //when special hand move is played leader spends energy but has nothing else to do
     }
 
     private void spendEnergy(ActionEvent event) {
@@ -80,6 +81,7 @@ public class Leader implements ActionEventHandler {
         );
     }
 
+    //HAND
     private void removeCard(Card card) {
         hand.remove(card);
         postHandChangedEvent();
