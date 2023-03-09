@@ -16,8 +16,8 @@ import dixu.deckard.server.*;
  *     <p>
  * I'm planning to make roguelike deckbuilder with special steal mechanics and little mix of auto-battle genre.
  * <p>
- * For now im trying to stabilize central {@link Fight} mechanics before adding content, like more {@link Card}s,
- * different {@link Minion}s or more {@link Special} abilities. There is no progression system jet and game lasts for
+ * For now im implementing core game features like {@link Card}s, different {@link Minion}s or {@link Leader}'s
+ * {@link Special} abilities. There is no progression system jet and game lasts for
  * only one {@link Fight}.
  * <p>
  * {@link App} create all objects from client and from server and starts an app.
@@ -30,22 +30,21 @@ public class App {
 //        GuiParams.LOCATION_ON_SCREEN_X = 0;
 //        GuiParams.LOCATION_ON_SCREEN_Y = 0;
 
-
-        //create frame class and initialize window size
-        Display display = new Display("Deckard Thief");
-
-        //create team
+        //initialize fight(server)
         LeaderFactory factory = new LeaderFactory();
         Leader firstLeader = factory.create(LeaderType.PLAYER);
         Leader secondLeader = factory.create(LeaderType.SIMPLE_BOT);
+        Fight fight = new Fight(firstLeader,secondLeader);
 
-        //create engine and connections
+        //initialize client
+        Display display = new Display("Deckard Thief");
         FightViewImpl fightViewImpl = new FightViewImpl(firstLeader,secondLeader);
         GameEngine engine = new GameEngine(display, fightViewImpl);
-        Fight fight = new Fight(firstLeader,secondLeader);
         GuiController guiController = new GuiController(fightViewImpl);
         display.addListener(fightViewImpl);
         engine.start();
+
+        //start game
         fight.start();
     }
 }
