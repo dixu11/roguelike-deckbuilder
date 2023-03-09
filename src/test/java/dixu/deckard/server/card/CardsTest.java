@@ -1,7 +1,13 @@
-package dixu.deckard.server;
+package dixu.deckard.server.card;
 
+import dixu.deckard.server.FunctionalTest;
+import dixu.deckard.server.card.Card;
+import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.game.GameParams;
+import dixu.deckard.server.minion.Minion;
+import dixu.deckard.server.team.Team;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

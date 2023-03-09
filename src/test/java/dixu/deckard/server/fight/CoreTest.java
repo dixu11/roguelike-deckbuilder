@@ -1,11 +1,15 @@
-package dixu.deckard.server;
+package dixu.deckard.server.fight;
 
+import dixu.deckard.server.FunctionalTest;
+import dixu.deckard.server.card.CardFactory;
+import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.minion.Minion;
 import org.junit.jupiter.api.*;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static dixu.deckard.server.GameParams.*;
+import static dixu.deckard.server.game.GameParams.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 //tests for core game functionalities

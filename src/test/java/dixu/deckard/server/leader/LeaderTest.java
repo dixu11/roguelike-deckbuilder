@@ -1,13 +1,18 @@
-package dixu.deckard.server;
+package dixu.deckard.server.leader;
 
+import dixu.deckard.server.FunctionalTest;
+import dixu.deckard.server.card.Card;
+import dixu.deckard.server.card.CardFactory;
+import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventName;
+import dixu.deckard.server.minion.Minion;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static dixu.deckard.server.GameParams.*;
+import static dixu.deckard.server.game.GameParams.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class LeaderTest extends FunctionalTest {
