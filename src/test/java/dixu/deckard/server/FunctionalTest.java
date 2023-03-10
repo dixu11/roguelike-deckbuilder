@@ -80,7 +80,7 @@ public abstract class FunctionalTest {
     }
 
     protected void executeTurn() {
-        bus.post(CoreEvent.of(CoreEventType.TURN_ENDED));
+        bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
     }
 
     protected List<Minion> allMinions() {

@@ -9,7 +9,7 @@ public class ComboEffect extends AttackEffectDecorator implements ActionEventHan
     public ComboEffect(AttackEffect decorated) {
         super(decorated);
         bus.register(this, ActionEventType.MINION_CARD_PLAYED);
-        bus.register(this, CoreEventType.TURN_STARTED);
+        bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
     }
 
     @Override

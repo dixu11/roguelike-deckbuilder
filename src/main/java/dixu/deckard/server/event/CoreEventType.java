@@ -1,7 +1,10 @@
 package dixu.deckard.server.event;
 
 public enum CoreEventType implements EventType {
-    GAME_OVER, TURN_ENDED, TURN_STARTED;
+    SETUP_PHASE_STARTED,
+    LEADER_PHASE_STARTED,
+    MINION_PHASE_STARTED,
+    FIGHT_OVER;
 
     @Override
     public String getType() {

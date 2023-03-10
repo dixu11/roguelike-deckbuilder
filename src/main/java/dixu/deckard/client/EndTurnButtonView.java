@@ -17,7 +17,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
         bounds = new Rectangle(GuiParams.getWidth(0.7), GuiParams.getHeight(0.9),
                 GuiParams.getWidth(0.05), GuiParams.getHeight(0.03));
 
-        bus.register(this, CoreEventType.TURN_STARTED);
+        bus.register(this, CoreEventType.LEADER_PHASE_STARTED);
     }
 
     //render
@@ -40,7 +40,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
             return;
         }
         visible = false;
-        bus.post(CoreEvent.of(CoreEventType.TURN_ENDED));
+        bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
     }
 
     @Override
@@ -52,7 +52,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
     @Override
     public void handle(CoreEvent event) {
         switch (event.getType()) {
-            case TURN_STARTED -> onTurnStart();
+            case LEADER_PHASE_STARTED -> onTurnStart();
         }
     }
 

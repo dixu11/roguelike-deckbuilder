@@ -37,7 +37,7 @@ public class Team implements ActionEventHandler {
     }
 
     //draws
-    public void executeStartTurnCardDraws() {
+    public void minionsDrawCards() {
         for (Minion minion : minions) {
             minion.drawCards(MINION_DRAW_PER_TURN);
         }
@@ -125,7 +125,7 @@ public class Team implements ActionEventHandler {
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            bus.post(CoreEvent.of(CoreEventType.GAME_OVER));
+            bus.post(CoreEvent.of(CoreEventType.FIGHT_OVER));
         }
     }
 

@@ -2,7 +2,7 @@ package dixu.deckard.server.event;
 
 /**
  * (SOURCE)_(EVENT NAME)
-* */
+ */
 public enum ActionEventType implements EventType {
     MINION_CARD_DISCARDED,
     MINION_CARD_DRAW,
@@ -17,14 +17,15 @@ public enum ActionEventType implements EventType {
     LEADER_ENERGY_CHANGED,
     LEADER_HAND_CHANGED,
     MINION_CARD_PLAYED,
-    MINION_REGENERATED;
+    MINION_REGENERATED,
+    CARD_OWNER_CHANGED;
 
     public static Object determineSourceFromEventName(ActionEvent actionEvent) {
         if (actionEvent.getType().name().startsWith("MINION")) {
             return actionEvent.getMinion();
         } else if (actionEvent.getType().name().startsWith("TEAM")) {
             return actionEvent.getOwnTeam();
-        } else if(actionEvent.getType().name().startsWith("LEADER")){
+        } else if (actionEvent.getType().name().startsWith("LEADER")) {
             return actionEvent.getLeader();
         } else {
             throw new IllegalStateException("UNKNOWN EVENT SOURCE");

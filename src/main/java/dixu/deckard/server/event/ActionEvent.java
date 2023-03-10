@@ -14,6 +14,7 @@ public class ActionEvent implements Event<ActionEventType> {
 
     //when adding field update lombok builder on bottom!
     private ActionEventType type;
+    private ActionEventSubtype subtype;
     private Object source;
     private Team ownTeam;
     private Team enemyTeam;
@@ -49,7 +50,7 @@ public class ActionEvent implements Event<ActionEventType> {
     public static class ActionEventBuilder {
 
         public ActionEvent build() {
-            ActionEvent actionEvent = new ActionEvent(this.type, this.source, this.ownTeam,
+            ActionEvent actionEvent = new ActionEvent(this.type,this.subtype, this.source, this.ownTeam,
                     this.enemyTeam, this.minion, this.card,this.oldCard, this.value,this.oldValue,this.leader);
             actionEvent.source = ActionEventType.determineSourceFromEventName(actionEvent);
 

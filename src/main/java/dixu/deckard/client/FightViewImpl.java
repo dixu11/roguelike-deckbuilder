@@ -1,6 +1,5 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.fight.FightView;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.event.*;
 
@@ -19,7 +18,7 @@ import static dixu.deckard.client.GuiParams.*;
  * from their {@link Graphics2D} object while rendering.
 * */
 
-public class FightViewImpl implements FightView, MouseListener, CoreEventHandler {
+public class FightViewImpl implements MouseListener, CoreEventHandler {
     public static final int LEADER_HAND_X = GuiParams.getWidth(0.37);
     public static final int LEADER_HAND_Y = GuiParams.getHeight(0.8);
     private final BusManager bus = BusManager.instance();
@@ -34,7 +33,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
         this.secondTeam = new TeamView(secondLeader.getTeam(),Direction.RIGHT);
         firstLeaderHand = new LeaderHandView(firstLeader);
 
-        bus.register(this, CoreEventType.GAME_OVER);
+        bus.register(this, CoreEventType.FIGHT_OVER);
 
         setupCounters(firstLeader);
     }
@@ -86,7 +85,7 @@ public class FightViewImpl implements FightView, MouseListener, CoreEventHandler
 
     @Override
     public void handle(CoreEvent event) {
-        if (event.getType() == CoreEventType.GAME_OVER) {
+        if (event.getType() == CoreEventType.FIGHT_OVER) {
             onGameOver();
         }
     }

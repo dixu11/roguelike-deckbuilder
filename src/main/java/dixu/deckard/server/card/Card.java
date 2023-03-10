@@ -50,7 +50,7 @@ public class Card {
             enemySelection = EnemySelection.AREA;
         }
 
-        final AttackEffect baseAttack = new BasicAttackEffect(attackValue, enemySelection,this);
+        final AttackEffect baseAttack = new BasicAttackEffect(attackValue, enemySelection, this);
         attackEffect = baseAttack;
 
         if (type == PIERCING_ATTACK) {
@@ -78,8 +78,8 @@ public class Card {
 
     private void setupBlockCard() {
         int blockValue = type.getValue();
-        BlockEffect blockEffect = new BasicBlockEffect(blockValue,this);
-        if(type == DECK_SHIELD){
+        BlockEffect blockEffect = new BasicBlockEffect(blockValue, this);
+        if (type == DECK_SHIELD) {
             blockEffect = new DeckShieldEffect(blockEffect);
         }
         if (type == BLOCK_BOOSTER) {
@@ -90,7 +90,7 @@ public class Card {
 
     private void setupSkillCard() {
         if (type == HEAL) {
-            effects.add(new HealEffect(HEAL.getValue(),this));
+            effects.add(new HealEffect(HEAL.getValue(), this));
         }
     }
 
@@ -145,6 +145,12 @@ public class Card {
 
     public void setOwner(Minion owner) {
         this.owner = owner;
+      /*  bus.post(ActionEvent.builder()
+                .type(ActionEventType.CARD_OWNER_CHANGED)
+                .card(this)
+                .minion(owner)
+                .build()
+        );*/
     }
 
     @Override

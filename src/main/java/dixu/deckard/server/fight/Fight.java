@@ -34,6 +34,7 @@ public class Fight implements CoreEventHandler {
     private final Leader firstLeader;
     private final Team firstTeam;
     private final Team secondTeam;
+    private final FightState fightState = FightState.getInstance();
     private static boolean delayCardPlay = true;
 
     public Fight(Leader firstLeader, Leader secondLeader) {
@@ -41,35 +42,44 @@ public class Fight implements CoreEventHandler {
         this.secondTeam = secondLeader.getTeam();
         this.firstLeader = firstLeader;
 
-        bus.register(this, CoreEventType.TURN_ENDED);
-        bus.register(this, CoreEventType.TURN_STARTED);
+        bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
+        bus.register(this, CoreEventType.LEADER_PHASE_STARTED);
+        bus.register(this, CoreEventType.MINION_PHASE_STARTED);
     }
 
     public void start() {
         secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK);
-        bus.post(CoreEvent.of(CoreEventType.TURN_STARTED));
+        bus.post(CoreEvent.of(CoreEventType.SETUP_PHASE_STARTED));
     }
 
     @Override
     public void handle(CoreEvent event) {
         switch (event.getType()) {
-            case TURN_STARTED -> onTurnStart();
-            case TURN_ENDED -> onTurnEnd();
+            case SETUP_PHASE_STARTED -> onSetupPhase();
+            case LEADER_PHASE_STARTED -> onLeader();
+            case MINION_PHASE_STARTED -> onMinionPhase();
         }
     }
 
-    private void onTurnStart() {
-        firstTeam.executeStartTurnCardDraws();
-        secondTeam.executeStartTurnCardDraws();
+    private void onSetupPhase() {
+        fightState.setPhase(Phase.SETUP);
+        firstTeam.minionsDrawCards();
+        secondTeam.minionsDrawCards();
         firstTeam.clearBlock();
         firstLeader.regenerateEnergy();
+        bus.post(CoreEvent.of(CoreEventType.LEADER_PHASE_STARTED));
     }
 
-    private void onTurnEnd() {
+    private void onLeader() {
+        fightState.setPhase(Phase.LEADER);
+    }
+
+    private void onMinionPhase() {
+        fightState.setPhase(Phase.MINIONS);
         firstTeam.playAllCards(createContextForFirstTeam());
         secondTeam.clearBlock();
         secondTeam.playAllCards(createContextForSecondTeam());
-        bus.post(CoreEvent.of(CoreEventType.TURN_STARTED));
+        bus.post(CoreEvent.of(CoreEventType.SETUP_PHASE_STARTED));
     }
 
     private CardContext createContextForFirstTeam() {
