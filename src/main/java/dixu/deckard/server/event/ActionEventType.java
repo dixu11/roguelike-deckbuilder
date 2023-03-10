@@ -4,21 +4,21 @@ package dixu.deckard.server.event;
  * (SOURCE)_(EVENT NAME)
  */
 public enum ActionEventType implements EventType {
-    MINION_CARD_DISCARDED,
-    MINION_CARD_DRAW,
-    MINION_DAMAGED,
-    MINION_DIED,
-    MINION_SHUFFLE,
-    TEAM_BLOCK_CHANGED,
-    LEADER_SPECIAL_UPGRADE,
-    MINION_HAND_CHANGED,
-    LEADER_SPECIAL_STEAL,
-    LEADER_SPECIAL_MOVE_HAND,
-    LEADER_ENERGY_CHANGED,
-    LEADER_HAND_CHANGED,
-    MINION_CARD_PLAYED,
-    MINION_REGENERATED,
-    CARD_OWNER_CHANGED;
+    MINION_CARD_DISCARDED, //action
+    MINION_CARD_DRAW, //action
+    MINION_DAMAGED, //action
+    MINION_DIED, //action
+    MINION_SHUFFLE, //action
+    LEADER_SPECIAL_UPGRADE, //action
+    LEADER_SPECIAL_STEAL, //action
+    LEADER_SPECIAL_MOVE_HAND, //action
+    MINION_CARD_PLAYED, //action
+    MINION_REGENERATED, //action
+    TEAM_BLOCK_CHANGED, //state
+    MINION_HAND_CHANGED, // state
+    LEADER_ENERGY_CHANGED, //state
+    LEADER_HAND_CHANGED, //state
+    CARD_OWNER_CHANGED; //state
 
     public static Object determineSourceFromEventName(ActionEvent actionEvent) {
         if (actionEvent.getType().name().startsWith("MINION")) {
