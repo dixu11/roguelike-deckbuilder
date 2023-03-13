@@ -2,19 +2,20 @@ package dixu.deckard.server.card.effect;
 
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventHandler;
 import dixu.deckard.server.event.ActionEventType;
+import dixu.deckard.server.event.EventHandler;
+import dixu.deckard.server.event.bus.Bus;
 
-public class LifeLustEffect extends AttackEffectDecorator implements ActionEventHandler {
+public class LifeLustEffect extends AttackEffectDecorator implements EventHandler {
     public LifeLustEffect(AttackEffect decorated) {
         super(decorated);
     }
 
     @Override
     public void execute(CardContext context) {
-        bus.register(this, ActionEventType.MINION_DAMAGED);
+        Bus.register(this, ActionEventType.MINION_DAMAGED);
         super.execute(context);
-        bus.unregister(this, ActionEventType.MINION_DAMAGED);
+        Bus.unregister(this, ActionEventType.MINION_DAMAGED);
     }
 
     @Override

@@ -2,19 +2,20 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 
-public class MinionHandView extends HandView  implements ActionEventHandler{
+public class MinionHandView extends HandView  implements EventHandler {
     private final MinionView minionView;
 
     public MinionHandView(MinionView minionView) {
         super();
         this.minionView = minionView;
-        bus.register(this, ActionEventType.MINION_HAND_CHANGED);
+        Bus.register(this, ActionEventType.MINION_HAND_CHANGED);
     }
 
     @Override
     void postEventOnClick(CardView clickedCard) {
-        bus.post(GuiEvent.builder()
+        Bus.post(GuiEvent.builder()
                 .name(GuiEventType.MINION_CARD_SELECTED)
                 .cardView(clickedCard)
                 .minionView(minionView)

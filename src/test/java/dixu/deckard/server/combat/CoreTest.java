@@ -1,4 +1,4 @@
-package dixu.deckard.server.fight;
+package dixu.deckard.server.combat;
 
 import dixu.deckard.server.FunctionalTest;
 import dixu.deckard.server.card.CardFactory;

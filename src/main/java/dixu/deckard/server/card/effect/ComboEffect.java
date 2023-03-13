@@ -1,15 +1,16 @@
 package dixu.deckard.server.card.effect;
 
 import dixu.deckard.server.card.CardCategory;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.event.*;
 
-public class ComboEffect extends AttackEffectDecorator implements ActionEventHandler, CoreEventHandler {
+public class ComboEffect extends AttackEffectDecorator implements EventHandler {
 
     public ComboEffect(AttackEffect decorated) {
         super(decorated);
-        bus.register(this, ActionEventType.MINION_CARD_PLAYED);
-        bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
+        Bus.register(this, ActionEventType.MINION_CARD_PLAYED);
+        Bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
     }
 
     @Override

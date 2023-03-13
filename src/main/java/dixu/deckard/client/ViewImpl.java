@@ -1,5 +1,6 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.event.*;
 
@@ -18,22 +19,21 @@ import static dixu.deckard.client.GuiParams.*;
  * from their {@link Graphics2D} object while rendering.
 * */
 
-public class FightViewImpl implements MouseListener, CoreEventHandler {
+public class ViewImpl implements MouseListener, EventHandler {
     public static final int LEADER_HAND_X = GuiParams.getWidth(0.37);
     public static final int LEADER_HAND_Y = GuiParams.getHeight(0.8);
-    private final BusManager bus = BusManager.instance();
     private final TeamView firstTeam;
     private final TeamView secondTeam;
     private final LeaderHandView firstLeaderHand;
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
     private CounterView energyCounter;
 
-    public FightViewImpl(Leader firstLeader, Leader secondLeader) {
+    public ViewImpl(Leader firstLeader, Leader secondLeader) {
         this.firstTeam = new TeamView(firstLeader.getTeam(),Direction.LEFT);
         this.secondTeam = new TeamView(secondLeader.getTeam(),Direction.RIGHT);
         firstLeaderHand = new LeaderHandView(firstLeader);
 
-        bus.register(this, CoreEventType.FIGHT_OVER);
+        Bus.register(this, CoreEventType.FIGHT_OVER);
 
         setupCounters(firstLeader);
     }
@@ -46,7 +46,7 @@ public class FightViewImpl implements MouseListener, CoreEventHandler {
                 .strategy(((oldValue, e) -> e.getValue()))
                 .build();
 
-        bus.register(energyCounter, ActionEventType.LEADER_ENERGY_CHANGED);
+        Bus.register(energyCounter, ActionEventType.LEADER_ENERGY_CHANGED);
         this.energyCounter = energyCounter;
     }
 

@@ -4,18 +4,19 @@ import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardCategory;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 
 import java.util.List;
 
-public class SoloEffect extends AttackEffectDecorator implements ActionEventHandler, CoreEventHandler {
+public class  SoloEffect extends AttackEffectDecorator implements EventHandler {
     private static final int ATTACK_NEGATIVE_MODIFIER = -2;
     private boolean active = true;
 
     public SoloEffect(AttackEffect decorated) {
         super(decorated);
-        bus.register(this, ActionEventType.MINION_HAND_CHANGED);
-        bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
-        bus.register(this, CoreEventType.MINION_PHASE_STARTED);
+        Bus.register(this, ActionEventType.MINION_HAND_CHANGED);
+        Bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
+        Bus.register(this, CoreEventType.MINION_PHASE_STARTED);
     }
 
     @Override

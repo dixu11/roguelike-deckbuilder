@@ -2,10 +2,8 @@ package dixu.deckard.server.card.effect;
 
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
-import dixu.deckard.server.event.BusManager;
 
 public class EffectDecorator<T extends CardEffect> implements CardEffect {
-     BusManager bus = BusManager.instance();
     T decorated;
 
     public EffectDecorator(T decorated) {

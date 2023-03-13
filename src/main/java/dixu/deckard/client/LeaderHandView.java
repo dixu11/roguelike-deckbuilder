@@ -1,9 +1,10 @@
 package dixu.deckard.client;
 
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.event.*;
 
-public class LeaderHandView extends HandView implements ActionEventHandler{
+public class LeaderHandView extends HandView implements EventHandler {
 
     private final Leader leader;
 
@@ -11,7 +12,7 @@ public class LeaderHandView extends HandView implements ActionEventHandler{
         this.leader = leader;
         reloadCards();
 
-        bus.register(this, ActionEventType.LEADER_HAND_CHANGED);
+        Bus.register(this, ActionEventType.LEADER_HAND_CHANGED);
     }
 
     private void reloadCards() {
@@ -35,7 +36,7 @@ public class LeaderHandView extends HandView implements ActionEventHandler{
 
     @Override
     void postEventOnClick(CardView clickedCard) {
-        bus.post(GuiEvent.builder()
+        Bus.post(GuiEvent.builder()
                 .name(GuiEventType.LEADER_CARD_SELECTED)
                 .cardView(clickedCard)
                 .build()

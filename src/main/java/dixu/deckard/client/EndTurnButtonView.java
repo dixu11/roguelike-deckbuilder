@@ -1,13 +1,13 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 
 import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class EndTurnButtonView implements Clickable, CoreEventHandler {
-    private final BusManager bus = BusManager.instance();
+public class EndTurnButtonView implements Clickable, EventHandler {
     private final Rectangle bounds;
     private final int TURN_ENDED_COOLDOWN_SECONDS = 1;
     private LocalTime turnStarted = LocalTime.now();
@@ -17,7 +17,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
         bounds = new Rectangle(GuiParams.getWidth(0.7), GuiParams.getHeight(0.9),
                 GuiParams.getWidth(0.05), GuiParams.getHeight(0.03));
 
-        bus.register(this, CoreEventType.LEADER_PHASE_STARTED);
+        Bus.register(this, CoreEventType.LEADER_PHASE_STARTED);
     }
 
     //render
@@ -40,7 +40,7 @@ public class EndTurnButtonView implements Clickable, CoreEventHandler {
             return;
         }
         visible = false;
-        bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
+        Bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
     }
 
     @Override

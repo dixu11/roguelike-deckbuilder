@@ -1,4 +1,4 @@
-package dixu.deckard.server.event;
+package dixu.deckard.server.card;
 
 public enum CardRarity {
     BASIC,COMMON

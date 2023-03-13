@@ -3,6 +3,7 @@ package dixu.deckard.server.leader;
 
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.team.Team;
 
@@ -14,17 +15,15 @@ import java.util.Map;
 import static dixu.deckard.server.game.GameParams.*;
 
 /**
- * {@link Leader} is player entity or computer that is controlling one side of a fight.
- * {@link Leader} has  {@link Team} of {@link Minion}s fighting for him but not directly controlled.
+ * {@link Leader} is player entity or computer that is controlling one side of a combat.
+ * {@link Leader} has  {@link Team} of {@link Minion}s combating for him but not directly controlled.
  * {@link Leader} can decide to spend his {@link Leader#energy} to cast {@link Special} actions to mess
  * with {@link Minion}s {@link Card}s.
  * <p>
  * His special abilities are listed in {@link Special} class.
 * */
 
-public class Leader implements ActionEventHandler {
-
-    private final BusManager bus = BusManager.instance();
+public class Leader implements EventHandler {
     private final Team team;
     private final List<Card> hand = new ArrayList<>();
     private final Map<ActionEventType,Special> specials = new HashMap<>();
@@ -37,15 +36,15 @@ public class Leader implements ActionEventHandler {
         specials.put(ActionEventType.LEADER_SPECIAL_UPGRADE, new Special(UPGRADE_SPECIAL_COST));
         specials.put(ActionEventType.LEADER_SPECIAL_MOVE_HAND, new Special(MOVE_SPECIAL_COST));
 
-        bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
-        bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
-        bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
     }
 
     //SKILLS
     public void regenerateEnergy() {
         energy = INITIAL_ENERGY;
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_ENERGY_CHANGED)
                 .leader(this)
                 .value(energy)
@@ -76,7 +75,7 @@ public class Leader implements ActionEventHandler {
     private void spendEnergy(ActionEvent event) {
         int cost = specials.get(event.getType()).getCost();
         energy -= cost;
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_ENERGY_CHANGED)
                 .leader(this)
                 .value(energy)
@@ -99,7 +98,7 @@ public class Leader implements ActionEventHandler {
     }
 
     private void postHandChangedEvent() {
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_HAND_CHANGED)
                 .leader(this)
                 .build()

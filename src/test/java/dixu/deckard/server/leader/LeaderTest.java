@@ -6,6 +6,7 @@ import dixu.deckard.server.card.CardFactory;
 import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventType;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ public class LeaderTest extends FunctionalTest {
         List<Card> minionHand = minion.getHand();
         Card cardToSteal = minionHand.get(0);
 
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_STEAL)
                 .leader(firstLeader)
                 .minion(minion)
@@ -55,7 +56,7 @@ public class LeaderTest extends FunctionalTest {
         Card leaderCard = factory.createCard(CardType.BASIC_ATTACK);
         firstLeader.addCard(leaderCard);
 
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_UPGRADE)
                 .leader(firstLeader)
                 .minion(minion)
@@ -78,7 +79,7 @@ public class LeaderTest extends FunctionalTest {
         List<Card> minionHand = minion.getHand();
         Card minionFirstCard = minionHand.get(0);
 
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_MOVE_HAND)
                 .leader(firstLeader)
                 .minion(minion)

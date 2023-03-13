@@ -4,7 +4,8 @@ import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.fight.Fight;
+import dixu.deckard.server.event.bus.Bus;
+import dixu.deckard.server.combat.Combat;
 import dixu.deckard.server.game.GameParams;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.team.Team;
@@ -12,13 +13,12 @@ import dixu.deckard.server.team.Team;
 import java.util.*;
 
 /**
- * {@link Minion}s form a {@link Team} to take a part in a {@link Fight} for their {@link Leader}, controlled by player
+ * {@link Minion}s form a {@link Team} to take a part in a {@link Combat} for their {@link Leader}, controlled by player
  * or a game. Every {@link Minion} has its deck of {@link Card}s and plays {@link GameParams#MINION_DRAW_PER_TURN} number of
  * them every turn automatically. Minion die and leaves a {@link Team} when its {@link Minion#hp} reaches 0.
  */
 
-public class Minion implements ActionEventHandler {
-    private final BusManager bus = BusManager.instance();
+public class Minion implements EventHandler {
     private final Card minionCard;
     //deck
     private final MinionDeck deck;
@@ -35,9 +35,9 @@ public class Minion implements ActionEventHandler {
         this.deck = deck;
         deck.setMinion(this);
 
-        bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
-        bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
-        bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
     }
 
     //card draw
@@ -71,7 +71,7 @@ public class Minion implements ActionEventHandler {
      deck.playAllCards(cardContext);
     }
 
-    //fight
+    //combat
     public void applyRegen(int value) {
         if (hp == maxHp) {
             return;
@@ -83,7 +83,7 @@ public class Minion implements ActionEventHandler {
         if (hp > maxHp) {
             hp = maxHp;
         }
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.MINION_REGENERATED)
                 .value(hp)
                 .oldValue(oldValue)
@@ -101,7 +101,7 @@ public class Minion implements ActionEventHandler {
         if (hp < 0) {
             hp = 0;
         }
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.MINION_DAMAGED)
                 .oldValue(oldValue)
                 .value(hp)
@@ -109,7 +109,7 @@ public class Minion implements ActionEventHandler {
                 .build()
         );
         if (hp <= 0) {
-            bus.post(ActionEvent.builder()
+            Bus.post(ActionEvent.builder()
                     .type(ActionEventType.MINION_DIED)
                     .minion(this)
                     .ownTeam(team)

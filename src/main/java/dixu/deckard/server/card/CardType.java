@@ -1,13 +1,12 @@
 package dixu.deckard.server.card;
 
 import dixu.deckard.server.game.MyRandom;
-import dixu.deckard.server.event.CardRarity;
 
 import java.util.Arrays;
 
 import static dixu.deckard.server.card.CardCategory.*;
-import static dixu.deckard.server.event.CardRarity.BASIC;
-import static dixu.deckard.server.event.CardRarity.COMMON;
+import static dixu.deckard.server.card.CardRarity.BASIC;
+import static dixu.deckard.server.card.CardRarity.COMMON;
 
 public enum CardType {
     BASIC_ATTACK(ATTACK, BASIC, "Basic Attack ", 1),

@@ -1,21 +1,24 @@
-package dixu.deckard.server.fight;
+package dixu.deckard.server.combat;
 
+import dixu.deckard.server.event.EventHandler;
+import dixu.deckard.server.event.CoreEvent;
+import dixu.deckard.server.event.CoreEventType;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.leader.Special;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
-import dixu.deckard.server.event.*;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.team.Team;
 
 import static dixu.deckard.server.game.GameParams.SECOND_TEAM_INITIAL_BLOCK;
 /**
- * {@link Fight} is central gameplay part of a whole game. In {@link Fight}s {@link Leader}s put their {@link Minion}s
+ * {@link Combat} is central gameplay part of a whole game. In {@link Combat}s {@link Leader}s put their {@link Minion}s
  * to the test for life and death. Concept is a little similar to the Pokémon series because {@link Minion}s are not
  * directly controlled and {@link Leader} can influence their actions by modifying their decks of {@link Card}s.
  *<p>
  *  In this version first {@link Leader} is controlled by a player and second one is controlled by the game. Only
- *  player have {@link Special} abilities, and he has to use them to win a {@link Fight}. The greatest power of
+ *  player have {@link Special} abilities, and he has to use them to win a {@link Combat}. The greatest power of
  *  player {@link Leader} is ability to steal {@link Card}s from his enemy {@link Minion}s and pass them to their {@link Minion}s.
  *  <p>
  * Round consist of two phases. In first phase, called a turn, both leaders spend their {@link Leader#getEnergy}
@@ -24,32 +27,30 @@ import static dixu.deckard.server.game.GameParams.SECOND_TEAM_INITIAL_BLOCK;
  * In second phase first {@link Team} clears the block and its {@link Minion}s play their {@link Card}s, then
  * second {@link Team} block is cleared, and they play their {@link Card}s.
  * <p>
- * Now next round starts by {@link Minion}s drawing their new {@link Card}s and shuffling their decks if needed. {@link Fight} lasts
+ * Now next round starts by {@link Minion}s drawing their new {@link Card}s and shuffling their decks if needed. {@link Combat} lasts
  * until all {@link Minion}s of one {@link Team} are slayed.
 * */
 
-public class Fight implements CoreEventHandler {
-
-    private final BusManager bus = BusManager.instance();
+public class Combat implements EventHandler {
     private final Leader firstLeader;
     private final Team firstTeam;
     private final Team secondTeam;
-    private final FightState fightState = FightState.getInstance();
+    private final CombatState combatState = CombatState.getInstance();
     private static boolean delayCardPlay = true;
 
-    public Fight(Leader firstLeader, Leader secondLeader) {
+    public Combat(Leader firstLeader, Leader secondLeader) {
         this.firstTeam = firstLeader.getTeam();
         this.secondTeam = secondLeader.getTeam();
         this.firstLeader = firstLeader;
 
-        bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
-        bus.register(this, CoreEventType.LEADER_PHASE_STARTED);
-        bus.register(this, CoreEventType.MINION_PHASE_STARTED);
+        Bus.register(this, CoreEventType.SETUP_PHASE_STARTED);
+        Bus.register(this, CoreEventType.LEADER_PHASE_STARTED);
+        Bus.register(this, CoreEventType.MINION_PHASE_STARTED);
     }
 
     public void start() {
         secondTeam.addBlock(SECOND_TEAM_INITIAL_BLOCK);
-        bus.post(CoreEvent.of(CoreEventType.SETUP_PHASE_STARTED));
+        Bus.post(CoreEvent.of(CoreEventType.SETUP_PHASE_STARTED));
     }
 
     @Override
@@ -62,24 +63,24 @@ public class Fight implements CoreEventHandler {
     }
 
     private void onSetupPhase() {
-        fightState.setPhase(Phase.SETUP);
+        combatState.setPhase(Phase.SETUP);
         firstTeam.minionsDrawCards();
         secondTeam.minionsDrawCards();
         firstTeam.clearBlock();
         firstLeader.regenerateEnergy();
-        bus.post(CoreEvent.of(CoreEventType.LEADER_PHASE_STARTED));
+        Bus.post(CoreEvent.of(CoreEventType.LEADER_PHASE_STARTED));
     }
 
     private void onLeader() {
-        fightState.setPhase(Phase.LEADER);
+        combatState.setPhase(Phase.LEADER);
     }
 
     private void onMinionPhase() {
-        fightState.setPhase(Phase.MINIONS);
+        combatState.setPhase(Phase.MINIONS);
         firstTeam.playAllCards(createContextForFirstTeam());
         secondTeam.clearBlock();
         secondTeam.playAllCards(createContextForSecondTeam());
-        bus.post(CoreEvent.of(CoreEventType.SETUP_PHASE_STARTED));
+        Bus.post(CoreEvent.of(CoreEventType.SETUP_PHASE_STARTED));
     }
 
     private CardContext createContextForFirstTeam() {

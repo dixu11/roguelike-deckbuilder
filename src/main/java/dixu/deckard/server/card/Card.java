@@ -1,11 +1,11 @@
 package dixu.deckard.server.card;
 
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.minion.Minion;
 import dixu.deckard.server.card.effect.*;
 import dixu.deckard.server.event.ActionEvent;
 import dixu.deckard.server.event.ActionEventType;
-import dixu.deckard.server.event.BusManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,6 @@ import static dixu.deckard.server.card.CardType.*;
  * {@link Card}'s effect is determined by its {@link Card#category}.
  */
 public class Card {
-    private final BusManager bus = BusManager.instance();
     private String name;
     private CardCategory category;
     private CardType type;
@@ -98,7 +97,7 @@ public class Card {
         for (CardEffect effect : effects) {
             effect.execute(context);
         }
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.MINION_CARD_PLAYED)
                 .card(context.getCard())
                 .minion(context.getMinion())
@@ -145,7 +144,7 @@ public class Card {
 
     public void setOwner(Minion owner) {
         this.owner = owner;
-      /*  bus.post(ActionEvent.builder()
+      /*  Bus.post(ActionEvent.builder()
                 .type(ActionEventType.CARD_OWNER_CHANGED)
                 .card(this)
                 .minion(owner)

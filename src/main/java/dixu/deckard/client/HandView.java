@@ -1,13 +1,10 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.event.BusManager;
-
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class HandView {
-    final BusManager bus = BusManager.instance();
     final List<CardView> cardViews = new ArrayList<>();
     private int translateX;
     private int translateY;

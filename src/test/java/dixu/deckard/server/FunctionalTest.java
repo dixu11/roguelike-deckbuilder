@@ -3,11 +3,9 @@ package dixu.deckard.server;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardFactory;
 import dixu.deckard.server.card.CardType;
-import dixu.deckard.server.event.ActionEventType;
-import dixu.deckard.server.event.BusManager;
-import dixu.deckard.server.event.CoreEvent;
-import dixu.deckard.server.event.CoreEventType;
-import dixu.deckard.server.fight.Fight;
+import dixu.deckard.server.event.*;
+import dixu.deckard.server.combat.Combat;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.leader.LeaderFactory;
 import dixu.deckard.server.leader.LeaderType;
@@ -29,7 +27,6 @@ public abstract class FunctionalTest {
     protected Team secondTeam;
     protected Leader firstLeader;
     protected Leader secondLeader;
-    protected BusManager bus;
 
     @BeforeEach
     public void before() {
@@ -40,7 +37,7 @@ public abstract class FunctionalTest {
     @AfterEach
     public void after() {
         //Buses are singleton and also needs to be re-initialized after each test
-        BusManager.reInitialize();
+        Bus.reInitialize();
     }
 
     private void setClassicParams() {
@@ -63,24 +60,23 @@ public abstract class FunctionalTest {
     }
 
     private void loadGame() { //todo refactor copying same code here and in App
-        Fight.disableDelay();
-        bus = BusManager.instance();
+        Combat.disableDelay();
         LeaderFactory leaderFactory = new LeaderFactory();
         firstLeader = leaderFactory.create(LeaderType.PLAYER);
         secondLeader = leaderFactory.create(LeaderType.SIMPLE_BOT);
         firstTeam = firstLeader.getTeam();
         secondTeam = secondLeader.getTeam();
-        Fight fight = new Fight(firstLeader, secondLeader);
-        fight.start();
+        Combat combat = new Combat(firstLeader, secondLeader);
+        combat.start();
     }
 
     protected void reloadGame() {
-        after(); //reset bus
+        after(); //reset Bus
         loadGame();
     }
 
     protected void executeTurn() {
-        bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
+        Bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
     }
 
     protected List<Minion> allMinions() {
@@ -91,17 +87,27 @@ public abstract class FunctionalTest {
     }
     //todo could not find way to avoid repetition - my try was EventName interface but i can't figure out how to
 
-    //put it back to overloaded  bus.register() call - it makes compile error -> 'suspicious call'
+    //put it back to overloaded  Bus.register() call - it makes compile error -> 'suspicious call'
     protected <T> AtomicBoolean listenEventPosted(CoreEventType eventName) {
         //  T elem = eventName.getObject();
         AtomicBoolean wasPosted = new AtomicBoolean(false);
-        bus.register(event -> wasPosted.set(true), eventName); // if i pass elem here - there's a problem
+        Bus.register(new EventHandler() {
+                         @Override
+                         public void handle(CoreEvent event) {
+                             wasPosted.set(true);
+                         }
+                     }, eventName); // if i pass elem here - there's a problem
         return wasPosted;
     }
 
     protected AtomicBoolean listenEventPosted(ActionEventType eventName) {
         AtomicBoolean wasPosted = new AtomicBoolean(false);
-        bus.register(event -> wasPosted.set(true), eventName);
+        Bus.register(new EventHandler() {
+            @Override
+            public void handle(ActionEvent event) {
+                wasPosted.set(true);
+            }
+        }, eventName);
         return wasPosted;
     }
 

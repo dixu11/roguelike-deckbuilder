@@ -4,19 +4,19 @@ import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.card.CardFactory;
 import dixu.deckard.server.event.ActionEvent;
-import dixu.deckard.server.event.ActionEventHandler;
 import dixu.deckard.server.event.ActionEventType;
-import dixu.deckard.server.event.BusManager;
+import dixu.deckard.server.event.EventHandler;
+import dixu.deckard.server.event.bus.Bus;
 
-public class GiftCardEffect extends BasicEffect implements CardEffect, ActionEventHandler {
-    private BusManager bus = BusManager.instance();
+
+public class GiftCardEffect extends BasicEffect implements CardEffect, EventHandler {
     private Card card;
 
 
     public GiftCardEffect(Card card) {
         super(0,card);
         this.card = card;
-        bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
     }
 
     @Override

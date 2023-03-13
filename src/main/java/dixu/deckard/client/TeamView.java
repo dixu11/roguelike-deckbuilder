@@ -1,6 +1,7 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.team.Team;
 
 import java.awt.*;
@@ -10,14 +11,12 @@ import java.util.List;
 import static dixu.deckard.client.GuiParams.CARD_HEIGHT;
 import static dixu.deckard.client.GuiParams.CARD_WIDTH;
 
-public class TeamView implements ActionEventHandler {
+public class TeamView implements EventHandler {
     //layout
     private static final int X_FIRST_TEAM_POSITION = GuiParams.getWidth(0.27);
     private static final int Y_FIRST_TEAM_POSITION = GuiParams.getHeight(0.33);
     private static final int TEAMS_DISTANCE = GuiParams.getWidth(0.3);
     private static final int PADDING = GuiParams.getWidth(0.08);
-
-    private final BusManager bus = BusManager.instance();
     private List<MinionView> minions;
     private final Team team;
     private final Direction direction;
@@ -30,7 +29,7 @@ public class TeamView implements ActionEventHandler {
         setupMinions(team);
         setupBlockCounters(team);
 
-        bus.register(this, ActionEventType.MINION_DIED);
+        Bus.register(this, ActionEventType.MINION_DIED);
     }
 
     private void setupMinions(Team team) {
@@ -48,7 +47,7 @@ public class TeamView implements ActionEventHandler {
                 .strategy((oldVal, e) -> e.getValue())
                 .build();
 
-        bus.register(blockCounterEvent, ActionEventType.TEAM_BLOCK_CHANGED);
+        Bus.register(blockCounterEvent, ActionEventType.TEAM_BLOCK_CHANGED);
         blockCounter = blockCounterEvent;
     }
 

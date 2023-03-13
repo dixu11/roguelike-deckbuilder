@@ -1,14 +1,14 @@
 package dixu.deckard.client;
 
-import dixu.deckard.server.event.ActionEventHandler;
 import dixu.deckard.server.event.ActionEvent;
+import dixu.deckard.server.event.EventHandler;
 import lombok.Builder;
 
 import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 @Builder
-public class EventCounterView implements CounterView, ActionEventHandler {
+public class EventCounterView implements CounterView, EventHandler {
 
     private static final double MARGIN_PERCENT = 0.2;
     private static final Color DEFAULT_COLOR = Color.DARK_GRAY;

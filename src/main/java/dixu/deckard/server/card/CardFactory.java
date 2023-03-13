@@ -1,7 +1,6 @@
 package dixu.deckard.server.card;
 
 import dixu.deckard.server.leader.LeaderType;
-import dixu.deckard.server.event.CardRarity;
 
 import java.util.ArrayList;
 import java.util.List;

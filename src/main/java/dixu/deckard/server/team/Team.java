@@ -1,12 +1,13 @@
 package dixu.deckard.server.team;
 
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.game.MyRandom;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.card.effect.AttackEffect;
 import dixu.deckard.server.card.effect.EnemySelection;
 import dixu.deckard.server.event.*;
-import dixu.deckard.server.fight.Fight;
+import dixu.deckard.server.combat.Combat;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.minion.Minion;
 
@@ -17,13 +18,12 @@ import java.util.Optional;
 import static dixu.deckard.server.game.GameParams.MINION_DRAW_PER_TURN;
 
 /**
- * {@link Team} is group of {@link Minion}s, controlled by {@link Leader}, spawning on one side of the {@link Fight}.
+ * {@link Team} is group of {@link Minion}s, controlled by {@link Leader}, spawning on one side of the {@link Combat}.
  * When {@link Leader} ends his turn {@link Minion}s of all {@link Team}s play their cards automatically.
  * {@link Team}s have {@link Team#block} attribute that lasts one turn and protects them from the attacks.
 * */
 
-public class Team implements ActionEventHandler {
-    private final BusManager bus = BusManager.instance();
+public class Team implements EventHandler {
     private final List<Minion> minions;
     private int block;
     private boolean clearBlockEnabled = true;
@@ -33,7 +33,7 @@ public class Team implements ActionEventHandler {
         for (Minion minion : minions) {
             minion.setTeam(this);
         }
-        bus.register(this, ActionEventType.MINION_DIED);
+        Bus.register(this, ActionEventType.MINION_DIED);
     }
 
     //draws
@@ -100,7 +100,7 @@ public class Team implements ActionEventHandler {
     }
 
     private void postBlockChangedEvent(int newValue) {
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.TEAM_BLOCK_CHANGED)
                 .value(newValue)
                 .ownTeam(this)
@@ -125,7 +125,7 @@ public class Team implements ActionEventHandler {
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            bus.post(CoreEvent.of(CoreEventType.FIGHT_OVER));
+            Bus.post(CoreEvent.of(CoreEventType.FIGHT_OVER));
         }
     }
 

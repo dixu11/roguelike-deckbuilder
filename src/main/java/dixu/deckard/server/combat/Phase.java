@@ -1,4 +1,4 @@
-package dixu.deckard.server.fight;
+package dixu.deckard.server.combat;
 
 public enum Phase {
     SETUP,

@@ -1,15 +1,14 @@
 package dixu.deckard.client;
 
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
 
 import java.awt.*;
 
 import static dixu.deckard.client.GuiParams.*;
 
-public class MinionView implements ActionEventHandler {
-
-    private final BusManager bus = BusManager.instance();
+public class MinionView implements EventHandler {
     private final Minion minion;
     private final CardView minionCardView;
     private final MinionHandView minionHandView;
@@ -27,8 +26,8 @@ public class MinionView implements ActionEventHandler {
         minionHandView = new MinionHandView(this);
         minionCardView = new CardView(minion.getMinionCard());
 
-        bus.register(this, ActionEventType.MINION_CARD_PLAYED);
-        bus.register(this, ActionEventType.MINION_CARD_DRAW);
+        Bus.register(this, ActionEventType.MINION_CARD_PLAYED);
+        Bus.register(this, ActionEventType.MINION_CARD_DRAW);
 
         setupCounters();
     }
@@ -43,8 +42,8 @@ public class MinionView implements ActionEventHandler {
                 .strategy(((oldValue, e) -> e.getValue()))
                 .build();
 
-        bus.register(healthCounter, ActionEventType.MINION_DAMAGED);
-        bus.register(healthCounter, ActionEventType.MINION_REGENERATED);
+        Bus.register(healthCounter, ActionEventType.MINION_DAMAGED);
+        Bus.register(healthCounter, ActionEventType.MINION_REGENERATED);
         minionCardView.addCounter(healthCounter);
 
         EventCounterView drawCounter = EventCounterView.builder()
@@ -60,8 +59,8 @@ public class MinionView implements ActionEventHandler {
                 )
                 .build();
 
-        bus.register(drawCounter, ActionEventType.MINION_CARD_DRAW);
-        bus.register(drawCounter, ActionEventType.MINION_SHUFFLE);
+        Bus.register(drawCounter, ActionEventType.MINION_CARD_DRAW);
+        Bus.register(drawCounter, ActionEventType.MINION_SHUFFLE);
         this.drawCounter = drawCounter;
 
         EventCounterView discardCounter = EventCounterView.builder()
@@ -74,8 +73,8 @@ public class MinionView implements ActionEventHandler {
                 .strategy(((oldValue, e) -> e.getType() == ActionEventType.MINION_SHUFFLE ? 0 : oldValue + 1))
                 .build();
 
-        bus.register(discardCounter, ActionEventType.MINION_CARD_PLAYED); //change to source eventHandler -> but make 2 versions!
-        bus.register(discardCounter, ActionEventType.MINION_SHUFFLE);
+        Bus.register(discardCounter, ActionEventType.MINION_CARD_PLAYED); //change to source eventHandler -> but make 2 versions!
+        Bus.register(discardCounter, ActionEventType.MINION_SHUFFLE);
         this.discardCounter = discardCounter;
     }
 
@@ -117,7 +116,7 @@ public class MinionView implements ActionEventHandler {
 
     public void reactToClick(int x, int y) {
         if (minionCardView.isClicked(x,y,transX,transY,0)) {
-           bus.post(GuiEvent.builder()
+           Bus.post(GuiEvent.builder()
                    .name(GuiEventType.MINION_SELECTED)
                    .cardView(minionCardView)
                    .minionView(this)

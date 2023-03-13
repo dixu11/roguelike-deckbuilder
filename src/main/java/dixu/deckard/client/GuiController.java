@@ -2,9 +2,9 @@ package dixu.deckard.client;
 
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.event.*;
+import dixu.deckard.server.event.bus.Bus;
 
-public class GuiController implements GuiEventHandler {
-    private final BusManager bus = BusManager.instance();
+public class GuiController implements EventHandler {
     private final LeaderHandView leaderHand;
     private final TeamView firstTeam;
     private final TeamView secondTeam;
@@ -12,14 +12,14 @@ public class GuiController implements GuiEventHandler {
     private final SelectView secondTeamSelect = new SelectView();
     private final SelectView firstTeamMinionSelect = new SelectView();
 
-    public GuiController(FightViewImpl fightView) {
-        this.leaderHand = fightView.getLeaderHand();
-        this.firstTeam = fightView.getFirstTeam();
-        this.secondTeam = fightView.getSecondTeam();
+    public GuiController(ViewImpl combatView) {
+        this.leaderHand = combatView.getLeaderHand();
+        this.firstTeam = combatView.getFirstTeam();
+        this.secondTeam = combatView.getSecondTeam();
 
-        bus.register(this, GuiEventType.MINION_CARD_SELECTED);
-        bus.register(this, GuiEventType.MINION_SELECTED);
-        bus.register(this, GuiEventType.LEADER_CARD_SELECTED);
+        Bus.register(this, GuiEventType.MINION_CARD_SELECTED);
+        Bus.register(this, GuiEventType.MINION_SELECTED);
+        Bus.register(this, GuiEventType.LEADER_CARD_SELECTED);
     }
 
     @Override
@@ -64,7 +64,7 @@ public class GuiController implements GuiEventHandler {
         Card selectedLeaderCard = leaderCardSelect.getSelected().getCard();
         leaderCardSelect.clearSelection();
 
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_UPGRADE)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
@@ -86,7 +86,7 @@ public class GuiController implements GuiEventHandler {
         secondTeamSelect.newCardSelected(newSelected);
         if (!secondTeamSelect.isDoubleClick()) return;
 
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_STEAL)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
@@ -111,7 +111,7 @@ public class GuiController implements GuiEventHandler {
         firstTeamMinionSelect.newCardSelected(newSelected);
         if (!firstTeamMinionSelect.isDoubleClick()) return;
 
-        bus.post(ActionEvent.builder()
+        Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_MOVE_HAND)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
