@@ -64,7 +64,7 @@ public class Minion implements EventHandler {
 
     //play cards
     void discard(Card card) {
-     deck.discard(card);
+     deck.discardAction(card);
     }
 
     public void playAllCards(CardContext cardContext) {

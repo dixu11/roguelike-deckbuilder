@@ -3,12 +3,18 @@ package dixu.deckard.client;
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.*;
+
 
 import static dixu.deckard.client.GuiParams.*;
 
 public class MinionView implements EventHandler {
+
+    private static final Logger logger = LogManager.getLogger(MinionView.class);
     private final Minion minion;
     private final CardView minionCardView;
     private final MinionHandView minionHandView;
@@ -104,7 +110,7 @@ public class MinionView implements EventHandler {
     private void onCardPlayed(ActionEvent event) {
         if (event.getMinion() == minion) {
             minionHandView.remove(event.getCard());
-            System.out.println("Animation: CardPlayed");
+            logger.trace("Animation: CardPlayed");
         }
     }
 

@@ -9,6 +9,8 @@ import dixu.deckard.server.combat.Combat;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.leader.LeaderFactory;
 import dixu.deckard.server.leader.LeaderType;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * If you want to learn about the rules of the game and central elements of the system start from {@link Combat} class :)
@@ -16,7 +18,7 @@ import dixu.deckard.server.leader.LeaderType;
  *     You can also check diagrams in resources package.
  * <p>
  * {@link Event} notifications are central architecture element of this project and working with
- * {@link Event}s is executed by {@link BusManager}.
+ * {@link Event}s is executed by {@link dixu.deckard.server.event.bus.Bus}.
  * <p>
  *     ANY suggestions how to improve this code, especially concerning architecture, are strongly recommended. I'm open for
  *     all sorts of feedback. If you like, you can contact me on GitHub, e-mail or facebook.
@@ -32,6 +34,7 @@ import dixu.deckard.server.leader.LeaderType;
  *     @author <a href="mailto:daniel.szlicht25@gmail.com">Daniel 'Dixu' Szlicht</a>
 * */
 public class App {
+
     public static void main(String[] args) {
         //UNCOMMENT THIS IF YOU DON'T SEE GAME WINDOW:
 //        GuiParams.LOCATION_ON_SCREEN_X = 0;

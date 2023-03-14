@@ -112,9 +112,7 @@ public class MinionDeck {
     }
 
 
-    void discard(Card card) {
-        hand.remove(card);
-        discarded.add(card);
+    void discardAction(Card card) {
         Bus.post(ActionEvent.builder()
                 .type(ActionEventType.MINION_CARD_DISCARDED)
                 .minion(minion)
@@ -122,14 +120,20 @@ public class MinionDeck {
                 .card(card)
                 .build()
         );
-        postMinionHandChanged();
+        removeCard(card);
+    }
+
+   private void removeCard(Card card) {
+       hand.remove(card);
+       discarded.add(card);
+       postMinionHandChanged();
     }
 
     public void playAllCards(CardContext cardContext) {
         for (Card card : new ArrayList<>(hand)) {
             cardContext.setCard(card);
             card.play(cardContext);
-            discard(card);
+            discardAction(card);
             Combat.delayForAnimation(PLAY_DELAY_SECONDS);
         }
     }
@@ -154,7 +158,7 @@ public class MinionDeck {
 
     void onMoveHand() {
         if (!hand.isEmpty()) {
-            discard(hand.remove(0));
+            discardAction(hand.remove(0));
             drawCard();
         }
     }
