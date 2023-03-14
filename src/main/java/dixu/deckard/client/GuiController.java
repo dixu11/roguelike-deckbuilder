@@ -3,6 +3,7 @@ package dixu.deckard.client;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.event.bus.Bus;
+import dixu.deckard.server.minion.Minion;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -25,7 +26,7 @@ public class GuiController implements EventHandler {
         Bus.register(this, GuiEventType.MINION_SELECTED);
         Bus.register(this, GuiEventType.LEADER_CARD_SELECTED);
         Bus.register(this, GuiEventType.BACKGROUND_CLICK);
-        Bus.register(this,CoreEventType.MINION_PHASE_STARTED);
+        Bus.register(this, CoreEventType.MINION_PHASE_STARTED);
     }
 
     @Override
@@ -158,6 +159,20 @@ public class GuiController implements EventHandler {
 
     private void stealToDeck(GuiEvent event) {
         logger.debug("steal to deck selected");
+        Minion ownedMinion = firstTeamMinionSelect.getSelected().getCard().getOwner();
+        Card stolenCard = secondTeamHandSelect.getSelected().getCard();
+
+        Bus.post(ActionEvent.builder()
+                .type(ActionEventType.LEADER_SPECIAL_STEAL)
+                .subtype(ActionEventSubtype.STEAL_TO_DECK)
+                .leader(leaderHand.getLeader())
+                .ownTeam(firstTeam.getTeam())
+                .enemyTeam(secondTeam.getTeam())
+                .minion(stolenCard.getOwner())
+                .targetMinion(ownedMinion)
+                .card(stolenCard)
+                .build()
+        );
     }
 
     private void stealSwap() {

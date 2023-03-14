@@ -153,12 +153,24 @@ public class MinionDeck {
     }
 
     void onStealSpecial(ActionEvent event) {
-        if (event.getTargetMinion().equals(minion) && event.getSubtype() != ActionEventSubtype.STEAL_TO_SWAP) {
+        if (event.getMinion().equals(minion) && event.getSubtype() == ActionEventSubtype.STEAL_TO_LEADER) {
             Card card = event.getCard();
-            card.setOwner(null);  // todo because cards have to have their owners for their effects i have to update this every time card changes owner... can i avoid this??
+            card.setOwner(null);
             hand.remove(card);
-            postMinionHandChanged(); //todo make hand separate object to post hand change every time?
+            postMinionHandChanged();
             drawCard();
+        }
+        if (event.getSubtype() == ActionEventSubtype.STEAL_TO_DECK) {
+            if (event.getTargetMinion().equals(minion)) {
+                discarded.add(event.getCard());
+                postProportionsChanged();
+                //todo but if it is block? will Deck Block card react?
+            } else {
+                Card card = event.getCard();
+                hand.remove(card);
+                postMinionHandChanged();
+                drawCard();
+            }
         }
         if (event.getSubtype() == ActionEventSubtype.STEAL_TO_SWAP) {
             if (event.getTargetMinion().equals(minion)) { //enemy minion
