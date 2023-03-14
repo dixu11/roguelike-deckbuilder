@@ -133,14 +133,14 @@ public class Minion implements EventHandler {
     //specials handling
     @Override
     public void handle(ActionEvent event) {
-        if (event.getMinion() != this) {
+        if (!event.getMinion().equals(this) && !event.getTargetMinion().equals(this)) {
             return;
         }
 
         switch (event.getType()) {
-            case LEADER_SPECIAL_GIVE -> deck.onUpgradeSpecial(event);
+            case LEADER_SPECIAL_GIVE -> deck.onGiveSpecial(event);
             case LEADER_SPECIAL_STEAL -> deck.onStealSpecial(event);
-            case LEADER_SPECIAL_MOVE_HAND -> deck.onMoveHand();
+            case LEADER_SPECIAL_MOVE_HAND -> deck.onMoveHand(event);
         }
     }
 

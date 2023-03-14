@@ -17,9 +17,9 @@ import static dixu.deckard.client.GuiParams.*;
  * Every gui element refers to its coordinates as it's root is x = 0 and y = 0 and translate {@link Graphics2D} to proper
  * position when render inner elements. Inner elements can dig for its absolute position by getting transform coords
  * from their {@link Graphics2D} object while rendering.
-* */
+ */
 
-public class ViewImpl implements MouseListener, EventHandler {
+public class CombatView implements MouseListener, EventHandler {
     public static final int LEADER_HAND_X = GuiParams.getWidth(0.37);
     public static final int LEADER_HAND_Y = GuiParams.getHeight(0.8);
     private final TeamView firstTeam;
@@ -28,12 +28,12 @@ public class ViewImpl implements MouseListener, EventHandler {
     private final EndTurnButtonView endTurn = new EndTurnButtonView();
     private CounterView energyCounter;
 
-    public ViewImpl(Leader firstLeader, Leader secondLeader) {
-        this.firstTeam = new TeamView(firstLeader.getTeam(),Direction.LEFT);
-        this.secondTeam = new TeamView(secondLeader.getTeam(),Direction.RIGHT);
+    public CombatView(Leader firstLeader, Leader secondLeader) {
+        this.firstTeam = new TeamView(firstLeader.getTeam(), Direction.LEFT);
+        this.secondTeam = new TeamView(secondLeader.getTeam(), Direction.RIGHT);
         firstLeaderHand = new LeaderHandView(firstLeader);
 
-        Bus.register(this, CoreEventType.FIGHT_OVER);
+        Bus.register(this, CoreEventType.COMBAT_OVER);
 
         setupCounters(firstLeader);
     }
@@ -60,11 +60,11 @@ public class ViewImpl implements MouseListener, EventHandler {
         renderBackground(g);
         firstTeam.render(g);
         secondTeam.render(g);
-        g.translate(LEADER_HAND_X,LEADER_HAND_Y); //todo refactor
+        g.translate(LEADER_HAND_X, LEADER_HAND_Y); //todo refactor
         firstLeaderHand.render(g);
-        g.translate(-LEADER_HAND_X,-LEADER_HAND_Y);
+        g.translate(-LEADER_HAND_X, -LEADER_HAND_Y);
         endTurn.render(g);
-        energyCounter.render(g,getWidth(0.344),getHeight(0.755)); //todo refactor to card size change
+        energyCounter.render(g, getWidth(0.344), getHeight(0.755)); //todo refactor to card size change
     }
 
     private void renderBackground(Graphics g) {
@@ -75,17 +75,27 @@ public class ViewImpl implements MouseListener, EventHandler {
     //interaction
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (endTurn.isClicked(e.getX(), e.getY())) {
-            endTurn.onClick();
-        }
-        firstLeaderHand.reactToClickOnWindow(e.getX(), e.getY());
-        firstTeam.reactToClickOnScreen(e.getX(), e.getY());
-        secondTeam.reactToClickOnScreen(e.getX(), e.getY());
+        int x = e.getX();
+        int y = e.getY();
+
+        boolean clicked = endTurn.onClick(x, y);
+        if (clicked) return;
+        clicked = firstLeaderHand.reactToClickOnWindow(x, y);
+        if (clicked) return;
+        clicked = firstTeam.reactToClickOnScreen(x, y);
+        if (clicked) return;
+        clicked =  secondTeam.reactToClickOnScreen(x, y);
+        if (clicked) return;
+
+        Bus.post(GuiEvent.builder()
+                .type(GuiEventType.BACKGROUND_CLICK)
+                .build()
+        );
     }
 
     @Override
     public void handle(CoreEvent event) {
-        if (event.getType() == CoreEventType.FIGHT_OVER) {
+        if (event.getType() == CoreEventType.COMBAT_OVER) {
             onGameOver();
         }
     }

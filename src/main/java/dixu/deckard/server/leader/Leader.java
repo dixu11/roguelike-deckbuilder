@@ -67,9 +67,15 @@ public class Leader implements EventHandler {
         if (event.getType() == ActionEventType.LEADER_SPECIAL_GIVE && event.getLeader().equals(this)) {
            removeCard(event.getCard());
         } else if (event.getType() == ActionEventType.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
-            addCard(event.getCard());
+           onStealEvent(event);
         }
         //when special hand move is played leader spends energy but has nothing else to do
+    }
+
+    private void onStealEvent(ActionEvent event) {
+        if (event.getSubtype() == ActionEventSubtype.STEAL_TO_LEADER) {
+            addCard(event.getCard());
+        }
     }
 
     private void spendEnergy(ActionEvent event) {

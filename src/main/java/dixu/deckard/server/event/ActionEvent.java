@@ -19,6 +19,7 @@ public class ActionEvent implements Event<ActionEventType> {
     private Team ownTeam;
     private Team enemyTeam;
     private Minion minion;
+    private Minion targetMinion;
     private Card card;
     private Card oldCard;
     private int value;
@@ -50,10 +51,14 @@ public class ActionEvent implements Event<ActionEventType> {
     public static class ActionEventBuilder {
 
         public ActionEvent build() {
+            if (minion == null) {
+                minion = targetMinion;
+            } else if (targetMinion == null) {
+                targetMinion = minion;
+            }
             ActionEvent actionEvent = new ActionEvent(this.type,this.subtype, this.source, this.ownTeam,
-                    this.enemyTeam, this.minion, this.card,this.oldCard, this.value,this.oldValue,this.leader);
+                    this.enemyTeam, this.minion,this.targetMinion, this.card,this.oldCard, this.value,this.oldValue,this.leader);
             actionEvent.source = ActionEventType.determineSourceFromEventName(actionEvent);
-
             return actionEvent;
         }
     }

@@ -9,8 +9,8 @@ public enum ActionEventType implements EventType {
     MINION_CARD_DRAW,
     MINION_DAMAGED,
     MINION_DIED,
-    LEADER_SPECIAL_GIVE,
     LEADER_SPECIAL_STEAL,
+    LEADER_SPECIAL_GIVE,
     LEADER_SPECIAL_MOVE_HAND,
     //state events //todo check if structure is different
     MINION_DECK_PROPORTIONS_CHANGED,

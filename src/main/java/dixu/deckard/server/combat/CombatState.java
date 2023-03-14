@@ -16,7 +16,7 @@ public class CombatState implements EventHandler {
     private static CombatState instance;
 
     private CombatState() {
-        Bus.register(this, CoreEventType.FIGHT_OVER);
+        Bus.register(this, CoreEventType.COMBAT_OVER);
     }
 
     public static CombatState getInstance() {

@@ -15,13 +15,13 @@ public final class GameEngine implements Runnable {
     private BufferStrategy strategy;
 
     private final Display display;
-    private final ViewImpl combatViewImpl;
+    private final CombatView combatView;
 
 
-    public GameEngine(Display display, ViewImpl combatViewImpl) {
+    public GameEngine(Display display, CombatView combatView) {
         running = false;
         this.display = display;
-        this.combatViewImpl = combatViewImpl;
+        this.combatView = combatView;
     }
 
 
@@ -54,7 +54,7 @@ public final class GameEngine implements Runnable {
     }
 
     private void tick() {
-        combatViewImpl.tick();
+        combatView.tick();
     }
 
     private void render() {
@@ -76,7 +76,7 @@ public final class GameEngine implements Runnable {
     private void renderFrame() {
         Graphics graphics = strategy.getDrawGraphics();
         graphics.clearRect(0, 0, WIDTH, HEIGHT);
-        combatViewImpl.render((Graphics2D) graphics);
+        combatView.render((Graphics2D) graphics);
         strategy.show();
         graphics.dispose();
     }

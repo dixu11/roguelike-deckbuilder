@@ -3,6 +3,7 @@ package dixu.deckard.server.minion;
 import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardContext;
 import dixu.deckard.server.event.ActionEvent;
+import dixu.deckard.server.event.ActionEventSubtype;
 import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.combat.Combat;
@@ -115,13 +116,18 @@ public class MinionDeck {
                 .card(card)
                 .build()
         );
-        removeCard(card);
+        discard(card);
     }
 
-   private void removeCard(Card card) {
-       hand.remove(card);
-       discarded.add(card);
-       postMinionHandChanged();
+    private void discard(Card card) {
+        hand.remove(card);
+        discarded.add(card);
+        postMinionHandChanged();
+    }
+
+    private void replaceHandCard(Card card, Card oldCard) {
+        hand.set(hand.indexOf(oldCard), card);
+        postMinionHandChanged();
     }
 
     public void playAllCards(CardContext cardContext) {
@@ -133,7 +139,10 @@ public class MinionDeck {
         }
     }
 
-    void onUpgradeSpecial(ActionEvent event) {
+    void onGiveSpecial(ActionEvent event) {
+        if (event.getTargetMinion() != minion) {
+            return;
+        }
         Card oldCard = event.getOldCard();
         oldCard.setOwner(null);
         int index = hand.indexOf(oldCard);
@@ -144,14 +153,26 @@ public class MinionDeck {
     }
 
     void onStealSpecial(ActionEvent event) {
-        Card card = event.getCard();
-        card.setOwner(null);  // todo because cards have to have their owners for their effects i have to update this every time card changes owner... can i avoid this??
-        hand.remove(card);
-        postMinionHandChanged(); //todo make hand separate object to post hand change every time?
-        drawCard();
+        if (event.getTargetMinion().equals(minion) && event.getSubtype() != ActionEventSubtype.STEAL_TO_SWAP) {
+            Card card = event.getCard();
+            card.setOwner(null);  // todo because cards have to have their owners for their effects i have to update this every time card changes owner... can i avoid this??
+            hand.remove(card);
+            postMinionHandChanged(); //todo make hand separate object to post hand change every time?
+            drawCard();
+        }
+        if (event.getSubtype() == ActionEventSubtype.STEAL_TO_SWAP) {
+            if (event.getTargetMinion().equals(minion)) { //enemy minion
+                replaceHandCard(event.getOldCard(), event.getCard());
+            } else {
+                replaceHandCard(event.getCard(), event.getOldCard());
+            }
+        }
     }
 
-    void onMoveHand() {
+    void onMoveHand(ActionEvent event) {
+        if (event.getTargetMinion() != minion) {
+            return;
+        }
         if (!hand.isEmpty()) {
             discardAction(hand.remove(0));
             drawCard();

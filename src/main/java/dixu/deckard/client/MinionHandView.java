@@ -16,7 +16,7 @@ public class MinionHandView extends HandView  implements EventHandler {
     @Override
     void postEventOnClick(CardView clickedCard) {
         Bus.post(GuiEvent.builder()
-                .name(GuiEventType.MINION_CARD_SELECTED)
+                .type(GuiEventType.MINION_CARD_SELECTED)
                 .cardView(clickedCard)
                 .minionView(minionView)
                 .teamView(minionView.getTeamView())

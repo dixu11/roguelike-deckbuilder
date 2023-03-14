@@ -37,7 +37,7 @@ public class LeaderHandView extends HandView implements EventHandler {
     @Override
     void postEventOnClick(CardView clickedCard) {
         Bus.post(GuiEvent.builder()
-                .name(GuiEventType.LEADER_CARD_SELECTED)
+                .type(GuiEventType.LEADER_CARD_SELECTED)
                 .cardView(clickedCard)
                 .build()
         );

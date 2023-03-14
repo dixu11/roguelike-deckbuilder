@@ -7,7 +7,7 @@ import java.awt.*;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-public class EndTurnButtonView implements Clickable, EventHandler {
+public class EndTurnButtonView implements EventHandler {
     private final Rectangle bounds;
     private final int TURN_ENDED_COOLDOWN_SECONDS = 1;
     private LocalTime turnStarted = LocalTime.now();
@@ -33,17 +33,20 @@ public class EndTurnButtonView implements Clickable, EventHandler {
 
 
     //interaction
-    @Override
-    public void onClick() {
+
+    public boolean onClick(int x, int y) {
+     if(!isClicked(x, y)){
+         return false;
+     }
         //block queued click - may be removed after implementing concurrency events
         if (turnStarted.until(LocalTime.now(), ChronoUnit.SECONDS) < TURN_ENDED_COOLDOWN_SECONDS) {
-            return;
+            return true;
         }
         visible = false;
         Bus.post(CoreEvent.of(CoreEventType.MINION_PHASE_STARTED));
+        return true;
     }
 
-    @Override
     public boolean isClicked(int x, int y) {
         return bounds.intersects(x, y, 1, 1);
     }

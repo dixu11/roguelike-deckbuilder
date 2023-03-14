@@ -84,7 +84,11 @@ public class CardFactory {
     }
 
     public Card createRandomCard() {
-        return new Card(CardType.getRandom());
+        Card card = new Card(CardType.getRandom());
+        if (card.getCategory() == CardCategory.MINION) {
+            return createRandomCard();
+        }
+        return card;
     }
 
     public Card createCard(CardType type) {

@@ -19,14 +19,15 @@ public abstract class HandView {
         }
     }
 
-    public void reactToClickOnWindow(int windowX, int windowY) {
+    public boolean reactToClickOnWindow(int windowX, int windowY) {
         for (int i = 0; i < cardViews.size(); i++) {
             CardView cardView = cardViews.get(i);
             if (cardView.isClicked(windowX, windowY, translateX, translateY, i)) {
                 postEventOnClick(cardView);
-                return;
+                return true;
             }
         }
+        return false;
     }
 
     abstract void postEventOnClick(CardView clickedCard);

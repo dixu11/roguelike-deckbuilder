@@ -117,17 +117,18 @@ public class MinionView implements EventHandler {
         }
     }
 
-    public void reactToClick(int x, int y) {
+    public boolean reactToClick(int x, int y) {
         if (minionCardView.isClicked(x,y,transX,transY,0)) {
            Bus.post(GuiEvent.builder()
-                   .name(GuiEventType.MINION_SELECTED)
+                   .type(GuiEventType.MINION_SELECTED)
                    .cardView(minionCardView)
                    .minionView(this)
                    .teamView(teamView)
                    .build()
            );
+            return true;
         }
-        minionHandView.reactToClickOnWindow(x, y);
+       return minionHandView.reactToClickOnWindow(x, y);
     }
 
     public Minion getMinion() {

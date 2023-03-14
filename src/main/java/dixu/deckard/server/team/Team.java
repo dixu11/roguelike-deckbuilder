@@ -125,7 +125,7 @@ public class Team implements EventHandler {
     private void characterDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
-            Bus.post(CoreEvent.of(CoreEventType.FIGHT_OVER));
+            Bus.post(CoreEvent.of(CoreEventType.COMBAT_OVER));
         }
     }
 

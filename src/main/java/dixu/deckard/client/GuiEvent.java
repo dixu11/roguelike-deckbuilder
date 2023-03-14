@@ -9,19 +9,19 @@ import lombok.Getter;
 @Getter
 public class GuiEvent implements Event<GuiEventType> {
 
-    private GuiEventType name;
+    private GuiEventType type;
     private CardView cardView;
     private MinionView minionView;
     private TeamView teamView;
 
     @Override
     public GuiEventType getType() {
-        return name;
+        return type;
     }
 
     public static GuiEvent of(GuiEventType name) {
         return builder()
-                .name(name)
+                .type(name)
                 .build();
     }
 }

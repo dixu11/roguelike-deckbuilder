@@ -9,8 +9,6 @@ import dixu.deckard.server.combat.Combat;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.leader.LeaderFactory;
 import dixu.deckard.server.leader.LeaderType;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 /**
  * If you want to learn about the rules of the game and central elements of the system start from {@link Combat} class :)
@@ -48,10 +46,10 @@ public class App {
 
         //initialize client
         Display display = new Display("Deckard Thief");
-        ViewImpl combatViewImpl = new ViewImpl(firstLeader,secondLeader);
-        GameEngine engine = new GameEngine(display, combatViewImpl);
-        GuiController guiController = new GuiController(combatViewImpl);
-        display.addListener(combatViewImpl);
+        CombatView combatView = new CombatView(firstLeader,secondLeader);
+        GameEngine engine = new GameEngine(display, combatView);
+        GuiController guiController = new GuiController(combatView);
+        display.addListener(combatView);
         engine.start();
 
         //start game

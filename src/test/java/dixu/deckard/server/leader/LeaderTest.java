@@ -5,6 +5,7 @@ import dixu.deckard.server.card.Card;
 import dixu.deckard.server.card.CardFactory;
 import dixu.deckard.server.card.CardType;
 import dixu.deckard.server.event.ActionEvent;
+import dixu.deckard.server.event.ActionEventSubtype;
 import dixu.deckard.server.event.ActionEventType;
 import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
@@ -34,6 +35,7 @@ public class LeaderTest extends FunctionalTest {
 
         Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_STEAL)
+                .subtype(ActionEventSubtype.STEAL_TO_LEADER)
                 .leader(firstLeader)
                 .minion(minion)
                 .card(cardToSteal)
@@ -47,7 +49,7 @@ public class LeaderTest extends FunctionalTest {
     }
 
     @Test
-    @DisplayName("When leader use upgrade special he spends energy, and change minion card to new one")
+    @DisplayName("When leader use give special he spends energy, and change minion card to new one")
     public void test3() {
         Minion minion = firstMinion(firstTeam);
         List<Card> minionHand = minion.getHand();
@@ -116,6 +118,37 @@ public class LeaderTest extends FunctionalTest {
 
         executeTurn();
 
-        assertEquals(INITIAL_ENERGY,firstLeader.getEnergy());
+        assertEquals(INITIAL_ENERGY, firstLeader.getEnergy());
+    }
+
+    @Test
+    @DisplayName("When leader use swap steal special - spends energy and swap stolen card with selected old one")
+    public void test7() {
+        Minion ownMinion = firstMinion(firstTeam);
+        Minion enemyMinion = firstMinion(secondTeam);
+        List<Card> ownMinionHand = ownMinion.getHand();
+        List<Card> enemyMinionHand = enemyMinion.getHand();
+        Card cardToExchange = ownMinionHand.get(0);
+        Card cardToSteal = enemyMinionHand.get(0);
+
+        Bus.post(ActionEvent.builder()
+                .type(ActionEventType.LEADER_SPECIAL_STEAL)
+                .subtype(ActionEventSubtype.STEAL_TO_SWAP)
+                .leader(firstLeader)
+                .minion(ownMinion)
+                .targetMinion(enemyMinion)
+                .card(cardToSteal)
+                .oldCard(cardToExchange)
+                .build()
+        );
+
+        assertTrue(ownMinionHand.contains(cardToSteal));
+        assertFalse(ownMinionHand.contains(cardToExchange));
+        assertFalse(enemyMinionHand.contains(cardToSteal));
+        assertTrue(enemyMinionHand.contains(cardToExchange));
+        assertEquals(MINION_DRAW_PER_TURN,ownMinionHand.size());
+        assertEquals(MINION_DRAW_PER_TURN,enemyMinionHand.size());
+        assertEquals(0,firstLeader.getHand().size());
+        assertEquals(INITIAL_ENERGY - STEAL_SPECIAL_COST, firstLeader.getEnergy());
     }
 }

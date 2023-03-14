@@ -74,10 +74,14 @@ public class TeamView implements EventHandler {
         return Y_FIRST_TEAM_POSITION;
     }
 
-    public void reactToClickOnScreen(int x, int y){
+    public boolean reactToClickOnScreen(int x, int y){
         for (MinionView minion : minions) {
-             minion.reactToClick(x, y);
+            boolean clicked = minion.reactToClick(x, y);
+            if (clicked) {
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
