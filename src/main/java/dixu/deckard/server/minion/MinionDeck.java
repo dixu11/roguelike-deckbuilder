@@ -143,13 +143,20 @@ public class MinionDeck {
         if (event.getTargetMinion() != minion) {
             return;
         }
-        Card oldCard = event.getOldCard();
-        oldCard.setOwner(null);
-        int index = hand.indexOf(oldCard);
-        Card newCard = event.getCard();
-        newCard.setOwner(minion);
-        hand.set(index, newCard);
-        postMinionHandChanged();
+        if (event.getSubtype() == ActionEventSubtype.GIVE_TO_HAND) {
+            Card oldCard = event.getOldCard();
+            oldCard.setOwner(null);
+            int index = hand.indexOf(oldCard);
+            Card newCard = event.getCard();
+            newCard.setOwner(minion);
+            hand.set(index, newCard);
+            postMinionHandChanged();
+        } else if (event.getSubtype() == ActionEventSubtype.GIVE_TO_DECK) {
+            discarded.add(event.getCard());
+            postProportionsChanged();
+            //todo but if it is block? will Deck Block card react?
+        }
+
     }
 
     void onStealSpecial(ActionEvent event) {

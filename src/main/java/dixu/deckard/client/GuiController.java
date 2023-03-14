@@ -47,7 +47,7 @@ public class GuiController implements EventHandler {
     }
 
     private void onMinionCardSelected(GuiEvent event) {
-        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_STEAL)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_GIVE)) {
             clearSelections();
             return;
         }
@@ -63,6 +63,7 @@ public class GuiController implements EventHandler {
                 stealCardSpecial(event);
             } else if (leaderCardSelect.isSelected()) {
                 giveSpecial(event);
+                clearSelections();
             }
         } else {
             stealCardSpecial(event);
@@ -80,6 +81,7 @@ public class GuiController implements EventHandler {
             stealCardSpecial(event);
         } else if (leaderCardSelect.isSelected()) {
             giveSpecial(event);
+            clearSelections();
         } else {
             moveMinionHandSpecial(event);
         }
@@ -99,6 +101,14 @@ public class GuiController implements EventHandler {
         }
 
         leaderCardSelect.newCardSelected(event.getCardView());
+        if (firstTeamHandSelect.isSelected()) {
+            giveToHand();
+            clearSelections();
+        }
+        if (firstTeamMinionSelect.isSelected()) {
+            giveToDeck();
+            clearSelections();
+        }
         if (leaderCardSelect.isDoubleClick()) {
             leaderCardSelect.clearSelection();
         }
@@ -113,21 +123,45 @@ public class GuiController implements EventHandler {
             return;
         }
 
-        Card minionCard = event.getCardView().getCard();
+        if (firstTeamMinionSelect.isSelected()) {
+            giveToDeck();
+        } else if (firstTeamHandSelect.isSelected()) {
+            giveToHand();
+        }
+    }
+
+    private void giveToHand() {
+        Card minionCard = firstTeamHandSelect.getSelected().getCard();
         Card selectedLeaderCard = leaderCardSelect.getSelected().getCard();
-        leaderCardSelect.clearSelection();
 
         Bus.post(ActionEvent.builder()
                 .type(ActionEventType.LEADER_SPECIAL_GIVE)
+                .subtype(ActionEventSubtype.GIVE_TO_HAND)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
                 .enemyTeam(secondTeam.getTeam())
-                .targetMinion(event.getMinionView().getMinion())
+                .targetMinion(minionCard.getOwner())
                 .card(selectedLeaderCard)
                 .oldCard(minionCard)
                 .build()
         );
     }
+
+    private void giveToDeck() {
+        Card selectedLeaderCard = leaderCardSelect.getSelected().getCard();
+
+        Bus.post(ActionEvent.builder()
+                .type(ActionEventType.LEADER_SPECIAL_GIVE)
+                .subtype(ActionEventSubtype.GIVE_TO_DECK)
+                .leader(leaderHand.getLeader())
+                .ownTeam(firstTeam.getTeam())
+                .enemyTeam(secondTeam.getTeam())
+                .targetMinion(firstTeamMinionSelect.getSelected().getCard().getOwner())
+                .card(selectedLeaderCard)
+                .build()
+        );
+    }
+
 
     private void stealCardSpecial(GuiEvent event) {
         if (secondTeamHandSelect.isDoubleClick()) {
