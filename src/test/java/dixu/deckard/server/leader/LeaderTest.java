@@ -151,4 +151,32 @@ public class LeaderTest extends FunctionalTest {
         assertEquals(0,firstLeader.getHand().size());
         assertEquals(INITIAL_ENERGY - STEAL_SPECIAL_COST, firstLeader.getEnergy());
     }
+
+    @Test
+    @DisplayName("When leader use steal to deck special - spends energy and add stolen card to discard, enemy draws card")
+    public void test8() {
+        Minion ownMinion = firstMinion(firstTeam);
+        Minion enemyMinion = firstMinion(secondTeam);
+        List<Card> ownMinionHand = ownMinion.getHand();
+        List<Card> enemyMinionHand = enemyMinion.getHand();
+        Card cardToSteal = enemyMinionHand.get(0);
+
+        Bus.post(ActionEvent.builder()
+                .type(ActionEventType.LEADER_SPECIAL_STEAL)
+                .subtype(ActionEventSubtype.STEAL_TO_DECK)
+                .leader(firstLeader)
+                .minion(enemyMinion)
+                .targetMinion(ownMinion)
+                .card(cardToSteal)
+                .build()
+        );
+
+        assertTrue(ownMinion.getDiscarded().contains(cardToSteal));
+        assertFalse(ownMinionHand.contains(cardToSteal));
+        assertFalse(enemyMinionHand.contains(cardToSteal));
+        assertEquals(MINION_DRAW_PER_TURN,ownMinionHand.size());
+        assertEquals(MINION_DRAW_PER_TURN,enemyMinionHand.size());
+        assertEquals(0,firstLeader.getHand().size());
+        assertEquals(INITIAL_ENERGY - STEAL_SPECIAL_COST, firstLeader.getEnergy());
+    }
 }
