@@ -57,7 +57,7 @@ public class LeaderTest extends FunctionalTest {
         firstLeader.addCard(leaderCard);
 
         Bus.post(ActionEvent.builder()
-                .type(ActionEventType.LEADER_SPECIAL_UPGRADE)
+                .type(ActionEventType.LEADER_SPECIAL_GIVE)
                 .leader(firstLeader)
                 .minion(minion)
                 .card(leaderCard)

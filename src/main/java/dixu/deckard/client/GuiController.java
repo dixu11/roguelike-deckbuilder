@@ -32,7 +32,7 @@ public class GuiController implements EventHandler {
     }
 
     private void selectLeaderCard(GuiEvent event) {
-        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_UPGRADE)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_GIVE)) {
             clearSelections();
             return;
         }
@@ -55,7 +55,7 @@ public class GuiController implements EventHandler {
         if (leaderCardSelect.getSelected() == null || event.getCardView() == null) {
             return;
         }
-        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_UPGRADE)) {
+        if (!leaderHand.getLeader().canAfford(ActionEventType.LEADER_SPECIAL_GIVE)) {
             clearSelections();
             return;
         }
@@ -65,7 +65,7 @@ public class GuiController implements EventHandler {
         leaderCardSelect.clearSelection();
 
         Bus.post(ActionEvent.builder()
-                .type(ActionEventType.LEADER_SPECIAL_UPGRADE)
+                .type(ActionEventType.LEADER_SPECIAL_GIVE)
                 .leader(leaderHand.getLeader())
                 .ownTeam(firstTeam.getTeam())
                 .enemyTeam(secondTeam.getTeam())

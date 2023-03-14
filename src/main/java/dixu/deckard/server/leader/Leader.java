@@ -33,10 +33,10 @@ public class Leader implements EventHandler {
         this.team = team;
 
         specials.put(ActionEventType.LEADER_SPECIAL_STEAL, new Special(STEAL_SPECIAL_COST));
-        specials.put(ActionEventType.LEADER_SPECIAL_UPGRADE, new Special(UPGRADE_SPECIAL_COST));
+        specials.put(ActionEventType.LEADER_SPECIAL_GIVE, new Special(UPGRADE_SPECIAL_COST));
         specials.put(ActionEventType.LEADER_SPECIAL_MOVE_HAND, new Special(MOVE_SPECIAL_COST));
 
-        Bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_GIVE);
         Bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
         Bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
     }
@@ -64,7 +64,7 @@ public class Leader implements EventHandler {
 
         spendEnergy(event);
 
-        if (event.getType() == ActionEventType.LEADER_SPECIAL_UPGRADE && event.getLeader().equals(this)) {
+        if (event.getType() == ActionEventType.LEADER_SPECIAL_GIVE && event.getLeader().equals(this)) {
            removeCard(event.getCard());
         } else if (event.getType() == ActionEventType.LEADER_SPECIAL_STEAL && event.getLeader().equals(this)) {
             addCard(event.getCard());

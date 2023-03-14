@@ -36,7 +36,7 @@ public class Minion implements EventHandler {
         deck.setMinion(this);
 
         Bus.register(this, ActionEventType.LEADER_SPECIAL_STEAL);
-        Bus.register(this, ActionEventType.LEADER_SPECIAL_UPGRADE);
+        Bus.register(this, ActionEventType.LEADER_SPECIAL_GIVE);
         Bus.register(this, ActionEventType.LEADER_SPECIAL_MOVE_HAND);
     }
 
@@ -83,7 +83,7 @@ public class Minion implements EventHandler {
         if (hp > maxHp) {
             hp = maxHp;
         }
-        Bus.post(ActionEvent.builder()
+    /*    Bus.post(ActionEvent.builder()
                 .type(ActionEventType.MINION_REGENERATED)
                 .value(hp)
                 .oldValue(oldValue)
@@ -91,6 +91,7 @@ public class Minion implements EventHandler {
                 .ownTeam(team)
                 .build()
         );
+        postMinionHealthChanged();*/
     }
     public void applyDamage(int value) {
         if (value <= 0) {
@@ -108,6 +109,7 @@ public class Minion implements EventHandler {
                 .minion(this)
                 .build()
         );
+        postMinionHealthChanged();
         if (hp <= 0) {
             Bus.post(ActionEvent.builder()
                     .type(ActionEventType.MINION_DIED)
@@ -118,6 +120,16 @@ public class Minion implements EventHandler {
         }
     }
 
+    private void postMinionHealthChanged() {
+        Bus.post(ActionEvent.builder()
+                .type(ActionEventType.MINION_HEALTH_CHANGED)
+                .value(hp)
+                .minion(this)
+                .ownTeam(team)
+                .build()
+        );
+    }
+
     //specials handling
     @Override
     public void handle(ActionEvent event) {
@@ -126,7 +138,7 @@ public class Minion implements EventHandler {
         }
 
         switch (event.getType()) {
-            case LEADER_SPECIAL_UPGRADE -> deck.onUpgradeSpecial(event);
+            case LEADER_SPECIAL_GIVE -> deck.onUpgradeSpecial(event);
             case LEADER_SPECIAL_STEAL -> deck.onStealSpecial(event);
             case LEADER_SPECIAL_MOVE_HAND -> deck.onMoveHand();
         }

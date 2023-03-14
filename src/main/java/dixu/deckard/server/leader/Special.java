@@ -12,7 +12,7 @@ import dixu.deckard.server.minion.Minion;
  *     - {@link ActionEventType#LEADER_SPECIAL_STEAL} let {@link Leader} steal cards from enemy
  *     {@link Minion}s and put them to his hand.
  *      <p>
- *       - {@link ActionEventType#LEADER_SPECIAL_UPGRADE} let {@link Leader} give stolen card
+ *       - {@link ActionEventType#LEADER_SPECIAL_GIVE} let {@link Leader} give stolen card
  *       to his {@link Minion} replacing chosen {@link Card} with new one - effectively upgrading his deck for the rest
  *       of the game.
  *       <p>

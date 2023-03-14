@@ -3,7 +3,6 @@ package dixu.deckard.client;
 import dixu.deckard.server.event.*;
 import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.minion.Minion;
-import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -33,6 +32,7 @@ public class MinionView implements EventHandler {
         minionCardView = new CardView(minion.getMinionCard());
 
         Bus.register(this, ActionEventType.MINION_CARD_PLAYED);
+        Bus.register(this, ActionEventType.MINION_CARD_DISCARDED);
         Bus.register(this, ActionEventType.MINION_CARD_DRAW);
 
         setupCounters();
@@ -48,8 +48,7 @@ public class MinionView implements EventHandler {
                 .strategy(((oldValue, e) -> e.getValue()))
                 .build();
 
-        Bus.register(healthCounter, ActionEventType.MINION_DAMAGED);
-        Bus.register(healthCounter, ActionEventType.MINION_REGENERATED);
+        Bus.register(healthCounter, ActionEventType.MINION_HEALTH_CHANGED);
         minionCardView.addCounter(healthCounter);
 
         EventCounterView drawCounter = EventCounterView.builder()
@@ -60,13 +59,11 @@ public class MinionView implements EventHandler {
                 .value(minion.getDraw().size())
                 .source(minion)
                 .strategy(
-                        ((oldValue, e) -> e.getType() == ActionEventType.MINION_SHUFFLE ?
-                                e.getMinion().getDraw().size() : oldValue - 1)
+                        ((oldValue, e) -> e.getMinion().getDraw().size())
                 )
                 .build();
 
-        Bus.register(drawCounter, ActionEventType.MINION_CARD_DRAW);
-        Bus.register(drawCounter, ActionEventType.MINION_SHUFFLE);
+        Bus.register(drawCounter, ActionEventType.MINION_DECK_PROPORTIONS_CHANGED);
         this.drawCounter = drawCounter;
 
         EventCounterView discardCounter = EventCounterView.builder()
@@ -76,11 +73,10 @@ public class MinionView implements EventHandler {
                 .blinking(false)
                 .description("\uD83C\uDCC1: ")
                 .source(minion)
-                .strategy(((oldValue, e) -> e.getType() == ActionEventType.MINION_SHUFFLE ? 0 : oldValue + 1))
+                .strategy(((oldValue, e) -> e.getMinion().getDiscarded().size()))
                 .build();
 
-        Bus.register(discardCounter, ActionEventType.MINION_CARD_PLAYED); //change to source eventHandler -> but make 2 versions!
-        Bus.register(discardCounter, ActionEventType.MINION_SHUFFLE);
+        Bus.register(discardCounter, ActionEventType.MINION_DECK_PROPORTIONS_CHANGED); //change to source eventHandler -> but make 2 versions!
         this.discardCounter = discardCounter;
     }
 
@@ -102,21 +98,22 @@ public class MinionView implements EventHandler {
     @Override
     public void handle(ActionEvent event) {
         switch (event.getType()) {
-            case MINION_CARD_PLAYED -> onCardPlayed(event); // todo move to hand object
-            case MINION_CARD_DRAW -> onCardDraw(event); // todo move to hand object
+            case MINION_CARD_PLAYED, MINION_CARD_DISCARDED -> onCardRemoved(event);
+            case MINION_CARD_DRAW -> onCardDraw(event);
         }
     }
 
-    private void onCardPlayed(ActionEvent event) {
+    private void onCardRemoved(ActionEvent event) {
         if (event.getMinion() == minion) {
             minionHandView.remove(event.getCard());
-            logger.trace("Animation: CardPlayed");
+            logger.trace("Animation: CardPlayed/Discarded");
         }
     }
 
     private void onCardDraw(ActionEvent event) {
         if (event.getMinion() == minion) {
             minionHandView.add(event.getCard());
+            logger.trace("Animation: CardDrawn");
         }
     }
 

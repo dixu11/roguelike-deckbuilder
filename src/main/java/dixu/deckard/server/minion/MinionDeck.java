@@ -61,16 +61,7 @@ public class MinionDeck {
         Collections.shuffle(discarded);
         draw.addAll(discarded);
         discarded.clear();
-        postShuffleEvent();
-    }
-
-    private void postShuffleEvent() {
-        Bus.post(ActionEvent.builder()
-                .type(ActionEventType.MINION_SHUFFLE)
-                .minion(minion)
-                .source(this)
-                .build()
-        );
+        postProportionsChanged();
     }
 
     void postMinionHandChanged() {
@@ -80,6 +71,7 @@ public class MinionDeck {
                 .ownTeam(minion.getTeam())
                 .build()
         );
+        postProportionsChanged();
     }
 
     void setHand(List<Card> newHand) {
@@ -91,6 +83,7 @@ public class MinionDeck {
     void setDiscard(List<Card> cards) {
         cards.forEach(card -> card.setOwner(minion));
         discarded = cards;
+        postProportionsChanged();
         //todo post discard changed?
         //todo move it to new "deck" entity for all this complexity?
     }
@@ -98,11 +91,13 @@ public class MinionDeck {
     void setDraw(List<Card> cards) {
         cards.forEach(card -> card.setOwner(minion));
         draw = new LinkedList<>(cards);
+        postProportionsChanged();
         //todo post discard changed?
     }
 
     void clearDraw() {
         draw.clear();
+        postProportionsChanged();
     }
 
     List<Card> getAllCards() {
@@ -161,6 +156,15 @@ public class MinionDeck {
             discardAction(hand.remove(0));
             drawCard();
         }
+    }
+
+    private void postProportionsChanged() {
+        Bus.post(ActionEvent.builder()
+                .type(ActionEventType.MINION_DECK_PROPORTIONS_CHANGED)
+                .minion(minion)
+                .ownTeam(minion.getTeam())
+                .build()
+        );
     }
 
     List<Card> getHand() {

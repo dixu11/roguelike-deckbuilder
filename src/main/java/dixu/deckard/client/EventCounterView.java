@@ -80,8 +80,11 @@ public class EventCounterView implements CounterView, EventHandler {
         if (strategy == null) {
             throw new IllegalStateException("STRATEGY MUST BE DEFINED ON EVERY COUNTER");
         }
-        if (event.getSource() == source) {
-            value = strategy.updateValue(value, event);
+        if (event.getSource() != source) return;
+
+        int oldValue = value;
+        value = strategy.updateValue(value, event);
+        if (oldValue!= value) {
             changed = LocalTime.now();
         }
     }
