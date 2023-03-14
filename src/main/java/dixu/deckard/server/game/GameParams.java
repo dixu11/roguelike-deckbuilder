@@ -6,7 +6,7 @@ public class GameParams {
     public final static double PLAY_DELAY_SECONDS = 1;
     public final static double DRAW_DELAY_SECONDS = 0.5;
     public static int MINION_PER_TEAM = 2;
-    public static int MINION_DRAW_PER_TURN = 1;
+    public static int MINION_DRAW_PER_TURN = 2;
     public static int SECOND_TEAM_INITIAL_BLOCK = 3;
     //leader
     public static final int LEADER_MAX_HAND_SIZE = 5;
