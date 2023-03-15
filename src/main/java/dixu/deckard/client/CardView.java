@@ -26,13 +26,11 @@ public class CardView {
         }
         g.setColor(MAIN_COLOR_BRIGHT);
         g.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
-
         g.setColor(MAIN_COLOR_DARK);
         Font font = g.getFont().deriveFont(12f);
         g.setFont(font);
         g.drawString(card.getName(), CARD_WIDTH / 10, CARD_HEIGHT / 6);
         descriptionRenderer.render(g,card.getDescription());
-
         for (CounterView counter : counters) {
             counter.render(g, new Rectangle(0, 0, CARD_WIDTH, CARD_HEIGHT));
         }

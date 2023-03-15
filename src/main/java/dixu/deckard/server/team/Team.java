@@ -118,11 +118,11 @@ public class Team implements EventHandler {
 
     private void onMinionDied(ActionEvent event) {
         if (event.getOwnTeam() == this) {
-            characterDied(event.getMinion());
+            minionDied(event.getMinion());
         }
     }
 
-    private void characterDied(Minion minion) {
+    private void minionDied(Minion minion) {
         minions.remove(minion);
         if (minions.isEmpty()) {
             Bus.post(CoreEvent.of(CoreEventType.COMBAT_OVER));

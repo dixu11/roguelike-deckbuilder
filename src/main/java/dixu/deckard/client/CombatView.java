@@ -3,6 +3,8 @@ package dixu.deckard.client;
 import dixu.deckard.server.event.bus.Bus;
 import dixu.deckard.server.leader.Leader;
 import dixu.deckard.server.event.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,7 +86,7 @@ public class CombatView implements MouseListener, EventHandler {
         if (clicked) return;
         clicked = firstTeam.reactToClickOnScreen(x, y);
         if (clicked) return;
-        clicked =  secondTeam.reactToClickOnScreen(x, y);
+        clicked = secondTeam.reactToClickOnScreen(x, y);
         if (clicked) return;
 
         Bus.post(GuiEvent.builder()

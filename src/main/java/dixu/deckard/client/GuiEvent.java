@@ -19,9 +19,9 @@ public class GuiEvent implements Event<GuiEventType> {
         return type;
     }
 
-    public static GuiEvent of(GuiEventType name) {
+    public static GuiEvent of(GuiEventType type) {
         return builder()
-                .type(name)
+                .type(type)
                 .build();
     }
 }

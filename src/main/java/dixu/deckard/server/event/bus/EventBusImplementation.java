@@ -16,6 +16,10 @@ public class EventBusImplementation {
                                                     // It makes them react to TurnStart before TurnEnd... Making it concurrency fix problem but introduces a loooot more bugs
     }
 
+    public void post(Event event){
+        List<EventHandler> handlers = allHandlers.get(event.getType());
+    }
+
     private List<EventHandler> getHandlers(Event event) {
         return getHandlers(event.getType());
     }
