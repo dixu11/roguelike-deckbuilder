@@ -8,7 +8,7 @@ public class GuiParams {
     public static final Color HIGHLIGHT_COLOR = Color.YELLOW;
     public static int LOCATION_ON_SCREEN_X = 2000;
     public static int LOCATION_ON_SCREEN_Y = 0;
-    private static final int DEFAULT_WIDTH = 2100;
+    private static final int DEFAULT_WIDTH = 1540;
     private static final int DEFAULT_HEIGHT = 800;
     public static final int WIDTH = DEFAULT_WIDTH;
     public static final int HEIGHT = DEFAULT_HEIGHT;

@@ -35,8 +35,8 @@ public class App {
 
     public static void main(String[] args) {
         //UNCOMMENT THIS IF YOU DON'T SEE GAME WINDOW:
-//        GuiParams.LOCATION_ON_SCREEN_X = 0;
-//        GuiParams.LOCATION_ON_SCREEN_Y = 0;
+        GuiParams.LOCATION_ON_SCREEN_X = 0;
+        GuiParams.LOCATION_ON_SCREEN_Y = 0;
 
         //initialize combat(server)
         LeaderFactory factory = new LeaderFactory();

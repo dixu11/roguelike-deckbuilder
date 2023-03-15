@@ -64,7 +64,7 @@ public class CombatView implements MouseListener, EventHandler {
         secondTeam.render(g);
         firstLeaderHand.render(g,LEADER_HAND_X, LEADER_HAND_Y);
         endTurn.render(g);
-        energyCounter.render(g, getWidth(0.344), getHeight(0.755)); //todo refactor to card size change
+        energyCounter.render(g, getWidth(0.337), getHeight(0.755)); //todo refactor to card size change
     }
 
     private void renderBackground(Graphics g) {

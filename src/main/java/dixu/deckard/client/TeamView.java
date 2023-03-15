@@ -13,10 +13,10 @@ import static dixu.deckard.client.GuiParams.CARD_WIDTH;
 
 public class TeamView implements EventHandler {
     //layout
-    private static final int X_FIRST_TEAM_POSITION = GuiParams.getWidth(0.27);
+    private static final int X_FIRST_TEAM_POSITION = GuiParams.getWidth(0.23);
     private static final int Y_FIRST_TEAM_POSITION = GuiParams.getHeight(0.33);
-    private static final int TEAMS_DISTANCE = GuiParams.getWidth(0.3);
-    private static final int PADDING = GuiParams.getWidth(0.08);
+    private static final int TEAMS_DISTANCE = GuiParams.getWidth(0.4);
+    private static final int PADDING = GuiParams.getWidth(0.12);
     private List<MinionView> minions;
     private final Team team;
     private final Direction direction;
