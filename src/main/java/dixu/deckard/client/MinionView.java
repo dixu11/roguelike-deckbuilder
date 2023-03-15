@@ -20,8 +20,6 @@ public class MinionView implements EventHandler {
     private CounterView drawCounter;
     private CounterView discardCounter;
     private final TeamView teamView;
-    private int transX;
-    private int transY;
 
 
     public MinionView(Minion minion, TeamView teamView) {
@@ -80,16 +78,12 @@ public class MinionView implements EventHandler {
         this.discardCounter = discardCounter;
     }
 
-    public void render(Graphics2D g) {
-        transX = (int) g.getTransform().getTranslateX();
-        transY = (int) g.getTransform().getTranslateY();
-        minionCardView.render(g);
+    public void render(Graphics2D g, int layoutX, int layoutY) {
+        minionCardView.render(g,layoutX,layoutY,0);
         int xTran = CARD_PADDING-CARD_WIDTH;
         int yTran = -CARD_HEIGHT - CARD_PADDING;
-        g.translate(xTran,yTran);
-        minionHandView.render(g);//todo refactor to calculate center
-        g.translate(-xTran,-yTran);
-        Rectangle r = new Rectangle(0, CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
+        minionHandView.render(g,layoutX + xTran,layoutY+ yTran);
+        Rectangle r = new Rectangle(layoutX,layoutY+ CARD_HEIGHT / 2, CARD_WIDTH, CARD_HEIGHT);
         drawCounter.render(g, r);
         discardCounter.render(g, r);
     }
@@ -118,7 +112,7 @@ public class MinionView implements EventHandler {
     }
 
     public boolean reactToClick(int x, int y) {
-        if (minionCardView.isClicked(x,y,transX,transY,0)) {
+        if (minionCardView.isClicked(x,y)) {
            Bus.post(GuiEvent.builder()
                    .type(GuiEventType.MINION_SELECTED)
                    .cardView(minionCardView)

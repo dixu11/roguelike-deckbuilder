@@ -6,7 +6,7 @@ public class GuiParams {
     public static final Color MAIN_COLOR_BRIGHT = Color.GRAY;
     public static final Color MAIN_COLOR_DARK = Color.DARK_GRAY;
     public static final Color HIGHLIGHT_COLOR = Color.YELLOW;
-    public static int LOCATION_ON_SCREEN_X = 0;
+    public static int LOCATION_ON_SCREEN_X = 2000;
     public static int LOCATION_ON_SCREEN_Y = 0;
     private static final int DEFAULT_WIDTH = 2100;
     private static final int DEFAULT_HEIGHT = 800;

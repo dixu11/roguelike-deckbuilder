@@ -30,8 +30,8 @@ public final class Display {
 
         frame.setSize(size);
         frame.setDefaultCloseOperation(EXIT_ON_CLOSE);
-//        frame.setLocation(LOCATION_ON_SCREEN_X, LOCATION_ON_SCREEN_Y);
-        frame.setLocationRelativeTo(null);
+        frame.setLocation(LOCATION_ON_SCREEN_X, LOCATION_ON_SCREEN_Y);
+//        frame.setLocationRelativeTo(null);
         frame.setResizable(false);
     }
 

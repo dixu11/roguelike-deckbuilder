@@ -52,18 +52,15 @@ public class TeamView implements EventHandler {
     }
 
     public void render(Graphics2D g) {
-        int xChange = 0;
-        g.translate(getX(), getY()); //todo put transform out of this object to meet central coordinate system rule
-        blockCounter.render(g, new Rectangle((int) (PADDING*0.75), CARD_HEIGHT * 2, CARD_WIDTH, CARD_HEIGHT));
+        int layoutX = getX();
+        int layoutY = getY();
+        blockCounter.render(g, new Rectangle((int) (PADDING*0.75)+ layoutX, CARD_HEIGHT * 2 + layoutY, CARD_WIDTH, CARD_HEIGHT));
 
         for (MinionView minion : new ArrayList<>(minions)) {
             int xMove = PADDING + CARD_WIDTH;
-            minion.render(g);
-            g.translate(xMove, 0);
-            xChange += xMove;
+            minion.render(g,layoutX,layoutY);
+            layoutX += xMove;
         }
-
-        g.translate(-getX() - xChange, -getY());
     }
 
     private int getX() {

@@ -12,7 +12,7 @@ public class CustomTextRenderer {
         this.bounds = bounds;
     }
 
-    public void render(Graphics2D g, String text) {
+    public void render(Graphics2D g, String text, int layoutX, int layoutY) {
         Font font = g.getFont().deriveFont(FONT_SIZE);
         g.setFont(font);
         String textLeft = text;
@@ -27,14 +27,14 @@ public class CustomTextRenderer {
             }
 
             if (line.length() + word.length() > CHARACTERS_PER_LINE) {
-                g.drawString(line, bounds.x, bounds.y + yMove);
+                g.drawString(line, bounds.x + layoutX, bounds.y + yMove + layoutY);
                 line = word + " ";
                 yMove += 15;
             } else {
                 line += word + " ";
             }
         }
-        g.drawString(line, bounds.x, bounds.y + yMove);
+        g.drawString(line, bounds.x+ layoutX, bounds.y + layoutY + yMove);
     }
 
     private String getNextWord(String text) {

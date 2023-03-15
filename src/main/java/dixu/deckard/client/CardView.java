@@ -13,6 +13,8 @@ public class CardView {
     private final Card card;
     private boolean selected = false;
     private final CustomTextRenderer descriptionRenderer;
+    private int translateX;
+    private int translateY;
 
     public CardView(Card card) {
         this.card = card;
@@ -20,19 +22,21 @@ public class CardView {
                 CARD_WIDTH, (int)(CARD_HEIGHT * 0.65)));
     }
 
-    public void render(Graphics2D g) {
+    public void render(Graphics2D g,int layoutX,int layoutY, int index) {
+        this.translateX = layoutX + index * (CARD_WIDTH + CARD_PADDING);
+        this.translateY = layoutY;
         if (card == null) {
             return;
         }
         g.setColor(MAIN_COLOR_BRIGHT);
-        g.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+        g.fillRect(translateX, translateY, CARD_WIDTH, CARD_HEIGHT);
         g.setColor(MAIN_COLOR_DARK);
         Font font = g.getFont().deriveFont(12f);
         g.setFont(font);
-        g.drawString(card.getName(), CARD_WIDTH / 10, CARD_HEIGHT / 6);
-        descriptionRenderer.render(g,card.getDescription());
+        g.drawString(card.getName(),translateX + CARD_WIDTH / 10,translateY + CARD_HEIGHT / 6);
+        descriptionRenderer.render(g,card.getDescription(),translateX,translateY);
         for (CounterView counter : counters) {
-            counter.render(g, new Rectangle(0, 0, CARD_WIDTH, CARD_HEIGHT));
+            counter.render(g, new Rectangle(translateX, translateY, CARD_WIDTH, CARD_HEIGHT));
         }
 
         if (!selected) {
@@ -40,15 +44,8 @@ public class CardView {
         }
         g.setColor(HIGHLIGHT_COLOR);
         g.setStroke(new BasicStroke(HIGHLIGHT_BORDER));
-        g.drawRect(-HIGHLIGHT_BORDER,0,CARD_WIDTH+HIGHLIGHT_BORDER,CARD_HEIGHT+HIGHLIGHT_BORDER);
+        g.drawRect(translateX-HIGHLIGHT_BORDER,translateY,CARD_WIDTH+HIGHLIGHT_BORDER,CARD_HEIGHT+HIGHLIGHT_BORDER);
         g.setStroke(new BasicStroke(1));
-    }
-
-    public void render(Graphics2D g, int index) {
-        int translateX = index * (CARD_WIDTH + CARD_PADDING);
-        g.translate(translateX, 0);
-        render(g);
-        g.translate(-translateX, 0);
     }
 
     public void addCounter(CounterView counter) {
@@ -59,8 +56,8 @@ public class CardView {
         return card;
     }
 
-    public boolean isClicked(int x, int y, int transX, int transY, int i) {
-        Rectangle bounds = new Rectangle(transX + i*(CARD_WIDTH+CARD_PADDING), transY, CARD_WIDTH, CARD_HEIGHT);
+    public boolean isClicked(int x, int y) {
+        Rectangle bounds = new Rectangle(translateX, translateY, CARD_WIDTH, CARD_HEIGHT);
         return bounds.intersects(new Rectangle(x, y, 1, 1));
     }
 

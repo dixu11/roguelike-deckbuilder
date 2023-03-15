@@ -47,6 +47,7 @@ public class Card {
 
         if (type == AREA_ATTACK) {
             enemySelection = EnemySelection.AREA;
+
         }
 
         final AttackEffect baseAttack = new BasicAttackEffect(attackValue, enemySelection, this);
@@ -110,6 +111,9 @@ public class Card {
         StringBuilder desc = new StringBuilder();
         for (CardEffect effect : effects) {
             desc.append(effect.getDescription()).append(" ");
+        }
+        if (type == AREA_ATTACK) { //todo refactor
+            desc.append(" damages every enemy minion");
         }
         return desc.toString();
     }
